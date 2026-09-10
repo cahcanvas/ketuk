@@ -3,6 +3,16 @@
 		value: string;
 		label: string;
 	}
+
+	/**
+	 * Opsi yang dikelompokkan, dirender sebagai `<optgroup>`. Dipakai kalau
+	 * daftarnya terlalu panjang untuk di-scan sebagai satu daftar rata — mis.
+	 * 38 provinsi Indonesia yang dikelompokkan per pulau.
+	 */
+	export interface SelectOptionGroup {
+		label: string;
+		options: SelectOption[];
+	}
 </script>
 
 <script lang="ts">
@@ -10,10 +20,13 @@
 		id?: string;
 		name?: string;
 		label?: string;
-		options: SelectOption[];
+		/** Daftar rata. Diabaikan kalau `groups` diisi. */
+		options?: SelectOption[];
+		groups?: SelectOptionGroup[];
 		value?: string;
 		placeholder?: string;
 		error?: string;
+		hint?: string;
 		disabled?: boolean;
 		required?: boolean;
 	}
@@ -22,10 +35,12 @@
 		id,
 		name,
 		label,
-		options,
+		options = [],
+		groups,
 		value = $bindable(''),
 		placeholder = 'Pilih salah satu',
 		error,
+		hint,
 		disabled = false,
 		required = false,
 	}: Props = $props();
@@ -47,16 +62,29 @@
 		{required}
 		bind:value
 		aria-invalid={error ? 'true' : undefined}
+		aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
 		class="rounded-lg border bg-white px-3.5 py-2.5 text-sm text-navy-900
 			focus-visible:outline-2 disabled:cursor-not-allowed disabled:bg-navy-50
 			{error ? 'border-red-400' : 'border-navy-200'}"
 	>
 		<option value="" disabled selected={!value}>{placeholder}</option>
-		{#each options as option (option.value)}
-			<option value={option.value}>{option.label}</option>
-		{/each}
+		{#if groups}
+			{#each groups as group (group.label)}
+				<optgroup label={group.label}>
+					{#each group.options as option (option.value)}
+						<option value={option.value}>{option.label}</option>
+					{/each}
+				</optgroup>
+			{/each}
+		{:else}
+			{#each options as option (option.value)}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		{/if}
 	</select>
 	{#if error}
-		<p class="text-sm text-red-600">{error}</p>
+		<p id="{inputId}-error" class="text-sm text-red-600">{error}</p>
+	{:else if hint}
+		<p id="{inputId}-hint" class="text-sm text-navy-400">{hint}</p>
 	{/if}
 </div>
