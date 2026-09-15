@@ -10,9 +10,9 @@
 		"check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"zod": "latest"
+		"zod": "4.5.4"
 	},
 	"devDependencies": {
-		"typescript": "latest"
+		"typescript": "5.9.3"
 	}
 }

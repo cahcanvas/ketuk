@@ -13,18 +13,18 @@
 	"dependencies": {
 		"@ketuk/shared": "workspace:*",
 		"@lucide/svelte": "^1.41.0",
-		"@supabase/ssr": "latest",
-		"@supabase/supabase-js": "latest"
+		"@supabase/ssr": "0.12.6",
+		"@supabase/supabase-js": "2.115.0"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "latest",
-		"@sveltejs/kit": "latest",
-		"@sveltejs/vite-plugin-svelte": "latest",
-		"@tailwindcss/vite": "latest",
-		"svelte": "latest",
-		"svelte-check": "latest",
-		"tailwindcss": "latest",
+		"@sveltejs/adapter-vercel": "6.3.4",
+		"@sveltejs/kit": "2.70.3",
+		"@sveltejs/vite-plugin-svelte": "7.3.0",
+		"@tailwindcss/vite": "4.3.3",
+		"svelte": "5.57.0",
+		"svelte-check": "4.7.6",
+		"tailwindcss": "4.3.3",
 		"typescript": "5.9.3",
-		"vite": "latest"
+		"vite": "8.2.2"
 	}
 }

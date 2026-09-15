@@ -36,6 +36,19 @@ Semua script berikut dijalankan dari root repository dan didelegasikan ke sub-pa
 | `bun run db:migrate` | Menjalankan migrasi yang sudah digenerate ke database Supabase. |
 | `bun run db:studio` | Membuka Drizzle Studio untuk melihat dan mengedit data secara visual. |
 
+## Menjaga dependency konsisten dengan CI
+
+Gunakan versi Bun pada `packageManager` di `package.json` root (saat ini `bun@1.4.1`). GitHub Actions membaca versi dari file yang sama.
+
+Dependency yang sebelumnya memakai `latest` sudah dikunci ke versi spesifik. TypeScript disamakan ke `5.9.3` di semua workspace. Saat menambah atau memperbarui dependency:
+
+1. Ubah versi dependency secara eksplisit pada package yang terkait.
+2. Jalankan `bun install` dari root untuk memperbarui `bun.lock`.
+3. Verifikasi dengan `bun install --frozen-lockfile`.
+4. Commit perubahan `package.json` dan `bun.lock` bersama-sama.
+
+CI tetap menggunakan `--frozen-lockfile` agar dependency yang dipasang mengikuti lockfile yang sudah direview.
+
 ## Migrasi database
 
 Schema database dikelola dengan Drizzle ORM di dalam `backend`. Setelah mengubah schema:
