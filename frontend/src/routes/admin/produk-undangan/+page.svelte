@@ -3,45 +3,29 @@
 		Sparkles,
 		Layers,
 		Palette,
-		Eye,
-		ArrowRight,
 		Check,
 		X,
 		Search,
 		Plus,
 		Copy,
-		Trash2,
-		RefreshCw,
 		Music,
 		Volume2,
 		VolumeX,
 		Smartphone,
 		Mail,
-		Settings,
 		ShieldCheck,
 		Heart,
-		Sliders,
 		CheckCircle2,
 		Wand2,
 		Calendar,
 		MapPin,
-		Gift,
-		AlertCircle,
-		Play,
-		Share2,
-		Info,
 		Zap,
 	} from '@lucide/svelte';
 	import {
 		MASTER_TEMPLATES,
 		DEFAULT_PLAN_PERMISSIONS,
 		type MasterTemplateProduct,
-		type ProductCategory,
-		type ProductBadge,
-		type OpeningEffectType,
-		type ParticleEffectType,
 		type ParticleDensity,
-		type ScrollMotionType,
 	} from '$lib/data/master-templates';
 
 	// Local mutable copy of master templates for the admin studio session
@@ -59,12 +43,11 @@
 	// Simulator state
 	let previewMode = $state<'envelope' | 'phone'>('envelope');
 	let isEnvelopeOpen = $state(false);
-	let isPlayingAnimation = $state(false);
 	let simulatedMusicPlaying = $state(false);
 	let saveFeedback = $state<string | null>(null);
 
 	// Derived currently edited template
-	const currentTemplate = $derived(
+	const selectedTemplate = $derived(
 		templates.find((t) => t.id === selectedTemplateId) ?? templates[0],
 	);
 
@@ -177,6 +160,7 @@
 	}
 
 	function handleDuplicateTemplate() {
+		const currentTemplate = selectedTemplate;
 		if (!currentTemplate) return;
 		const cloned: MasterTemplateProduct = JSON.parse(JSON.stringify(currentTemplate));
 		const cloneId = `${currentTemplate.id}-copy-${Date.now().toString().slice(-3)}`;
@@ -192,6 +176,7 @@
 	}
 
 	function handleTogglePublishStatus() {
+		const currentTemplate = selectedTemplate;
 		if (!currentTemplate) return;
 		currentTemplate.status =
 			currentTemplate.status === 'published' ? 'draft' : 'published';
@@ -212,17 +197,14 @@
 	}
 
 	function triggerTestAnimation() {
-		isPlayingAnimation = true;
+		const currentTemplate = selectedTemplate;
+		if (!currentTemplate) return;
 		isEnvelopeOpen = !isEnvelopeOpen;
 		if (isEnvelopeOpen && currentTemplate.audio.autoplay) {
 			simulatedMusicPlaying = true;
 		} else if (!isEnvelopeOpen) {
 			simulatedMusicPlaying = false;
 		}
-
-		setTimeout(() => {
-			isPlayingAnimation = false;
-		}, currentTemplate.animations.openingDurationMs + 300);
 	}
 </script>
 
@@ -393,6 +375,8 @@
 	</div>
 
 	<!-- Main Two-Column Workspace: Left Editor vs Right Real-Time Simulator -->
+	{#if selectedTemplate}
+	{@const currentTemplate = selectedTemplate}
 	<div class="grid gap-6 lg:grid-cols-12 items-start">
 		<!-- LEFT COLUMN (7 Cols): Studio Editor Tabs -->
 		<div class="lg:col-span-7 space-y-4">
@@ -1658,4 +1642,10 @@
 			</div>
 		</div>
 	</div>
+	{:else}
+		<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-8 text-center">
+			<h2 class="font-display text-lg font-semibold text-white">Belum ada template</h2>
+			<p class="mt-2 text-sm text-navy-400">Klik Tambah Template untuk mulai mengatur desain undangan.</p>
+		</div>
+	{/if}
 </div>

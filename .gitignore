@@ -12,3 +12,6 @@ coverage
 .turbo
 .vercel
 .mimosa
+
+# Steering Kiro — aturan kerja lokal, tidak ikut ke repo
+.kiro/steering/

@@ -9,10 +9,8 @@
 		Sliders,
 		CheckCircle2,
 		Layers,
-		Music,
 		Eye,
 		Activity,
-		Lock,
 		Wand2,
 	} from '@lucide/svelte';
 	import { MASTER_TEMPLATES } from '$lib/data/master-templates';
