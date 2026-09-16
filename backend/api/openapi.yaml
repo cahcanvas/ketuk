@@ -1,0 +1,2668 @@
+openapi: 3.0.3
+info:
+  title: ketuk-api
+  version: 0.2.0
+  description: |
+    Backend Ketuk. Sukses JSON `{"data": ...}` kecuali auth (`data` + `tokens`) dan callback Duitku (teks `SUCCESS`).
+    Schema katalog + undangan + planner sesuai handler hidup. CRUD lokasi/tamu/buku ucapan sudah dikode sesuai `docs/contracts/undangan-crud.md`.
+    PATCH inviter dan caption galeri juga sudah dikode sesuai `docs/contracts/undangan-patch-gallery-inviter.md`.
+    CRUD planner (patch/archive, hari, kategori, item budget, checklist) sudah dikode sesuai `docs/contracts/planner-crud.md` bagian 1; rundown sesi jam+PIC belum.
+    Auth dan billing masih path-only. Vendor belum diimplementasi.
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Catalog
+    description: Tipe acara dan template undangan
+  - name: Invitation
+    description: Undangan host (JWT). RSVP publik terpisah.
+  - name: Planner
+    description: Budget, hari, dan checklist host (JWT). Mandiri — tidak butuh undangan.
+  - name: Public
+    description: Tamu tanpa login. RSVP by token; preview by slug bukan RSVP.
+paths:
+  /healthz:
+    get:
+      summary: Monitoring sistem (API hidup + ping Postgres)
+  /v1/auth/register:
+    post:
+      summary: Register host (paket free)
+  /v1/auth/login:
+    post:
+      summary: Login
+  /v1/auth/refresh:
+    post:
+      summary: Rotasi token (refresh lama langsung dicabut)
+  /v1/auth/logout:
+    post:
+      summary: Cabut satu sesi refresh (body {refresh_token})
+  /v1/auth/password:
+    post:
+      summary: Ganti password; semua sesi refresh dicabut
+      security: [{bearerAuth: []}]
+  /v1/me:
+    get:
+      summary: Profil, subscription, undangan, planner
+      security: [{bearerAuth: []}]
+    patch:
+      summary: Ubah nama profil
+      security: [{bearerAuth: []}]
+  /v1/event-types:
+    get:
+      tags: [Catalog]
+      operationId: listEventTypes
+      summary: Katalog tipe acara
+      description: "`invitation_schema` adalah petunjuk slot `content` untuk FE. Server tidak memvalidasi key di `content`."
+      responses:
+        "200":
+          description: Daftar tipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventTypeListResponse"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/templates:
+    get:
+      tags: [Catalog]
+      operationId: listTemplates
+      summary: Template undangan
+      description: "Publik. Bearer opsional — jika JWT valid dan paket punya `premium_templates`, template premium `locked=false`."
+      parameters:
+        - in: query
+          name: type
+          description: "Filter slug `event_types` (wedding, birthday, …)"
+          schema: {type: string}
+      responses:
+        "200":
+          description: Daftar template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateListResponse"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/billing/plans:
+    get:
+      summary: Paket SaaS
+  /v1/billing/subscription:
+    get:
+      summary: Paket aktif + entitlement
+      security: [{bearerAuth: []}]
+  /v1/billing/checkout:
+    post:
+      summary: Buat pesanan upgrade plan via Duitku
+      security: [{bearerAuth: []}]
+  /v1/orders:
+    get:
+      summary: Riwayat transaksi host (pesanan)
+      security: [{bearerAuth: []}]
+      parameters:
+        - in: query
+          name: kind
+          description: subscription | gift | vendor; kosong = semua
+          schema: {type: string}
+  /v1/orders/{id}/sync:
+    post:
+      summary: Tanya status ke Duitku untuk order pending (rekonsiliasi)
+      security: [{bearerAuth: []}]
+  /v1/invitations:
+    get:
+      tags: [Invitation]
+      operationId: listInvitations
+      summary: Daftar undangan non-archived milik host
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: "List. Slice kosong di Go bisa `data: null`."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Invitation]
+      operationId: createInvitation
+      summary: Buat undangan draft
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInvitationRequest"
+      responses:
+        "201":
+          description: "Draft baru. `type_id` diambil dari template. `content` kosong jadi `{}`."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/EntitlementDenied"
+        "404":
+          description: template tidak ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: getInvitation
+      summary: Detail undangan
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    patch:
+      tags: [Invitation]
+      operationId: patchInvitation
+      summary: Ubah judul, content, atau tanggal
+      description: "Field yang tidak dikirim tidak diubah. `content` hanya diubah jika key JSON hadir (bukan null)."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchInvitationRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: archiveInvitation
+      summary: Archive undangan (bukan hard delete)
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Diarsipkan
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/publish:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    post:
+      tags: [Invitation]
+      operationId: publishInvitation
+      summary: Publish dan isi slug
+      description: "Slug bukan jalur RSVP. Idempoten jika sudah published. Tamu memakai `/v1/public/rsvp/{token}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/template:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    patch:
+      tags: [Invitation]
+      operationId: setInvitationTemplate
+      summary: Ganti template (ditolak setelah publish)
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetTemplateRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/EntitlementDenied"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Undangan sudah published
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+              example:
+                error: {code: immutable, message: cannot change template after publish}
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/locations:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: listLocations
+      summary: Daftar lokasi
+      description: "Ubah / hapus satu lokasi: `/v1/invitations/{id}/locations/{locationId}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Invitation]
+      operationId: addLocation
+      summary: Tambah lokasi + maps_url
+      description: "Tempel URL peta. Server tidak geocode. `id` di body diabaikan."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Location"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/locations/{locationId}:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+      - $ref: "#/components/parameters/LocationId"
+    patch:
+      tags: [Invitation]
+      operationId: patchLocation
+      summary: Ubah lokasi
+      description: "Body parsial: field yang tidak dikirim tidak diubah. `id` di body diabaikan. Server tidak geocode `maps_url`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchLocationRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: deleteLocation
+      summary: Hapus lokasi
+      description: "Lokasi bukan milik undangan ini → 404 `location`."
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/guests:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: listGuests
+      summary: Daftar tamu + rsvp_token
+      description: "Ubah / hapus satu tamu: `/v1/invitations/{id}/guests/{guestId}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Invitation]
+      operationId: addGuest
+      summary: Tambah tamu
+      description: "Status awal `draft`. `rsvp_token` UUID baru untuk `/v1/public/rsvp/{token}`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGuestRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/EntitlementDenied"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/guests/{guestId}:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+      - $ref: "#/components/parameters/GuestId"
+    patch:
+      tags: [Invitation]
+      operationId: patchGuest
+      summary: Ubah tamu atau tandai invited
+      description: "Body parsial. `status` host hanya `draft`|`invited` — jawaban RSVP tamu tidak lewat sini. `rsvp_token` tetap. Tidak mengirim notifikasi."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchGuestRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: deleteGuest
+      summary: Hapus tamu
+      description: "Tautan RSVP tamu ikut mati. Kuota tamu menghitung baris, jadi slot kembali terpakai."
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/inviters:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: listInviters
+      summary: Turut mengundang (bukan tamu RSVP)
+      description: "Ubah satu pengundang: `/v1/invitations/{id}/inviters/{inviterId}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InviterListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Invitation]
+      operationId: addInviter
+      summary: Tambah yang turut mengundang
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInviterRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InviterResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/inviters/{inviterId}:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+      - $ref: "#/components/parameters/InviterId"
+    patch:
+      tags: [Invitation]
+      operationId: patchInviter
+      summary: Ubah turut mengundang
+      description: "Body parsial. `name` jika dikirim tidak boleh kosong setelah trim. `role` kosong boleh (hapus peran). Body `{}` = no-op."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchInviterRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InviterResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: deleteInviter
+      summary: Hapus turut mengundang
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/gallery:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: listGallery
+      summary: Daftar foto galeri
+      description: "Ubah caption satu foto: `/v1/invitations/{id}/gallery/{mediaId}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MediaListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Invitation]
+      operationId: addGallery
+      summary: Upload foto galeri
+      description: "`multipart/form-data` field `file` (wajib), `caption` opsional. Content-Type harus `image/*`. Maks 16 MiB."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                caption:
+                  type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MediaResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/gallery/{mediaId}:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+      - $ref: "#/components/parameters/MediaId"
+    patch:
+      tags: [Invitation]
+      operationId: patchGallery
+      summary: Ubah caption foto galeri
+      description: "Hanya `caption`. File di `./storage` tidak disentuh. Id musik → 404 `media`. Body `{}` = no-op; `caption` kosong = hapus teks."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchGalleryRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MediaResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: deleteGallery
+      summary: Hapus foto galeri
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/music:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: getMusic
+      summary: Musik undangan
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: "`data` null jika belum ada musik"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MusicResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    put:
+      tags: [Invitation]
+      operationId: setMusic
+      summary: Upload musik (mengganti yang lama)
+      description: "Field `file`. Content-Type harus `audio/*`. Maks 16 MiB."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MediaResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: deleteMusic
+      summary: Hapus musik
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus, atau tidak ada musik
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/gift-methods:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+    get:
+      tags: [Invitation]
+      operationId: listGiftMethods
+      summary: Metode amplop (bank, ewallet, duitku)
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GiftMethodListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Invitation]
+      operationId: addGiftMethod
+      summary: Tambah metode amplop
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGiftMethodRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GiftMethodResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/gift-methods/{methodId}:
+    delete:
+      tags: [Invitation]
+      operationId: deleteGiftMethod
+      summary: Hapus metode amplop
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: "#/components/parameters/InvitationId"
+        - $ref: "#/components/parameters/GiftMethodId"
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/gifts:
+    get:
+      tags: [Invitation]
+      operationId: listGifts
+      summary: Riwayat amplop masuk
+      description: "Kas tamu (`gift_payments`), bukan `orders` langganan SaaS."
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: "#/components/parameters/InvitationId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GiftPaymentListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/guestbook:
+    get:
+      tags: [Invitation]
+      operationId: listGuestbookHost
+      summary: Buku ucapan (moderation host)
+      description: "Ubah / hapus satu entri: `/v1/invitations/{id}/guestbook/{entryId}`."
+      security: [{bearerAuth: []}]
+      parameters:
+        - $ref: "#/components/parameters/InvitationId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestbookListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/invitations/{id}/guestbook/{entryId}:
+    parameters:
+      - $ref: "#/components/parameters/InvitationId"
+      - $ref: "#/components/parameters/GuestbookEntryId"
+    patch:
+      tags: [Invitation]
+      operationId: patchGuestbook
+      summary: Ubah entri buku ucapan
+      description: "Keduanya opsional; body `{}` = no-op. Field yang dikirim tidak boleh kosong setelah trim. `created_at` tidak berubah."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchGuestbookRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestbookResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Invitation]
+      operationId: deleteGuestbook
+      summary: Hapus entri buku ucapan
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/public/rsvp/{token}:
+    parameters:
+      - $ref: "#/components/parameters/RSVPToken"
+    get:
+      tags: [Public]
+      operationId: getPublicRSVP
+      summary: Halaman RSVP tamu
+      description: |
+        Undangan harus published. Token salah → 404.
+        GET menaikkan status tamu `draft`/`invited` menjadi `opened`.
+        Bukan preview slug. Tidak mengembalikan `invitation_id` / `guest_id`.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicRSVPResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Public]
+      operationId: submitPublicRSVP
+      summary: Submit RSVP
+      description: "Field `message` adalah ucapan RSVP, bukan buku ucapan."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitRSVPRequest"
+      responses:
+        "200":
+          description: Objek Guest lengkap (termasuk rsvp_token, email, phone)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/public/rsvp/{token}/gifts:
+    post:
+      tags: [Public]
+      operationId: createPublicGift
+      summary: Tamu kirim amplop
+      description: "Bank/ewallet langsung `paid`. Duitku `pending` + `payment_url`. Tanpa Duitku → 503. `sender_name` kosong memakai nama tamu."
+      parameters:
+        - $ref: "#/components/parameters/RSVPToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePublicGiftRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GiftPaymentResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "503":
+          $ref: "#/components/responses/PaymentUnavailable"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/public/rsvp/{token}/guestbook:
+    post:
+      tags: [Public]
+      operationId: addPublicRSVPGuestbook
+      summary: Tamu isi buku ucapan
+      description: "`name` kosong memakai nama tamu. `message` wajib. Nama ≤ 80, pesan ≤ 2000 karakter."
+      parameters:
+        - $ref: "#/components/parameters/RSVPToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGuestbookRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestbookResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/public/invitations/{slug}:
+    get:
+      tags: [Public]
+      operationId: getPublicInvitation
+      summary: Preview undangan publik by slug (bukan RSVP)
+      description: Hanya status published. Draft/archived → 404. Jangan dipakai untuk submit RSVP.
+      parameters:
+        - $ref: "#/components/parameters/InvitationSlug"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicInvitationResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/public/invitations/{slug}/guestbook:
+    parameters:
+      - $ref: "#/components/parameters/InvitationSlug"
+    get:
+      tags: [Public]
+      operationId: listPublicGuestbook
+      summary: Daftar buku ucapan publik
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestbookListResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Public]
+      operationId: addPublicGuestbook
+      summary: Isi buku ucapan (nama + pesan wajib)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGuestbookRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestbookResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/public/media/{id}:
+    get:
+      tags: [Public]
+      operationId: getPublicMedia
+      summary: File galeri atau musik
+      description: "Bukan JSON `data`. Tidak mengecek undangan published."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        "200":
+          description: File mentah
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/public/payments/duitku/callback:
+    post:
+      summary: Webhook Duitku (form-urlencoded, body SUCCESS)
+  /v1/planners:
+    get:
+      tags: [Planner]
+      operationId: listPlanners
+      summary: Daftar planner aktif
+      description: "Hanya `status=active`. Planner yang sudah diarchive tetap terbaca lewat `GET /v1/planners/{id}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Planner]
+      operationId: createPlanner
+      summary: Buat planner (event | daily)
+      description: "Kuota `max_active_planners`; mode `daily` butuh flag `planner_daily`. `categories` kosong + `type_id` → kategori dicopy dari `event_types.planner_categories`. Mata uang selalu IDR."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlannerRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/EntitlementDenied"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+    get:
+      tags: [Planner]
+      operationId: getPlanner
+      summary: Detail planner
+      description: Termasuk planner yang sudah diarchive, asal milik host.
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    patch:
+      tags: [Planner]
+      operationId: patchPlanner
+      summary: Ubah planner (parsial)
+      description: |
+        Body parsial: field yang tidak dikirim tidak diubah, `{}` = no-op 200. `id` di body diabaikan.
+        `type_id` / `starts_at` / `ends_at` dikirim `null` untuk dikosongkan.
+        Turun `daily` → `event` mengosongkan `day_id` semua budget item; `day_id` checklist tetap.
+        `status` dan `currency` tidak lewat PATCH — archive pakai DELETE, mata uang tetap IDR.
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchPlannerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/EntitlementDenied"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Planner]
+      operationId: archivePlanner
+      summary: Archive planner
+      description: |
+        Bukan hard delete: `status=archived`, baris budget dan checklist tetap di DB.
+        Tautan `resource_links` tetap — hapus lewat `DELETE /v1/links/{id}`.
+        Sudah archived → 204 idempoten. Membebaskan slot kuota `max_active_planners`. Unarchive belum ada.
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Diarchive
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/days:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+    get:
+      tags: [Planner]
+      operationId: listDays
+      summary: Daftar hari
+      description: "Urut `day_date`. Ubah / hapus satu hari: `/v1/planners/{id}/days/{dayId}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerDayListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Planner]
+      operationId: addDay
+      summary: Tambah hari
+      description: "`date` = tanggal kalender (kolom DATE, jam diabaikan). Tanggal ganda dalam satu planner → 409 `conflict`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlannerDayRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerDayResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/DayDateConflict"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/days/{dayId}:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+      - $ref: "#/components/parameters/PlannerDayId"
+    patch:
+      tags: [Planner]
+      operationId: patchDay
+      summary: Ubah hari
+      description: "Body parsial, `{}` = no-op 200. `label` boleh string kosong. Tanggal bentrok → 409 `conflict`. Hari bukan milik planner ini → 404 `day`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchPlannerDayRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerDayResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/DayDateConflict"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Planner]
+      operationId: deleteDay
+      summary: Hapus hari
+      description: "Budget item dan checklist yang menempel hari ini tidak dihapus; `day_id` mereka jadi `null`."
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/days/{dayId}/sessions:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+      - $ref: "#/components/parameters/PlannerDayId"
+    get:
+      tags: [Planner]
+      operationId: listSessions
+      summary: Daftar sesi rundown
+      description: "Urut `starts_at` lalu `sort_order`. Hari bukan milik planner ini → 404 `day`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerSessionListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Planner]
+      operationId: addSession
+      summary: Tambah sesi rundown
+      description: "Jam dinding, bukan RFC3339: `\"HH:MM\"` atau `\"HH:MM:SS\"`. Tanggal ada di hari induknya. `pic_name` teks bebas, bukan id user/vendor."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlannerSessionRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerSessionResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/days/{dayId}/sessions/{sessionId}:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+      - $ref: "#/components/parameters/PlannerDayId"
+      - $ref: "#/components/parameters/PlannerSessionId"
+    patch:
+      tags: [Planner]
+      operationId: patchSession
+      summary: Ubah sesi rundown
+      description: "Body parsial, `{}` = no-op 200. `ends_at` menerima `null` untuk sesi tanpa jam selesai. Sesi di hari lain → 404 `session`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchPlannerSessionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlannerSessionResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Planner]
+      operationId: deleteSession
+      summary: Hapus sesi rundown
+      description: "Hapus hari ikut menghapus sesinya (FK CASCADE)."
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/categories:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+    get:
+      tags: [Planner]
+      operationId: listCategories
+      summary: Daftar kategori budget
+      description: "Ubah / hapus satu kategori: `/v1/planners/{id}/categories/{categoryId}`."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetCategoryListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Planner]
+      operationId: addCategory
+      summary: Tambah kategori budget
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBudgetCategoryRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetCategoryResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/categories/{categoryId}:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+      - $ref: "#/components/parameters/BudgetCategoryId"
+    patch:
+      tags: [Planner]
+      operationId: patchCategory
+      summary: Ubah kategori budget
+      description: "Body parsial, `{}` = no-op 200. `name` kosong → 400. Kategori bukan milik planner ini → 404 `category`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchBudgetCategoryRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetCategoryResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Planner]
+      operationId: deleteCategory
+      summary: Hapus kategori budget
+      description: "**Cascade:** semua budget item di dalam kategori ini terhapus. Minta konfirmasi host sebelum memanggil."
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus bersama itemnya
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/budget:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+    get:
+      tags: [Planner]
+      operationId: getBudget
+      summary: Ringkasan budget + daftar item
+      description: "Ini sekaligus daftar item — tidak ada `GET /v1/planners/{id}/budget/items` terpisah."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetSummaryResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/budget/items:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+    post:
+      tags: [Planner]
+      operationId: addBudgetItem
+      summary: Tambah item budget
+      description: |
+        `category_id` harus kategori milik planner ini (salah → 404 `category`). `amount` IDR, `< 0` → 400.
+        `day_id` hanya boleh saat `budget_mode` = `daily` (mode `event` → 400); hari asing → 404 `day`.
+        Baca item lewat `GET /v1/planners/{id}/budget`.
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBudgetItemRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetItemResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/budget/items/{itemId}:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+      - $ref: "#/components/parameters/BudgetItemId"
+    patch:
+      tags: [Planner]
+      operationId: patchBudgetItem
+      summary: Ubah item budget
+      description: |
+        Body parsial, `{}` = no-op 200. Item bukan milik planner ini → 404 `budget_item`.
+        `paid_at` RFC3339 = sudah dibayar, `null` = belum. Server tidak mengisi `now()` sendiri.
+        `day_id` `null` = lepas dari hari; non-null hanya saat mode `daily`.
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchBudgetItemRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetItemResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Planner]
+      operationId: deleteBudgetItem
+      summary: Hapus item budget
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/checklist:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+    get:
+      tags: [Planner]
+      operationId: listChecklist
+      summary: Daftar checklist
+      description: "Urut `sort_order`, lalu judul."
+      security: [{bearerAuth: []}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckItemListResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    post:
+      tags: [Planner]
+      operationId: addChecklistItem
+      summary: Tambah tugas checklist
+      description: "`day_id` boleh di mode `event` — tugas menempel hari, bukan budget. Hari asing → 404 `day`."
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCheckItemRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckItemResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/planners/{id}/checklist/{itemId}:
+    parameters:
+      - $ref: "#/components/parameters/PlannerId"
+      - $ref: "#/components/parameters/ChecklistItemId"
+    patch:
+      tags: [Planner]
+      operationId: patchChecklistItem
+      summary: Ubah tugas checklist
+      description: |
+        Body parsial, `{}` = no-op 200. Dulu hanya `{done}` → 204; sekarang 200 + `{"data": CheckItem}`.
+        Item bukan milik planner ini → 404 `checklist`. `day_id` / `due_at` `null` = dikosongkan.
+      security: [{bearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchCheckItemRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckItemResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    delete:
+      tags: [Planner]
+      operationId: deleteChecklistItem
+      summary: Hapus tugas checklist
+      security: [{bearerAuth: []}]
+      responses:
+        "204":
+          description: Dihapus
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /v1/links:
+    get:
+      summary: List tautan; filter opsional invitation_id / planner_id
+      security: [{bearerAuth: []}]
+      parameters:
+        - in: query
+          name: invitation_id
+          schema: {type: string, format: uuid}
+        - in: query
+          name: planner_id
+          schema: {type: string, format: uuid}
+    post:
+      security: [{bearerAuth: []}]
+  /v1/links/{id}:
+    delete:
+      summary: Hapus tautan (undangan dan planner tetap ada)
+      security: [{bearerAuth: []}]
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    InvitationId:
+      name: id
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    LocationId:
+      name: locationId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    GuestId:
+      name: guestId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    InviterId:
+      name: inviterId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    MediaId:
+      name: mediaId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    GiftMethodId:
+      name: methodId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    GuestbookEntryId:
+      name: entryId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    PlannerId:
+      name: id
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    PlannerDayId:
+      name: dayId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    PlannerSessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    BudgetCategoryId:
+      name: categoryId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    BudgetItemId:
+      name: itemId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    ChecklistItemId:
+      name: itemId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+    RSVPToken:
+      name: token
+      in: path
+      required: true
+      schema: {type: string}
+    InvitationSlug:
+      name: slug
+      in: path
+      required: true
+      schema: {type: string}
+  responses:
+    BadRequest:
+      description: "JSON rusak (`invalid_json`) atau validasi (`invalid_input` / `invalid_id`)"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+    InvalidId:
+      description: Path UUID rusak
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          example:
+            error: {code: invalid_id, message: invalid id}
+    Unauthorized:
+      description: JWT hilang atau tidak valid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          example:
+            error: {code: unauthorized, message: missing bearer token}
+    EntitlementDenied:
+      description: Kuota atau template premium
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          examples:
+            invitationQuota:
+              value:
+                error: {code: entitlement_denied, message: max_active_invitations quota exceeded}
+            guestQuota:
+              value:
+                error: {code: entitlement_denied, message: max_guests_per_invitation quota exceeded}
+            premiumTemplate:
+              value:
+                error: {code: entitlement_denied, message: premium_templates not included in current plan}
+            plannerQuota:
+              value:
+                error: {code: entitlement_denied, message: max_active_planners quota exceeded}
+            plannerDaily:
+              value:
+                error: {code: entitlement_denied, message: planner_daily not included in current plan}
+    NotFound:
+      description: Resource tidak ada atau bukan milik host; RSVP token/slug unpublished
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          examples:
+            invitation:
+              value:
+                error: {code: not_found, message: invitation not found}
+            plannerChild:
+              summary: "Anak planner: day / session / category / budget_item / checklist"
+              value:
+                error: {code: not_found, message: budget_item not found}
+    DayDateConflict:
+      description: Tanggal hari sudah ada di planner ini
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          example:
+            error: {code: conflict, message: day date already exists}
+    PaymentUnavailable:
+      description: Adapter Duitku tidak dikonfigurasi
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          example:
+            error: {code: payment_unavailable, message: Duitku is not configured}
+    InternalError:
+      description: Kesalahan server
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorBody"
+          example:
+            error: {code: internal, message: internal server error}
+  schemas:
+    ErrorBody:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: {type: string}
+            message: {type: string}
+    EventType:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        slug: {type: string, example: wedding}
+        name: {type: string}
+        invitation_schema:
+          type: object
+          additionalProperties: true
+          description: "Petunjuk slot content, contoh `{\"slots\":[\"couple\",\"rundown\"]}`. Bukan JSON Schema yang dienforce."
+        planner_categories:
+          description: Default kategori planner; bukan bagian undangan
+          nullable: true
+    Template:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        slug: {type: string}
+        type_id: {type: string, format: uuid}
+        name: {type: string}
+        tier:
+          type: string
+          enum: [free, premium]
+        version: {type: integer}
+        slots:
+          description: JSON array nama slot template
+        locked:
+          type: boolean
+          description: true jika premium dan caller tidak berhak
+    Invitation:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        owner_id: {type: string, format: uuid}
+        type_id: {type: string, format: uuid}
+        template_id: {type: string, format: uuid}
+        template_version: {type: integer}
+        slug:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [draft, published, archived]
+        title: {type: string}
+        content:
+          type: object
+          additionalProperties: true
+          description: Objek bebas. Key mengikuti invitation_schema tipe acara; server tidak validasi.
+        starts_at:
+          type: string
+          format: date-time
+          nullable: true
+        ends_at:
+          type: string
+          format: date-time
+          nullable: true
+    Location:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        label: {type: string}
+        venue_name: {type: string}
+        address: {type: string}
+        maps_url: {type: string, description: URL Google/Apple Maps yang ditempel}
+        lat:
+          type: number
+          format: double
+          nullable: true
+          description: Tidak diisi otomatis
+        lng:
+          type: number
+          format: double
+          nullable: true
+        starts_at:
+          type: string
+          format: date-time
+          nullable: true
+        sort_order: {type: integer}
+    Guest:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        name: {type: string}
+        email: {type: string}
+        phone: {type: string}
+        group: {type: string}
+        rsvp_token: {type: string}
+        status:
+          type: string
+          enum: [draft, invited, opened, accepted, declined]
+        plus_ones: {type: integer}
+        message: {type: string, description: Pesan RSVP, bukan buku ucapan}
+        rsvp_at:
+          type: string
+          format: date-time
+          nullable: true
+    Inviter:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        name: {type: string}
+        role: {type: string}
+        sort_order: {type: integer}
+    Media:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        kind:
+          type: string
+          enum: [gallery, music]
+        original_name: {type: string}
+        content_type: {type: string}
+        url:
+          type: string
+          example: /v1/public/media/00000000-0000-0000-0000-000000000001
+          description: Path relatif, bukan URL absolut
+        caption: {type: string}
+        sort_order: {type: integer}
+    GuestbookEntry:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        name: {type: string}
+        message: {type: string}
+        created_at: {type: string, format: date-time}
+    GiftMethod:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        kind:
+          type: string
+          enum: [bank, ewallet, duitku]
+        label: {type: string}
+        account_name: {type: string}
+        account_number: {type: string}
+        is_active: {type: boolean}
+        sort_order: {type: integer}
+    GiftPayment:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        method_id: {type: string, format: uuid}
+        sender_name: {type: string}
+        message: {type: string}
+        amount_idr:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [pending, paid, failed, expired]
+        merchant_order_id: {type: string}
+        duitku_reference: {type: string}
+        payment_url: {type: string}
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at: {type: string, format: date-time}
+    PublicRSVPPage:
+      type: object
+      properties:
+        guest_name: {type: string}
+        title: {type: string}
+        content:
+          type: object
+          additionalProperties: true
+        status:
+          type: string
+          description: Status tamu setelah GET (biasanya opened, atau accepted/declined)
+        locations:
+          type: array
+          items: {$ref: "#/components/schemas/Location"}
+          nullable: true
+        inviters:
+          type: array
+          items: {$ref: "#/components/schemas/Inviter"}
+        gallery:
+          type: array
+          items: {$ref: "#/components/schemas/Media"}
+        music:
+          allOf:
+            - $ref: "#/components/schemas/Media"
+          nullable: true
+        template_id: {type: string, format: uuid}
+        guestbook:
+          type: array
+          items: {$ref: "#/components/schemas/GuestbookEntry"}
+        gifts:
+          type: array
+          items: {$ref: "#/components/schemas/GiftMethod"}
+          description: Metode aktif saja
+    PublicInvitationPage:
+      type: object
+      properties:
+        title: {type: string}
+        content:
+          type: object
+          additionalProperties: true
+        slug: {type: string}
+        locations:
+          type: array
+          items: {$ref: "#/components/schemas/Location"}
+          nullable: true
+        inviters:
+          type: array
+          items: {$ref: "#/components/schemas/Inviter"}
+        gallery:
+          type: array
+          items: {$ref: "#/components/schemas/Media"}
+        music:
+          allOf:
+            - $ref: "#/components/schemas/Media"
+          nullable: true
+        template_id: {type: string, format: uuid}
+        guestbook:
+          type: array
+          items: {$ref: "#/components/schemas/GuestbookEntry"}
+        gifts:
+          type: array
+          items: {$ref: "#/components/schemas/GiftMethod"}
+    CreateInvitationRequest:
+      type: object
+      required: [title, template_id]
+      properties:
+        title: {type: string}
+        template_id: {type: string, format: uuid}
+        content:
+          type: object
+          additionalProperties: true
+    PatchInvitationRequest:
+      type: object
+      properties:
+        title: {type: string}
+        content:
+          type: object
+          additionalProperties: true
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+    SetTemplateRequest:
+      type: object
+      required: [template_id]
+      properties:
+        template_id: {type: string, format: uuid}
+    CreateGuestRequest:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+        email: {type: string}
+        phone: {type: string}
+        group: {type: string}
+    PatchLocationRequest:
+      type: object
+      description: Semua field opsional. Jangan geocode maps_url.
+      properties:
+        label: {type: string}
+        venue_name: {type: string}
+        address: {type: string}
+        maps_url: {type: string}
+        lat: {type: number, format: double, nullable: true}
+        lng: {type: number, format: double, nullable: true}
+        starts_at: {type: string, format: date-time, nullable: true}
+        sort_order: {type: integer}
+    PatchGuestRequest:
+      type: object
+      description: "Semua opsional. status host hanya draft|invited. Jangan kirim rsvp_token."
+      properties:
+        name: {type: string}
+        email: {type: string}
+        phone: {type: string}
+        group: {type: string}
+        status:
+          type: string
+          enum: [draft, invited]
+    PatchGuestbookRequest:
+      type: object
+      properties:
+        name: {type: string, maxLength: 80}
+        message: {type: string, maxLength: 2000}
+    PatchInviterRequest:
+      type: object
+      description: Semua opsional. name jika dikirim tidak boleh kosong setelah trim. role kosong boleh.
+      properties:
+        name: {type: string}
+        role: {type: string}
+        sort_order: {type: integer}
+    PatchGalleryRequest:
+      type: object
+      description: Hanya caption. Omit = tidak diubah. String kosong = hapus caption. Jangan kirim file.
+      properties:
+        caption: {type: string}
+    CreateInviterRequest:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+        role: {type: string}
+        sort_order: {type: integer}
+    CreateGiftMethodRequest:
+      type: object
+      required: [kind, label]
+      properties:
+        kind:
+          type: string
+          enum: [bank, ewallet, duitku]
+        label: {type: string}
+        account_name: {type: string}
+        account_number: {type: string}
+        sort_order: {type: integer}
+    SubmitRSVPRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [accepted, declined]
+        message: {type: string}
+        plus_ones: {type: integer, default: 0}
+    CreateGuestbookRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 80
+          description: Wajib di preview slug. Opsional di RSVP-token (default nama tamu).
+        message:
+          type: string
+          maxLength: 2000
+    CreatePublicGiftRequest:
+      type: object
+      required: [method_id, amount_idr]
+      properties:
+        method_id: {type: string, format: uuid}
+        amount_idr:
+          type: integer
+          format: int64
+          minimum: 1
+        sender_name: {type: string}
+        message: {type: string}
+    EventTypeListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/EventType"}
+          nullable: true
+    TemplateListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/Template"}
+          nullable: true
+    InvitationResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/Invitation"}
+    InvitationListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/Invitation"}
+          nullable: true
+    LocationResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/Location"}
+    LocationListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/Location"}
+          nullable: true
+    GuestResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/Guest"}
+    GuestListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/Guest"}
+          nullable: true
+    InviterResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/Inviter"}
+    InviterListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/Inviter"}
+    MediaResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/Media"}
+    MediaListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/Media"}
+    MusicResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: "#/components/schemas/Media"
+          nullable: true
+    GuestbookResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/GuestbookEntry"}
+    GuestbookListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/GuestbookEntry"}
+    GiftMethodResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/GiftMethod"}
+    GiftMethodListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/GiftMethod"}
+    GiftPaymentResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/GiftPayment"}
+    GiftPaymentListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: {$ref: "#/components/schemas/GiftPayment"}
+    PublicRSVPResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/PublicRSVPPage"}
+    PublicInvitationResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/PublicInvitationPage"}
+    Planner:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        owner_id: {type: string, format: uuid}
+        type_id: {type: string, format: uuid, nullable: true, description: Tipe acara katalog; opsional}
+        title: {type: string, example: Nikahan Sep & Dina}
+        budget_mode: {type: string, enum: [event, daily]}
+        currency: {type: string, example: IDR}
+        status: {type: string, enum: [active, archived]}
+        starts_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Tanggal kalender (kolom DATE); jam diabaikan server
+        ends_at: {type: string, format: date-time, nullable: true}
+    CreatePlannerRequest:
+      type: object
+      required: [title]
+      properties:
+        title: {type: string}
+        budget_mode: {type: string, enum: [event, daily], default: event}
+        type_id: {type: string, format: uuid, nullable: true}
+        categories:
+          type: array
+          nullable: true
+          items: {type: string}
+          description: Nama kategori awal; kosong + `type_id` → dicopy dari `event_types.planner_categories`
+    PatchPlannerRequest:
+      type: object
+      description: "Field yang tidak dikirim tidak diubah. `type_id` / `starts_at` / `ends_at` menerima `null` untuk dikosongkan."
+      properties:
+        title: {type: string, description: Trim; kosong → 400}
+        budget_mode: {type: string, enum: [event, daily]}
+        type_id: {type: string, format: uuid, nullable: true}
+        starts_at: {type: string, format: date-time, nullable: true}
+        ends_at: {type: string, format: date-time, nullable: true, description: Tanggal sebelum `starts_at` → 400}
+    PlannerDay:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        date: {type: string, format: date-time, description: Tanggal kalender; unik per planner}
+        label: {type: string, example: Akad}
+        sort_order: {type: integer}
+    CreatePlannerDayRequest:
+      type: object
+      required: [date]
+      properties:
+        date: {type: string, format: date-time}
+        label: {type: string}
+    PatchPlannerDayRequest:
+      type: object
+      properties:
+        date: {type: string, format: date-time}
+        label: {type: string, description: String kosong diperbolehkan}
+        sort_order: {type: integer}
+    PlannerSession:
+      type: object
+      description: Sesi rundown di dalam satu hari planner
+      properties:
+        id: {type: string, format: uuid}
+        day_id: {type: string, format: uuid}
+        title: {type: string, example: Akad}
+        starts_at:
+          type: string
+          example: "09:00:00"
+          description: Jam dinding `HH:MM:SS` (kolom TIME), bukan RFC3339
+        ends_at:
+          type: string
+          nullable: true
+          example: "11:30:00"
+          description: "`null` = sesi tanpa jam selesai"
+        pic_name: {type: string, example: Bu Rina, description: Teks bebas; bukan id user atau vendor}
+        sort_order: {type: integer}
+    CreatePlannerSessionRequest:
+      type: object
+      required: [title, starts_at]
+      properties:
+        title: {type: string, description: Trim; kosong → 400}
+        starts_at: {type: string, example: "09:00", description: "`\"HH:MM\"` atau `\"HH:MM:SS\"`"}
+        ends_at: {type: string, nullable: true, example: "11:30", description: Lebih awal dari `starts_at` → 400}
+        pic_name: {type: string, default: ""}
+        sort_order: {type: integer, default: 0}
+    PatchPlannerSessionRequest:
+      type: object
+      description: "Field yang tidak dikirim tidak diubah. `ends_at` menerima `null` untuk dikosongkan."
+      properties:
+        title: {type: string, description: Trim; kosong → 400}
+        starts_at: {type: string, example: "13:00"}
+        ends_at: {type: string, nullable: true, example: "16:30"}
+        pic_name: {type: string, description: String kosong = hapus nama PIC}
+        sort_order: {type: integer}
+    BudgetCategory:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        name: {type: string, example: Katering}
+        sort_order: {type: integer}
+    CreateBudgetCategoryRequest:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+    PatchBudgetCategoryRequest:
+      type: object
+      properties:
+        name: {type: string, description: Trim; kosong → 400}
+        sort_order: {type: integer}
+    BudgetItem:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        category_id: {type: string, format: uuid}
+        day_id: {type: string, format: uuid, nullable: true, description: Hanya terisi di mode `daily`}
+        name: {type: string}
+        amount: {type: integer, format: int64, description: IDR, example: 25000000}
+        paid_at: {type: string, format: date-time, nullable: true, description: Terisi = sudah dibayar}
+        note: {type: string}
+    CreateBudgetItemRequest:
+      type: object
+      required: [category_id, name]
+      properties:
+        category_id: {type: string, format: uuid}
+        name: {type: string}
+        amount: {type: integer, format: int64, default: 0}
+        day_id: {type: string, format: uuid, nullable: true}
+        note: {type: string}
+    PatchBudgetItemRequest:
+      type: object
+      description: "`day_id` / `paid_at` menerima `null` untuk dikosongkan; key absen tidak mengubah apa pun."
+      properties:
+        category_id: {type: string, format: uuid, description: Harus kategori planner yang sama}
+        day_id: {type: string, format: uuid, nullable: true}
+        name: {type: string, description: Trim; kosong → 400}
+        amount: {type: integer, format: int64, description: "`< 0` → 400"}
+        paid_at: {type: string, format: date-time, nullable: true}
+        note: {type: string}
+    BudgetSummary:
+      type: object
+      description: Ringkasan sekaligus daftar item per kategori
+      properties:
+        budget_mode: {type: string, enum: [event, daily]}
+        currency: {type: string, example: IDR}
+        total: {type: integer, format: int64, description: Jumlah semua item (IDR)}
+        paid: {type: integer, format: int64, description: Jumlah item yang punya `paid_at`}
+        categories:
+          type: array
+          items:
+            allOf:
+              - $ref: "#/components/schemas/BudgetCategory"
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    nullable: true
+                    items: {$ref: "#/components/schemas/BudgetItem"}
+                  total: {type: integer, format: int64}
+                  paid: {type: integer, format: int64}
+    CheckItem:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        day_id: {type: string, format: uuid, nullable: true, description: Boleh terisi di mode `event`}
+        title: {type: string}
+        done: {type: boolean}
+        due_at: {type: string, format: date-time, nullable: true}
+        sort_order: {type: integer}
+    CreateCheckItemRequest:
+      type: object
+      required: [title]
+      properties:
+        title: {type: string}
+        day_id: {type: string, format: uuid, nullable: true}
+        due_at: {type: string, format: date-time, nullable: true}
+        sort_order: {type: integer, default: 0}
+    PatchCheckItemRequest:
+      type: object
+      description: "`day_id` / `due_at` menerima `null` untuk dikosongkan; key absen tidak mengubah apa pun."
+      properties:
+        title: {type: string, description: Trim; kosong → 400}
+        day_id: {type: string, format: uuid, nullable: true}
+        done: {type: boolean}
+        due_at: {type: string, format: date-time, nullable: true}
+        sort_order: {type: integer}
+    PlannerResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/Planner"}
+    PlannerListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          nullable: true
+          items: {$ref: "#/components/schemas/Planner"}
+    PlannerDayResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/PlannerDay"}
+    PlannerDayListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          nullable: true
+          items: {$ref: "#/components/schemas/PlannerDay"}
+    PlannerSessionResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/PlannerSession"}
+    PlannerSessionListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          nullable: true
+          items: {$ref: "#/components/schemas/PlannerSession"}
+    BudgetCategoryResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/BudgetCategory"}
+    BudgetCategoryListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          nullable: true
+          items: {$ref: "#/components/schemas/BudgetCategory"}
+    BudgetItemResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/BudgetItem"}
+    BudgetSummaryResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/BudgetSummary"}
+    CheckItemResponse:
+      type: object
+      required: [data]
+      properties:
+        data: {$ref: "#/components/schemas/CheckItem"}
+    CheckItemListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          nullable: true
+          items: {$ref: "#/components/schemas/CheckItem"}
