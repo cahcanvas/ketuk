@@ -457,7 +457,11 @@ func (s *Server) checkout(w http.ResponseWriter, r *http.Request) {
 		httputil.Error(w, err)
 		return
 	}
-	out, err := s.billing.Checkout(r.Context(), user.ID, body.Plan, user.Email, user.Name)
+	customerName := user.Username
+	if user.Name != nil && *user.Name != "" {
+		customerName = *user.Name
+	}
+	out, err := s.billing.Checkout(r.Context(), user.ID, body.Plan, user.Email, customerName)
 	if err != nil {
 		httputil.Error(w, err)
 		return

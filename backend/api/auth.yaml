@@ -1,0 +1,250 @@
+register:
+  post:
+    tags: [Auth]
+    operationId: register
+    summary: Register host (paket free)
+    description: "`username` dan `email` unique (case-insensitive). `name` (display name) selalu `null` di awal — dilengkapi belakangan lewat `PATCH /v1/me`."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RegisterRequest"
+    responses:
+      "201":
+        description: Terdaftar, langsung dapat token pair
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthResponse"
+      "400":
+        description: "`invalid_input` (email/username kosong) atau `weak_password` (< 8 karakter)"
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            examples:
+              invalidInput:
+                value:
+                  error: {code: invalid_input, message: email and username are required}
+              weakPassword:
+                value:
+                  error: {code: weak_password, message: password must be at least 8 characters}
+      "409":
+        description: Email atau username sudah dipakai
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            examples:
+              emailTaken:
+                value:
+                  error: {code: email_taken, message: email already registered}
+              usernameTaken:
+                value:
+                  error: {code: username_taken, message: username already registered}
+      "429":
+        $ref: "#/components/responses/RateLimited"
+      "500":
+        $ref: "openapi.yaml#/components/responses/InternalError"
+login:
+  post:
+    tags: [Auth]
+    operationId: login
+    summary: Login
+    description: "Isi salah satu `email` atau `username`; kalau dua-duanya dikirim, `email` diprioritaskan."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoginRequest"
+    responses:
+      "200":
+        description: Berhasil, dapat token pair baru
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthResponse"
+      "401":
+        description: Email/username tidak ditemukan atau password salah (pesan sama untuk keduanya)
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            example:
+              error: {code: unauthorized, message: invalid credentials}
+      "429":
+        $ref: "#/components/responses/RateLimited"
+      "500":
+        $ref: "openapi.yaml#/components/responses/InternalError"
+refresh:
+  post:
+    tags: [Auth]
+    operationId: refresh
+    summary: Rotasi token (refresh lama langsung dicabut)
+    description: "Refresh token yang dipakai langsung dicabut (rotasi); dipakai ulang (replay) akan ditolak. Response cuma `{\"tokens\": ...}`, tanpa `data`."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RefreshRequest"
+    responses:
+      "200":
+        description: Token pair baru; sesi lama otomatis dicabut
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshResponse"
+      "401":
+        description: Token rusak/tidak valid, atau sudah dicabut/dipakai (replay)
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            examples:
+              invalidToken:
+                value:
+                  error: {code: unauthorized, message: invalid refresh token}
+              noLongerValid:
+                value:
+                  error: {code: unauthorized, message: refresh token is no longer valid}
+      "429":
+        $ref: "#/components/responses/RateLimited"
+      "500":
+        $ref: "openapi.yaml#/components/responses/InternalError"
+logout:
+  post:
+    tags: [Auth]
+    operationId: logout
+    summary: Cabut satu sesi refresh
+    description: Hanya mencabut sesi milik refresh_token yang dikirim; sesi/device lain tetap aktif.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RefreshRequest"
+    responses:
+      "204":
+        description: Sesi dicabut, tanpa body
+      "401":
+        description: Token rusak/tidak valid, atau sudah dicabut sebelumnya
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            example:
+              error: {code: unauthorized, message: invalid refresh token}
+      "429":
+        $ref: "#/components/responses/RateLimited"
+      "500":
+        $ref: "openapi.yaml#/components/responses/InternalError"
+changePassword:
+  post:
+    tags: [Auth]
+    operationId: changePassword
+    summary: Ganti password; semua sesi refresh dicabut
+    description: Password baru berlaku, tapi semua refresh_session dicabut sekaligus — device lain (termasuk yang minta ganti) harus login ulang.
+    security: [{bearerAuth: []}]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ChangePasswordRequest"
+    responses:
+      "204":
+        description: Password berhasil diganti, tanpa body
+      "400":
+        description: "`weak_password`: new_password < 8 karakter"
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            example:
+              error: {code: weak_password, message: password must be at least 8 characters}
+      "401":
+        description: Bearer token hilang/tidak valid, atau current_password salah
+        content:
+          application/json:
+            schema:
+              $ref: "openapi.yaml#/components/schemas/ErrorBody"
+            examples:
+              missingBearer:
+                value:
+                  error: {code: unauthorized, message: missing bearer token}
+              wrongCurrentPassword:
+                value:
+                  error: {code: unauthorized, message: current password is incorrect}
+      "500":
+        $ref: "openapi.yaml#/components/responses/InternalError"
+components:
+  responses:
+    RateLimited:
+      description: "Lebih dari `AUTH_RATE_LIMIT` request/menit dari IP yang sama (default 10)"
+      content:
+        application/json:
+          schema:
+            $ref: "openapi.yaml#/components/schemas/ErrorBody"
+          example:
+            error: {code: rate_limited, message: "too many attempts, try again later"}
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username: {type: string, example: finaltest}
+        email: {type: string, format: email}
+        password: {type: string, format: password, minLength: 8}
+    LoginRequest:
+      type: object
+      required: [password]
+      description: "Isi salah satu `email` atau `username`."
+      properties:
+        email: {type: string, format: email}
+        username: {type: string}
+        password: {type: string, format: password}
+    User:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        email: {type: string, format: email}
+        username: {type: string}
+        name:
+          type: string
+          nullable: true
+          description: Display name; `null` sampai diisi lewat `PATCH /v1/me`
+    TokenPair:
+      type: object
+      properties:
+        access_token: {type: string}
+        refresh_token: {type: string}
+        expires_in:
+          type: integer
+          description: Detik sampai access_token expired (default 900)
+    AuthResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+        tokens:
+          $ref: "#/components/schemas/TokenPair"
+    RefreshRequest:
+      type: object
+      required: [refresh_token]
+      properties:
+        refresh_token: {type: string}
+    RefreshResponse:
+      type: object
+      description: "Tidak ada `data` — cuma token pair baru."
+      properties:
+        tokens:
+          $ref: "#/components/schemas/TokenPair"
+    ChangePasswordRequest:
+      type: object
+      required: [current_password, new_password]
+      properties:
+        current_password: {type: string, format: password}
+        new_password: {type: string, format: password, minLength: 8}

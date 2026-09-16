@@ -13,37 +13,42 @@ import (
 
 func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 	var body struct {
+		Username string `json:"username"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
-		Name     string `json:"name"`
 	}
 	if err := httputil.Decode(r, &body); err != nil {
 		httputil.Error(w, err)
 		return
 	}
-	user, tokens, err := s.identity.Register(r.Context(), body.Email, body.Password, body.Name)
+	user, tokens, err := s.identity.Register(r.Context(), body.Email, body.Password, body.Username)
 	if err != nil {
 		httputil.Error(w, err)
 		return
 	}
-	httputil.JSON(w, http.StatusCreated, map[string]any{"data": user, "tokens": tokens})
+	httputil.JSON(w, http.StatusCreated, map[string]any{"data": newUserResponse(user), "tokens": newTokenPairResponse(tokens)})
 }
 
 func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Email    string `json:"email"`
+		Username string `json:"username"`
 		Password string `json:"password"`
 	}
 	if err := httputil.Decode(r, &body); err != nil {
 		httputil.Error(w, err)
 		return
 	}
-	user, tokens, err := s.identity.Login(r.Context(), body.Email, body.Password)
+	identifier := body.Email
+	if identifier == "" {
+		identifier = body.Username
+	}
+	user, tokens, err := s.identity.Login(r.Context(), identifier, body.Password)
 	if err != nil {
 		httputil.Error(w, err)
 		return
 	}
-	httputil.JSON(w, http.StatusOK, map[string]any{"data": user, "tokens": tokens})
+	httputil.JSON(w, http.StatusOK, map[string]any{"data": newUserResponse(user), "tokens": newTokenPairResponse(tokens)})
 }
 
 func (s *Server) refresh(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +64,7 @@ func (s *Server) refresh(w http.ResponseWriter, r *http.Request) {
 		httputil.Error(w, err)
 		return
 	}
-	httputil.JSON(w, http.StatusOK, map[string]any{"tokens": tokens})
+	httputil.JSON(w, http.StatusOK, map[string]any{"tokens": newTokenPairResponse(tokens)})
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +121,7 @@ func (s *Server) me(w http.ResponseWriter, r *http.Request) {
 	}
 	httputil.JSON(w, http.StatusOK, map[string]any{
 		"data": map[string]any{
-			"user":         user,
+			"user":         newUserResponse(user),
 			"subscription": sub,
 			"invitations":  invs,
 			"planners":     pls,
@@ -137,7 +142,7 @@ func (s *Server) patchMe(w http.ResponseWriter, r *http.Request) {
 		httputil.Error(w, err)
 		return
 	}
-	httputil.JSON(w, http.StatusOK, data(out))
+	httputil.JSON(w, http.StatusOK, data(newUserResponse(out)))
 }
 
 func (s *Server) eventTypes(w http.ResponseWriter, r *http.Request) {

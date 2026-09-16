@@ -15,3 +15,7 @@ coverage
 
 # Steering Kiro — aturan kerja lokal, tidak ikut ke repo
 .kiro/steering/
+
+# Generated, regenerate lewat `make bundle-api`
+backend/api/openapi.bundled.yaml
+backend/docs/contracts/

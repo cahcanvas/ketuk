@@ -46,7 +46,7 @@ func main() {
 		}
 	}
 
-	idn := identity.New(pool, cfg.JWTSecret, cfg.AccessTTL, cfg.RefreshTTL)
+	idn := identity.New(identity.NewPostgresRepository(pool), cfg.JWTSecret, cfg.AccessTTL, cfg.RefreshTTL)
 	var gw pay.Gateway = pay.Disabled{}
 	if cfg.Duitku.MerchantCode != "" && cfg.Duitku.APIKey != "" {
 		gw = pay.NewDuitku(cfg.Duitku.MerchantCode, cfg.Duitku.APIKey, cfg.Duitku.BaseURL)

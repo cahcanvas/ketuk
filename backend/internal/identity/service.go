@@ -8,44 +8,30 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
 
 	"ketuk.id/api/internal/apierr"
 )
 
-const freePlanID = "00000000-0000-0000-0000-000000000001"
-
+// Service holds the identity use cases. It depends only on the Repository
+// port, never on pgx/Postgres directly — persistence is an implementation
+// detail injected at the composition root (cmd/api/main.go).
 type Service struct {
-	pool       *pgxpool.Pool
+	repo       Repository
 	secret     []byte
 	accessTTL  time.Duration
 	refreshTTL time.Duration
 }
 
-func New(pool *pgxpool.Pool, secret string, accessTTL, refreshTTL time.Duration) *Service {
-	return &Service{pool: pool, secret: []byte(secret), accessTTL: accessTTL, refreshTTL: refreshTTL}
+func New(repo Repository, secret string, accessTTL, refreshTTL time.Duration) *Service {
+	return &Service{repo: repo, secret: []byte(secret), accessTTL: accessTTL, refreshTTL: refreshTTL}
 }
 
-type User struct {
-	ID    uuid.UUID `json:"id"`
-	Email string    `json:"email"`
-	Name  string    `json:"name"`
-}
-
-type TokenPair struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	ExpiresIn    int    `json:"expires_in"`
-}
-
-func (s *Service) Register(ctx context.Context, email, password, name string) (User, TokenPair, error) {
+func (s *Service) Register(ctx context.Context, email, password, username string) (User, TokenPair, error) {
 	email = strings.ToLower(strings.TrimSpace(email))
-	name = strings.TrimSpace(name)
-	if email == "" || name == "" {
-		return User{}, TokenPair{}, apierr.BadRequest("invalid_input", "email and name are required")
+	username = strings.TrimSpace(username)
+	if email == "" || username == "" {
+		return User{}, TokenPair{}, apierr.BadRequest("invalid_input", "email and username are required")
 	}
 	if len(password) < 8 {
 		return User{}, TokenPair{}, apierr.BadRequest("weak_password", "password must be at least 8 characters")
@@ -56,42 +42,28 @@ func (s *Service) Register(ctx context.Context, email, password, name string) (U
 		return User{}, TokenPair{}, err
 	}
 
-	user := User{ID: uuid.New(), Email: email, Name: name}
-	tx, err := s.pool.Begin(ctx)
-	if err != nil {
-		return User{}, TokenPair{}, err
-	}
-	defer tx.Rollback(ctx)
-
-	_, err = tx.Exec(ctx, `INSERT INTO users (id, email, password_hash, name) VALUES ($1,$2,$3,$4)`,
-		user.ID, user.Email, string(hash), user.Name)
-	if err != nil {
-		if isUnique(err) {
+	user := User{ID: uuid.New(), Email: email, Username: username}
+	if err := s.repo.CreateUser(ctx, user.ID, user.Email, user.Username, string(hash)); err != nil {
+		switch {
+		case errors.Is(err, ErrUsernameTaken):
+			return User{}, TokenPair{}, apierr.Conflict("username_taken", "username already registered")
+		case errors.Is(err, ErrEmailTaken):
 			return User{}, TokenPair{}, apierr.Conflict("email_taken", "email already registered")
+		default:
+			return User{}, TokenPair{}, err
 		}
-		return User{}, TokenPair{}, err
-	}
-	_, err = tx.Exec(ctx, `INSERT INTO subscriptions (id, user_id, plan_id, status, current_period_end)
-		VALUES ($1,$2,$3,'active', now() + interval '100 years')`,
-		uuid.New(), user.ID, freePlanID)
-	if err != nil {
-		return User{}, TokenPair{}, err
-	}
-	if err := tx.Commit(ctx); err != nil {
-		return User{}, TokenPair{}, err
 	}
 
 	tokens, err := s.issue(ctx, user.ID)
 	return user, tokens, err
 }
 
-func (s *Service) Login(ctx context.Context, email, password string) (User, TokenPair, error) {
-	email = strings.ToLower(strings.TrimSpace(email))
-	var user User
-	var hash string
-	err := s.pool.QueryRow(ctx, `SELECT id, email, name, password_hash FROM users WHERE lower(email)=$1`, email).
-		Scan(&user.ID, &user.Email, &user.Name, &hash)
-	if errors.Is(err, pgx.ErrNoRows) {
+// Login accepts either the account email or username as identifier, since the
+// register payload no longer guarantees the caller knows which one they set.
+func (s *Service) Login(ctx context.Context, identifier, password string) (User, TokenPair, error) {
+	identifier = strings.ToLower(strings.TrimSpace(identifier))
+	user, hash, err := s.repo.UserByIdentifier(ctx, identifier)
+	if errors.Is(err, ErrUserNotFound) {
 		return User{}, TokenPair{}, apierr.Unauthorized("invalid credentials")
 	}
 	if err != nil {
@@ -111,14 +83,11 @@ func (s *Service) Refresh(ctx context.Context, token string) (TokenPair, error) 
 	if err != nil {
 		return TokenPair{}, err
 	}
-	tag, err := s.pool.Exec(ctx, `
-		UPDATE refresh_sessions SET revoked_at=now()
-		WHERE id=$1 AND user_id=$2 AND revoked_at IS NULL AND expires_at > now()`, sessionID, userID)
-	if err != nil {
+	if err := s.repo.ConsumeRefreshSession(ctx, sessionID, userID); err != nil {
+		if errors.Is(err, ErrSessionInactive) {
+			return TokenPair{}, apierr.Unauthorized("refresh token is no longer valid")
+		}
 		return TokenPair{}, err
-	}
-	if tag.RowsAffected() == 0 {
-		return TokenPair{}, apierr.Unauthorized("refresh token is no longer valid")
 	}
 	return s.issue(ctx, userID)
 }
@@ -128,10 +97,7 @@ func (s *Service) Logout(ctx context.Context, token string) error {
 	if err != nil {
 		return err
 	}
-	_, err = s.pool.Exec(ctx, `
-		UPDATE refresh_sessions SET revoked_at=now()
-		WHERE id=$1 AND user_id=$2 AND revoked_at IS NULL`, sessionID, userID)
-	return err
+	return s.repo.RevokeRefreshSession(ctx, sessionID, userID)
 }
 
 func (s *Service) UpdateProfile(ctx context.Context, id uuid.UUID, name string) (User, error) {
@@ -139,11 +105,8 @@ func (s *Service) UpdateProfile(ctx context.Context, id uuid.UUID, name string) 
 	if name == "" {
 		return User{}, apierr.BadRequest("invalid_input", "name is required")
 	}
-	var user User
-	err := s.pool.QueryRow(ctx, `
-		UPDATE users SET name=$2, updated_at=now() WHERE id=$1
-		RETURNING id, email, name`, id, name).Scan(&user.ID, &user.Email, &user.Name)
-	if errors.Is(err, pgx.ErrNoRows) {
+	user, err := s.repo.UpdateUserName(ctx, id, name)
+	if errors.Is(err, ErrUserNotFound) {
 		return User{}, apierr.NotFound("user")
 	}
 	return user, err
@@ -155,9 +118,8 @@ func (s *Service) ChangePassword(ctx context.Context, id uuid.UUID, current, nex
 	if len(next) < 8 {
 		return apierr.BadRequest("weak_password", "password must be at least 8 characters")
 	}
-	var hash string
-	err := s.pool.QueryRow(ctx, `SELECT password_hash FROM users WHERE id=$1`, id).Scan(&hash)
-	if errors.Is(err, pgx.ErrNoRows) {
+	hash, err := s.repo.PasswordHash(ctx, id)
+	if errors.Is(err, ErrUserNotFound) {
 		return apierr.NotFound("user")
 	}
 	if err != nil {
@@ -170,21 +132,7 @@ func (s *Service) ChangePassword(ctx context.Context, id uuid.UUID, current, nex
 	if err != nil {
 		return err
 	}
-
-	tx, err := s.pool.Begin(ctx)
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback(ctx)
-	if _, err := tx.Exec(ctx, `UPDATE users SET password_hash=$2, updated_at=now() WHERE id=$1`, id, string(fresh)); err != nil {
-		return err
-	}
-	if _, err := tx.Exec(ctx, `
-		UPDATE refresh_sessions SET revoked_at=now()
-		WHERE user_id=$1 AND revoked_at IS NULL`, id); err != nil {
-		return err
-	}
-	return tx.Commit(ctx)
+	return s.repo.ChangePassword(ctx, id, string(fresh))
 }
 
 func (s *Service) ParseAccess(token string) (uuid.UUID, error) {
@@ -201,10 +149,8 @@ func (s *Service) ParseAccess(token string) (uuid.UUID, error) {
 }
 
 func (s *Service) Get(ctx context.Context, id uuid.UUID) (User, error) {
-	var user User
-	err := s.pool.QueryRow(ctx, `SELECT id, email, name FROM users WHERE id=$1`, id).
-		Scan(&user.ID, &user.Email, &user.Name)
-	if errors.Is(err, pgx.ErrNoRows) {
+	user, err := s.repo.UserByID(ctx, id)
+	if errors.Is(err, ErrUserNotFound) {
 		return User{}, apierr.NotFound("user")
 	}
 	return user, err
@@ -220,10 +166,7 @@ func (s *Service) issue(ctx context.Context, userID uuid.UUID) (TokenPair, error
 	if err != nil {
 		return TokenPair{}, err
 	}
-	_, err = s.pool.Exec(ctx, `
-		INSERT INTO refresh_sessions (id, user_id, expires_at) VALUES ($1,$2,$3)`,
-		sessionID, userID, time.Now().Add(s.refreshTTL))
-	if err != nil {
+	if err := s.repo.CreateRefreshSession(ctx, sessionID, userID, time.Now().Add(s.refreshTTL)); err != nil {
 		return TokenPair{}, err
 	}
 	return TokenPair{
@@ -267,11 +210,7 @@ func (s *Service) parseRefresh(token string) (userID, sessionID uuid.UUID, err e
 
 // PurgeExpiredSessions drops rows that can no longer authorise anything.
 func (s *Service) PurgeExpiredSessions(ctx context.Context) (int64, error) {
-	tag, err := s.pool.Exec(ctx, `DELETE FROM refresh_sessions WHERE expires_at < now()`)
-	if err != nil {
-		return 0, err
-	}
-	return tag.RowsAffected(), nil
+	return s.repo.DeleteExpiredSessions(ctx)
 }
 
 func (s *Service) parse(token string) (jwt.MapClaims, error) {
@@ -289,9 +228,4 @@ func (s *Service) parse(token string) (jwt.MapClaims, error) {
 		return nil, apierr.Unauthorized("invalid token")
 	}
 	return claims, nil
-}
-
-func isUnique(err error) bool {
-	var pg *pgconn.PgError
-	return errors.As(err, &pg) && pg.Code == "23505"
 }

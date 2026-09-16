@@ -3,14 +3,16 @@ info:
   title: ketuk-api
   version: 0.2.0
   description: |
-    Backend Ketuk. Sukses JSON `{"data": ...}` kecuali auth (`data` + `tokens`) dan callback Duitku (teks `SUCCESS`).
+    Backend Ketuk. Sukses JSON `{"data": ...}` kecuali `POST /v1/auth/refresh` (cuma `{"tokens": ...}`, tanpa `data`), register/login (`data` + `tokens`), dan callback Duitku (teks `SUCCESS`).
     Schema katalog + undangan + planner sesuai handler hidup. CRUD lokasi/tamu/buku ucapan sudah dikode sesuai `docs/contracts/undangan-crud.md`.
     PATCH inviter dan caption galeri juga sudah dikode sesuai `docs/contracts/undangan-patch-gallery-inviter.md`.
     CRUD planner (patch/archive, hari, kategori, item budget, checklist) sudah dikode sesuai `docs/contracts/planner-crud.md` bagian 1; rundown sesi jam+PIC belum.
-    Auth dan billing masih path-only. Vendor belum diimplementasi.
+    Auth: register/login/refresh/logout/password sudah punya schema penuh (lihat `api/auth.yaml`); `/v1/me` masih path-only. Billing masih path-only. Vendor belum diimplementasi.
 servers:
   - url: http://localhost:8080
 tags:
+  - name: Auth
+    description: Register, login, refresh/logout sesi, ganti password
   - name: Catalog
     description: Tipe acara dan template undangan
   - name: Invitation
@@ -24,21 +26,15 @@ paths:
     get:
       summary: Monitoring sistem (API hidup + ping Postgres)
   /v1/auth/register:
-    post:
-      summary: Register host (paket free)
+    $ref: "auth.yaml#/register"
   /v1/auth/login:
-    post:
-      summary: Login
+    $ref: "auth.yaml#/login"
   /v1/auth/refresh:
-    post:
-      summary: Rotasi token (refresh lama langsung dicabut)
+    $ref: "auth.yaml#/refresh"
   /v1/auth/logout:
-    post:
-      summary: Cabut satu sesi refresh (body {refresh_token})
+    $ref: "auth.yaml#/logout"
   /v1/auth/password:
-    post:
-      summary: Ganti password; semua sesi refresh dicabut
-      security: [{bearerAuth: []}]
+    $ref: "auth.yaml#/changePassword"
   /v1/me:
     get:
       summary: Profil, subscription, undangan, planner
