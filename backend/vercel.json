@@ -2,8 +2,5 @@
   "rewrites": [
     { "source": "/healthz", "destination": "/api" },
     { "source": "/v1/(.*)", "destination": "/api" }
-  ],
-  "crons": [
-    { "path": "/api/cron/sweep", "schedule": "*/15 * * * *" }
   ]
 }

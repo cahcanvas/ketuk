@@ -18,7 +18,9 @@ coverage
 
 # Generated, regenerate lewat `make bundle-api`
 backend/api/openapi.bundled.yaml
-backend/docs/contracts/
+
+# Dokumentasi kerja lokal, tidak ikut ke repo
+backend/docs/
 
 # Upload lokal (storage.Local dev fallback) — di produksi Vercel pakai Supabase Storage
 backend/storage/
