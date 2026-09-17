@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -115,48 +114,51 @@ func (s *Service) DeleteMedia(ctx context.Context, owner, invitationID, mediaID 
 	if err != nil {
 		return err
 	}
-	_ = os.Remove(filepath.Join(s.storageDir, rel))
-	return nil
+	return s.store.Delete(ctx, rel)
 }
 
-func (s *Service) OpenMedia(ctx context.Context, mediaID uuid.UUID) (absPath, contentType, original string, err error) {
+// ResolveMedia returns either a redirect URL (remote store, e.g. Supabase) or
+// a readable stream (local store) for mediaID — never both. Callers check url
+// first: a non-empty url means body is nil and the caller should redirect.
+func (s *Service) ResolveMedia(ctx context.Context, mediaID uuid.UUID) (url, contentType, original string, body io.ReadCloser, err error) {
 	var rel string
 	err = s.pool.QueryRow(ctx, `
 		SELECT m.rel_path, m.content_type, m.original_name
 		FROM invitation_media m WHERE m.id=$1`, mediaID).
 		Scan(&rel, &contentType, &original)
 	if err != nil {
-		return "", "", "", apierr.NotFound("media")
+		return "", "", "", nil, apierr.NotFound("media")
 	}
-	return filepath.Join(s.storageDir, rel), contentType, original, nil
+	if u := s.store.URL(rel); u != "" {
+		return u, contentType, original, nil, nil
+	}
+	f, err := s.store.Open(ctx, rel)
+	if err != nil {
+		return "", "", "", nil, apierr.NotFound("media")
+	}
+	return "", contentType, original, f, nil
 }
 
 func (s *Service) saveMedia(ctx context.Context, invitationID uuid.UUID, kind, original, contentType, caption string, src io.Reader) (Media, error) {
 	id := uuid.New()
 	ext := extFor(original, contentType)
 	rel := filepath.ToSlash(filepath.Join("invitations", invitationID.String(), kind, id.String()+ext))
-	abs := filepath.Join(s.storageDir, rel)
-	if err := os.MkdirAll(filepath.Dir(abs), 0o755); err != nil {
-		return Media{}, err
-	}
-	f, err := os.Create(abs)
-	if err != nil {
-		return Media{}, err
-	}
-	defer f.Close()
-	if _, err := io.Copy(f, src); err != nil {
-		_ = os.Remove(abs)
+	if err := s.store.Put(ctx, rel, contentType, src); err != nil {
 		return Media{}, err
 	}
 	m := Media{
 		ID: id, Kind: kind, OriginalName: original, ContentType: contentType,
 		Caption: strings.TrimSpace(caption), URL: "/v1/public/media/" + id.String(),
 	}
-	_, err = s.pool.Exec(ctx, `
+	_, err := s.pool.Exec(ctx, `
 		INSERT INTO invitation_media (id, invitation_id, kind, original_name, content_type, rel_path, caption)
 		VALUES ($1,$2,$3,$4,$5,$6,$7)`,
 		m.ID, invitationID, kind, original, contentType, rel, m.Caption)
-	return m, err
+	if err != nil {
+		_ = s.store.Delete(ctx, rel)
+		return Media{}, err
+	}
+	return m, nil
 }
 
 func (s *Service) listMedia(ctx context.Context, invitationID uuid.UUID) ([]Media, *Media, error) {

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -220,22 +219,23 @@ func (s *Server) publicMedia(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	abs, contentType, original, err := s.invitations.OpenMedia(r.Context(), id)
+	url, contentType, original, body, err := s.invitations.ResolveMedia(r.Context(), id)
 	if err != nil {
 		httputil.Error(w, err)
 		return
 	}
-	if _, err := os.Stat(abs); err != nil {
-		httputil.Error(w, apierr.NotFound("media"))
+	if url != "" {
+		http.Redirect(w, r, url, http.StatusFound)
 		return
 	}
+	defer body.Close()
 	if contentType != "" {
 		w.Header().Set("Content-Type", contentType)
 	}
 	if original != "" {
 		w.Header().Set("Content-Disposition", "inline; filename="+filepath.Base(original))
 	}
-	http.ServeFile(w, r, abs)
+	io.Copy(w, body)
 }
 
 func (s *Server) listGiftMethods(w http.ResponseWriter, r *http.Request) {

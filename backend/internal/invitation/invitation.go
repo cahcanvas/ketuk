@@ -15,24 +15,22 @@ import (
 	"ketuk.id/api/internal/billing"
 	"ketuk.id/api/internal/catalog"
 	"ketuk.id/api/internal/notify"
+	"ketuk.id/api/internal/storage"
 )
 
 type Service struct {
-	pool       *pgxpool.Pool
-	billing    *billing.Service
-	catalog    *catalog.Service
-	notify     notify.Notifier
-	storageDir string
+	pool    *pgxpool.Pool
+	billing *billing.Service
+	catalog *catalog.Service
+	notify  notify.Notifier
+	store   storage.Store
 }
 
-func New(pool *pgxpool.Pool, billing *billing.Service, catalog *catalog.Service, n notify.Notifier, storageDir string) *Service {
+func New(pool *pgxpool.Pool, billing *billing.Service, catalog *catalog.Service, n notify.Notifier, store storage.Store) *Service {
 	if n == nil {
 		n = notify.Noop{}
 	}
-	if storageDir == "" {
-		storageDir = "./storage"
-	}
-	return &Service{pool: pool, billing: billing, catalog: catalog, notify: n, storageDir: storageDir}
+	return &Service{pool: pool, billing: billing, catalog: catalog, notify: n, store: store}
 }
 
 type Invitation struct {

@@ -22,6 +22,8 @@ type Config struct {
 	PublicBaseURL  string
 	AuthRateLimit  int
 	Duitku         DuitkuConfig
+	Supabase       SupabaseConfig
+	CronSecret     string
 }
 
 type DuitkuConfig struct {
@@ -29,6 +31,15 @@ type DuitkuConfig struct {
 	APIKey       string
 	BaseURL      string
 	ReturnURL    string
+}
+
+// SupabaseConfig is only needed when deploying somewhere without a durable
+// filesystem (Vercel). Empty URL/ServiceRoleKey means "use local disk
+// instead" — see internal/storage.
+type SupabaseConfig struct {
+	URL            string
+	ServiceRoleKey string
+	StorageBucket  string
 }
 
 func Load() (Config, error) {
@@ -72,6 +83,12 @@ func Load() (Config, error) {
 			BaseURL:      getenv("DUITKU_BASE_URL", "https://api-sandbox.duitku.com"),
 			ReturnURL:    getenv("DUITKU_RETURN_URL", "http://localhost:5173/billing/return"),
 		},
+		Supabase: SupabaseConfig{
+			URL:            getenv("SUPABASE_URL", ""),
+			ServiceRoleKey: getenv("SUPABASE_SERVICE_ROLE_KEY", ""),
+			StorageBucket:  getenv("SUPABASE_STORAGE_BUCKET", "invitation-media"),
+		},
+		CronSecret: getenv("CRON_SECRET", ""),
 	}, nil
 }
 
