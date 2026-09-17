@@ -67,7 +67,7 @@ func Load() (Config, error) {
 	}
 
 	return Config{
-		HTTPAddr:       getenv("HTTP_ADDR", ":8080"),
+		HTTPAddr:       httpAddr(),
 		DatabaseURL:    dbURL,
 		JWTSecret:      secret,
 		AccessTTL:      accessTTL,
@@ -90,6 +90,16 @@ func Load() (Config, error) {
 		},
 		CronSecret: getenv("CRON_SECRET", ""),
 	}, nil
+}
+
+// httpAddr prefers PORT — the convention hosts like Vercel/Railway/Heroku use
+// to tell the app which port they expect it to listen on — falling back to
+// HTTP_ADDR (or :8080) for local dev and anywhere PORT isn't set.
+func httpAddr() string {
+	if port := os.Getenv("PORT"); port != "" {
+		return ":" + port
+	}
+	return getenv("HTTP_ADDR", ":8080")
 }
 
 func getenv(key, fallback string) string {
