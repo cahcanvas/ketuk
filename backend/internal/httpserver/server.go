@@ -23,6 +23,7 @@ import (
 	"ketuk.id/api/internal/link"
 	"ketuk.id/api/internal/pay"
 	"ketuk.id/api/internal/planner"
+	"ketuk.id/api/internal/sweepjob"
 )
 
 type Server struct {
@@ -54,6 +55,8 @@ func New(cfg config.Config, pool *pgxpool.Pool, idn *identity.Service, bill *bil
 	}))
 
 	r.Get("/healthz", s.health)
+	r.Get("/api/cron/sweep", s.cronSweep)
+	r.Post("/api/cron/sweep", s.cronSweep)
 
 	r.Route("/v1", func(r chi.Router) {
 		// Credential endpoints are the only brute-force target worth throttling.
@@ -164,6 +167,19 @@ func (s *Server) health(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	httputil.JSON(w, http.StatusOK, map[string]string{"status": "ok"})
+}
+
+// cronSweep is hit by an external scheduler (Vercel's own Cron Jobs are
+// capped at once/day on the Hobby plan, too coarse for this). CronSecret
+// unset means the route is unreachable rather than silently open.
+func (s *Server) cronSweep(w http.ResponseWriter, r *http.Request) {
+	secret := s.cfg.CronSecret
+	if secret == "" || r.Header.Get("Authorization") != "Bearer "+secret {
+		httputil.Error(w, apierr.Unauthorized("invalid cron secret"))
+		return
+	}
+	sweepjob.RunOnce(r.Context(), s.identity, s.billing, s.gifts)
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (s *Server) auth(next http.Handler) http.Handler {
