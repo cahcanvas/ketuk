@@ -25,7 +25,7 @@
 	<div class="bg-coffee-900 py-2 px-4 text-center text-[10px] sm:text-[11px] font-medium tracking-[0.18em] uppercase text-champagne-200">
 		<span class="inline-flex items-center gap-2">
 			<span class="h-1.5 w-1.5 rounded-full bg-champagne-400"></span>
-			<span>Koleksi Desain 2026: Diskon Spesial 50% untuk Seluruh Template Pernikahan</span>
+			<span>Undangan Aktif Selamanya · Tanpa Biaya Perpanjangan</span>
 		</span>
 	</div>
 
@@ -151,10 +151,11 @@
 							Ketuk<span class="text-coffee-700 italic font-normal">.id</span>
 						</span>
 					</div>
-					<p class="text-sm text-coffee-600 leading-relaxed max-w-sm">
-						Platform undangan digital pernikahan dan event modern dengan estetika haute-couture.
-						RSVP real-time, peta lokasi terintegrasi, dan amplop digital dalam satu sentuhan elegan.
-					</p>
+				<p class="text-sm text-coffee-600 leading-relaxed max-w-sm">
+					Platform undangan digital untuk setiap acara penting — pernikahan, ulang tahun,
+					aqiqah, syukuran, wisuda, hingga reuni. RSVP real-time, peta lokasi
+					terintegrasi, dan amplop digital dalam satu link.
+				</p>
 					<div class="flex items-center gap-4 text-xs text-coffee-500 pt-1">
 						<span class="inline-flex items-center gap-1">
 							<ShieldCheck size={14} class="text-emerald-700" />
@@ -170,14 +171,14 @@
 				<!-- Nav Column 1 -->
 				<div>
 					<h4 class="font-serif text-base font-semibold text-coffee-950 tracking-wide mb-3">
-						Koleksi Desain
+						Jenis Acara
 					</h4>
 					<ul class="space-y-2.5 text-xs text-coffee-600">
 						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Undangan Pernikahan</a></li>
-						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Tema Klasik & Botanical</a></li>
-						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Tema Minimalis Modern</a></li>
-						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Tema Luxury Gold</a></li>
-						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Undangan Ulang Tahun & Acara</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Undangan Ulang Tahun</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Aqiqah & Khitanan</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Syukuran & Wisuda</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Reuni & Acara Lainnya</a></li>
 					</ul>
 				</div>
 

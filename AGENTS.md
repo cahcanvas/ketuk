@@ -151,6 +151,13 @@ paragraf Bahasa Indonesia menjelaskan **kenapa**.
   `ApiRequestError`, tipe `ApiSuccess`/`ApiErrorBody`, `FetchCtx` =
   `{fetch, accessToken}`) + modul events/guests/planner/vendors/gifts/payments.
   `PUBLIC_API_URL` dibaca dinamis.
+- `lib/onboarding/` — preferensi onboarding user (taxonomy dua level:
+  kategori → sub-kategori). `types.ts` port `OnboardingStore`;
+  `local-store.ts` adapter localStorage (sementara, ganti ke Supabase fase
+  berikutnya tanpa ganti kontrak); `preference.svelte.ts` composable runes;
+  `event-config.ts` personalisasi dashboard per kategori (modules/
+  invitationFeatures/optionalFeatures; `other` & null = konfigurasi netral,
+  **jangan fallback ke wedding**).
 - `lib/supabase/` — `server.ts` (SSR cookie) & `client.ts` (browser, session di
   **cookie** bukan localStorage).
 - `lib/components/ui/` (15 generik: Badge, Button, Card, ConfirmDialog,
@@ -163,14 +170,16 @@ paragraf Bahasa Indonesia menjelaskan **kenapa**.
 - `lib/server/email-domain.ts` — cek MX record, fail-open, cache 500 domain.
 - `lib/utils/ics.ts`, `lib/data/{templates,master-templates}.ts`,
   `lib/icons/index.ts`.
-- `routes/` — 4 grup + admin:
+- `routes/` — 3 grup + 2 segment nyata:
   - `(marketing)` — landing, `harga/`, `template/` + `[slug]`, `tentang/`.
   - `(auth)` — `masuk` & `daftar` (+page.server.ts, Zod dari `@ketuk/shared`,
     form action, pesan identik untuk email/password salah), `callback`.
-  - `(app)` — guard login (`+layout.server.ts` + JIT profile dari
-    `user_metadata`); `dashboard`, `undangan/` + `[id]`/{edit,tamu,ucapan} +
-    `baru`, `planner/` + {budget,checklist,timeline}, `vendor/` + `[slug]`,
-    `hadiah/` + `[id]` (query **view `gift_orders_safe`** langsung via Supabase).
+  - `app/` — **segment nyata** (bukan grup): semua route ter-autentikasi
+    `/app/*` (dashboard, undangan/, planner/, vendor/, hadiah/, onboarding/).
+    Guard login di `app/+layout.server.ts` + JIT profile; gate onboarding di
+    `app/+layout.svelte` (klien — preference ada di localStorage). Path lama
+    (`/dashboard`, `/undangan`, dst.) dialihkan permanen (308) di
+    `hooks.server.ts` (`handleLegacyAppPaths`, hanya base hostname).
   - `(public)` — `[slug]` (+page.server.ts: `isPublished` + cache-control
     agresif `public, max-age=60, s-maxage=3600, swr=86400`, sengaja tak sentuh
     session agar CDN-aman) + `[slug]/tamu/[guestSlug]`.
@@ -194,11 +203,13 @@ browser mengandalkan RLS (`profiles`, `invitations`, `wishes`,
 ## 7. `@ketuk/shared`
 
 `packages/shared/src/`: `index.ts` barrel; `types/` (user, event, invitation,
-guest, planner, vendor, gift, payment); `schemas/` (auth, event, guest, gift,
-payment — Zod 4.5.4, dipakai form action frontend); `constants/` (plans,
-event-types, vendor-categories, provinces, payment-methods,
-disposable-email-domains); `utils/` (slug, format, email, date). Build:
-`tsc` ke `dist/` — **wajib `bun run build:shared` sebelum `check`/`build`**.
+guest, planner, vendor, gift, payment, onboarding); `schemas/` (auth, event,
+guest, gift, payment — Zod 4.5.4, dipakai form action frontend); `constants/`
+(plans, event-types, **event-categories** — taxonomy dua level kategori →
+sub-kategori, dipakai onboarding & katalog; vendor-categories, provinces,
+payment-methods, disposable-email-domains); `utils/` (slug, format, email,
+date). Build: `tsc` ke `dist/` — **wajib `bun run build:shared` sebelum
+`check`/`build`**.
 
 ## 8. Environment
 

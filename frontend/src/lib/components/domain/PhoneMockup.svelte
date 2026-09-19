@@ -1,17 +1,100 @@
 <script lang="ts">
 	import { Music, MapPin, Calendar, Check, Gift } from '@lucide/svelte';
 
+	/**
+	 * Konten mockup per jenis acara. Komponen ini cuma dipakai di homepage sebagai
+	 * contoh tampilan undangan; kalau dropdown kategori homepage memilih ulang
+	 * tahun, tamu yang sedang lihat harusnya melihat contoh yang relevan, bukan
+	 * "Akad Nikah". Satu-satunya yang tidak di-override: kerangka telepon, tab
+	 * RSVP, dan pemutar musik — perilakunya sama untuk semua acara.
+	 */
+	type MockupPreset = 'wedding' | 'birthday' | 'general';
+
+	interface ScheduleRow {
+		title: string;
+		note: string;
+		tag: string;
+	}
+
+	interface PresetContent {
+		eyebrow: string;
+		headline: string;
+		subline: string;
+		monogram: string;
+		scheduleTabLabel: string;
+		rows: ScheduleRow[];
+		giftTabLabel: string;
+		giftTitle: string;
+		giftAccount: string;
+		closingQuote: string;
+	}
+
+	const PRESETS: Record<MockupPreset, PresetContent> = {
+		wedding: {
+			eyebrow: 'The Wedding Celebration',
+			headline: 'Sarah & Dimas',
+			subline: 'Kami mengundang Anda untuk merayakan cinta kami',
+			monogram: 'S & D',
+			scheduleTabLabel: 'Akad & Resepsi',
+			rows: [
+				{ title: 'Akad Nikah', note: 'Pukul 08.00 - 10.00 WIB', tag: 'Khidmat' },
+				{ title: 'Resepsi Malam', note: 'Pukul 19.00 - 21.30 WIB', tag: 'Gala Dinner' },
+			],
+			giftTabLabel: 'Amplop Digital',
+			giftTitle: 'BCA Transfer Digital',
+			giftAccount: '8720 1928 331 (Sarah)',
+			closingQuote: '"Dua jiwa, satu takdir indah."',
+		},
+		birthday: {
+			eyebrow: 'Birthday Celebration',
+			headline: 'Ulang Tahun Ananda',
+			subline: 'Kami mengundang Anda untuk merayakan hari spesial ini',
+			monogram: '7th',
+			scheduleTabLabel: 'Rundown Acara',
+			rows: [
+				{ title: 'Pembukaan & Doa', note: 'Pukul 16.00 - 16.30 WIB', tag: 'Opening' },
+				{ title: 'Makan Bersama', note: 'Pukul 17.00 - 19.00 WIB', tag: 'Buffet' },
+			],
+			giftTabLabel: 'Kado Digital',
+			giftTitle: 'Kado Digital',
+			giftAccount: '8720 1928 331 (Tania)',
+			closingQuote: '"Selamat bertambah usia."',
+		},
+		general: {
+			eyebrow: 'The Celebration',
+			headline: 'Syukuran Keluarga',
+			subline: 'Kami mengundang Anda untuk hadir dan merayakan bersama',
+			monogram: 'S',
+			scheduleTabLabel: 'Acara',
+			rows: [
+				{ title: 'Acara Utama', note: 'Pukul 11.00 - 13.00 WIB', tag: 'Jamuan' },
+				{ title: 'Makan Bersama', note: 'Pukul 12.00 - 14.00 WIB', tag: 'Prasmanan' },
+			],
+			giftTabLabel: 'Tanda Kasih',
+			giftTitle: 'Tanda Kasih',
+			giftAccount: '8720 1928 331 (Budi)',
+			closingQuote: '"Terima kasih atas doa dan kehadiran Anda."',
+		},
+	};
+
 	interface Props {
 		coupleNames?: string;
 		eventDate?: string;
 		locationName?: string;
+		preset?: MockupPreset;
 	}
 
 	let {
-		coupleNames = 'Sarah & Dimas',
+		coupleNames,
 		eventDate = 'Sabtu, 24 Oktober 2026',
 		locationName = 'Plataran Dharmawangsa, Jakarta',
+		preset = 'wedding',
 	}: Props = $props();
+
+	const content = $derived(PRESETS[preset]);
+	// coupleNames dipakai sebagai headline bila diberikan; kalau tidak, pakai
+	// headline dari preset (mis. 'Ulang Tahun Ananda' untuk preset ulang tahun).
+	const headline = $derived(coupleNames ?? content.headline);
 
 	let musicPlaying = $state(true);
 	let activeTab = $state<'invitation' | 'details' | 'gift'>('invitation');
@@ -77,16 +160,16 @@
 				<span
 					class="font-display text-[10px] font-semibold tracking-[0.25em] text-coffee-700 uppercase"
 				>
-					The Wedding Celebration
+					{content.eyebrow}
 				</span>
 
 				<!-- Couple Names in Editorial Serif -->
 				<h3 class="font-serif mt-2 text-3xl font-medium tracking-wide text-coffee-900 italic">
-					{coupleNames}
+					{headline}
 				</h3>
 
 				<p class="font-serif mt-1 text-xs text-coffee-600 italic">
-					Kami mengundang Anda untuk merayakan cinta kami
+					{content.subline}
 				</p>
 
 				<!-- Main Arch Card / Illustration -->
@@ -101,7 +184,7 @@
 					<div
 						class="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-champagne-400/50 bg-cream-50/80 shadow-inner"
 					>
-						<span class="font-serif text-2xl font-normal text-coffee-800">S & D</span>
+						<span class="font-serif text-2xl font-normal text-coffee-800">{content.monogram}</span>
 					</div>
 
 					<div class="mt-4 space-y-2">
@@ -143,16 +226,16 @@
 
 				<!-- Tabs for Mini-Interactive Experience -->
 				<div class="mt-4 flex rounded-full border border-cream-200 bg-cream-100/80 p-1">
-					<button
-						type="button"
-						class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
-						'invitation'
-							? 'bg-coffee-800 text-white shadow-xs'
-							: 'text-coffee-700 hover:text-coffee-900'}"
-						onclick={() => (activeTab = 'invitation')}
-					>
-						Akad & Resepsi
-					</button>
+				<button
+					type="button"
+					class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
+					'invitation'
+						? 'bg-coffee-800 text-white shadow-xs'
+						: 'text-coffee-700 hover:text-coffee-900'}"
+					onclick={() => (activeTab = 'invitation')}
+				>
+					{content.scheduleTabLabel}
+				</button>
 					<button
 						type="button"
 						class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
@@ -163,45 +246,41 @@
 					>
 						RSVP Cepat
 					</button>
-					<button
-						type="button"
-						class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
-						'gift'
-							? 'bg-coffee-800 text-white shadow-xs'
-							: 'text-coffee-700 hover:text-coffee-900'}"
-						onclick={() => (activeTab = 'gift')}
-					>
-						Amplop Digital
-					</button>
+				<button
+					type="button"
+					class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
+					'gift'
+						? 'bg-coffee-800 text-white shadow-xs'
+						: 'text-coffee-700 hover:text-coffee-900'}"
+					onclick={() => (activeTab = 'gift')}
+				>
+					{content.giftTabLabel}
+				</button>
 				</div>
 
 				<!-- Tab Content -->
 				<div class="mt-3 text-left">
-					{#if activeTab === 'invitation'}
-						<div class="rounded-xl border border-cream-200 bg-white p-3.5 shadow-xs space-y-2">
+				{#if activeTab === 'invitation'}
+					<div class="rounded-xl border border-cream-200 bg-white p-3.5 shadow-xs space-y-2">
+						{#each content.rows as row, rowIndex (row.title)}
+							{#if rowIndex > 0}
+								<div class="border-t border-cream-100 pt-2"></div>
+							{/if}
 							<div class="flex items-start justify-between">
 								<div>
-									<h4 class="font-serif text-sm font-semibold text-coffee-900">Akad Nikah</h4>
-									<p class="text-[10px] text-coffee-500">Pukul 08.00 - 10.00 WIB</p>
+									<h4 class="font-serif text-sm font-semibold text-coffee-900">{row.title}</h4>
+									<p class="text-[10px] text-coffee-500">{row.note}</p>
 								</div>
 								<span
-									class="rounded-full bg-cream-100 px-2 py-0.5 text-[9px] font-medium text-coffee-700"
+									class="rounded-full {rowIndex === 0
+										? 'bg-cream-100 text-coffee-700'
+										: 'bg-coffee-50 text-coffee-800'} px-2 py-0.5 text-[9px] font-medium"
 								>
-									Khidmat
+									{row.tag}
 								</span>
 							</div>
-							<div class="border-t border-cream-100 pt-2 flex items-start justify-between">
-								<div>
-									<h4 class="font-serif text-sm font-semibold text-coffee-900">Resepsi Malam</h4>
-									<p class="text-[10px] text-coffee-500">Pukul 19.00 - 21.30 WIB</p>
-								</div>
-								<span
-									class="rounded-full bg-coffee-50 px-2 py-0.5 text-[9px] font-medium text-coffee-800"
-								>
-									Gala Dinner
-								</span>
-							</div>
-						</div>
+						{/each}
+					</div>
 					{:else if activeTab === 'details'}
 						<div class="rounded-xl border border-cream-200 bg-white p-3.5 shadow-xs text-center">
 							<p class="text-[11px] text-coffee-700">Apakah Anda bersedia hadir?</p>
@@ -242,23 +321,23 @@
 								<div class="rounded-lg bg-champagne-100 p-1.5 text-champagne-700">
 									<Gift size={14} />
 								</div>
-								<div>
-									<h4 class="font-serif text-xs font-semibold text-coffee-900">
-										BCA Transfer Digital
-									</h4>
-									<p class="text-[10px] text-coffee-500 font-mono">8720 1928 331 (Sarah)</p>
-								</div>
+							<div>
+								<h4 class="font-serif text-xs font-semibold text-coffee-900">
+									{content.giftTitle}
+								</h4>
+								<p class="text-[10px] text-coffee-500 font-mono">{content.giftAccount}</p>
 							</div>
-							<p class="mt-2 text-[10px] text-coffee-600 italic">
-								Bisa langsung salin nomor rekening atau kirim kado via alamat.
-							</p>
+						</div>
+						<p class="mt-2 text-[10px] text-coffee-600 italic">
+							Bisa langsung salin nomor rekening atau kirim kado via alamat.
+						</p>
 						</div>
 					{/if}
 				</div>
 
 				<div class="mt-4 pb-2">
 					<span class="font-serif text-xs text-coffee-800 italic">
-						"Dua jiwa, satu takdir indah."
+						{content.closingQuote}
 					</span>
 				</div>
 			</div>

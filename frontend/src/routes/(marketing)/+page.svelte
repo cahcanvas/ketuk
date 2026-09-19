@@ -1,596 +1,294 @@
 <script lang="ts">
+	import { ArrowDown, ArrowRight, CalendarDays, Check, MapPin, Users } from '@lucide/svelte';
+	import { EVENT_CATEGORIES, type EventCategoryId } from '@ketuk/shared';
 	import {
-		PhoneMockup,
 		TemplateCard,
 		TemplatePreviewModal,
 		type TemplateItem,
 	} from '$lib/components/domain';
-	import {
-		Check,
-		ArrowRight,
-		Star,
-		MessageCircle,
-		MapPin,
-		Music,
-		Gift,
-		Clock,
-		Shield,
-		ChevronDown,
-	} from '@lucide/svelte';
-
-	// State for event type tabs (Pernikahan vs Acara Lain)
-	let eventTab = $state<'wedding' | 'other'>('wedding');
-
-	// State for category filters
-	let activeCategory = $state('Semua');
-
-	// State for template preview modal
-	let selectedTemplate = $state<TemplateItem | null>(null);
-	let isPreviewOpen = $state(false);
-
-	// FAQ Accordion State
-	let openFaq = $state<number | null>(0);
-
-	const filterCategories = [
-		'Semua',
-		'Klasik',
-		'Minimalis',
-		'Elegan',
-		'Modern',
-		'Botanical',
-		'Luxury Gold',
-	];
-
 	import { TEMPLATES } from '$lib/data/templates';
 
-	// Filter templates based on active category
-	const filteredTemplates = $derived.by(() => {
-		if (activeCategory === 'Semua') return TEMPLATES;
-		return TEMPLATES.filter((t) => t.category === activeCategory);
-	});
+	type EventFilter = EventCategoryId | 'all';
+
+	const eventFilters: { value: EventFilter; label: string }[] = [
+		{ value: 'all', label: 'Semua acara' },
+		...EVENT_CATEGORIES.map((category) => ({ value: category.id, label: category.label })),
+	];
+
+	const styleFilters = ['Semua', 'Klasik', 'Minimalis', 'Elegan', 'Modern', 'Botanical', 'Luxury Gold'];
+
+	let activeEvent = $state<EventFilter>('all');
+	let activeStyle = $state('Semua');
+	let selectedTemplate = $state<TemplateItem | null>(null);
+	let isPreviewOpen = $state(false);
+	let openFaq = $state<number | null>(0);
+
+	const selectedCategory = $derived(
+		activeEvent === 'all' ? undefined : EVENT_CATEGORIES.find((category) => category.id === activeEvent),
+	);
+	const selectedLabel = $derived(selectedCategory?.label ?? 'acara apa pun');
+	const filteredTemplates = $derived.by(() =>
+		TEMPLATES.filter((template) => {
+			const matchesEvent = activeEvent === 'all' || template.eventTypes?.includes(activeEvent);
+			const matchesStyle = activeStyle === 'Semua' || template.category === activeStyle;
+			return matchesEvent && matchesStyle;
+		}),
+	);
+
+	const faqs = [
+		{
+			question: 'Acara apa saja yang bisa dibuat di Ketuk.id?',
+			answer:
+				'Kamu bisa membuat undangan untuk pernikahan, ulang tahun, aqiqah, khitanan, syukuran, wisuda, reuni, acara komunitas, dan acara bisnis. Untuk jenis acara lain, pilih Lainnya saat onboarding.',
+		},
+		{
+			question: 'Berapa lama undangan siap dibagikan?',
+			answer:
+				'Setelah memilih desain, isi judul acara, waktu, lokasi, dan detail yang dibutuhkan. Kamu bisa membagikan link setelah informasinya siap, lalu mengubahnya kapan saja dari dashboard.',
+		},
+		{
+			question: 'Apakah tamu bisa mengonfirmasi kehadiran?',
+			answer:
+				'Bisa. RSVP tamu masuk ke dashboard acara, jadi kamu tidak perlu mengumpulkan jawaban dari banyak chat secara manual.',
+		},
+		{
+			question: 'Apakah satu akun bisa mengelola beberapa acara?',
+			answer:
+				'Bisa. Preferensi onboarding membantu menata dashboard, sementara setiap undangan tetap menjadi acara tersendiri yang bisa dikelola dari akun yang sama.',
+		},
+	];
+
+	function chooseEvent(value: EventFilter) {
+		activeEvent = value;
+		activeStyle = 'Semua';
+		document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth' });
+	}
 
 	function handlePreview(template: TemplateItem) {
 		selectedTemplate = template;
 		isPreviewOpen = true;
 	}
-
-	function closePreview() {
-		isPreviewOpen = false;
-	}
-
-	const faqs = [
-		{
-			q: 'Berapa lama proses pembuatan undangan digital sampai siap dibagikan?',
-			a: 'Hanya dalam hitungan 5 hingga 15 menit! Anda cukup memilih template favorit, melengkapi detail acara (nama pengantin, waktu, lokasi peta, dan rekening), lalu link undangan siap disebarkan langsung ke tamu melalui WhatsApp.',
-		},
-		{
-			q: 'Apakah saya bisa mengubah detail acara jika ada perubahan tanggal atau waktu?',
-			a: 'Tentu saja! Anda memiliki akses dashboard penuh untuk mengedit nama, waktu, denah lokasi, lagu pengiring, maupun foto galeri kapan saja secara real-time tanpa biaya tambahan.',
-		},
-		{
-			q: 'Bagaimana cara kerja RSVP tamu via WhatsApp?',
-			a: 'Ketika tamu membuka link undangan Anda dan menekan tombol RSVP (Konfirmasi Hadir / Berhalangan), data tamu otomatis tersimpan di dashboard Anda dan dapat langsung mengirimkan pesan konfirmasi personal ke WhatsApp pengantin.',
-		},
-		{
-			q: 'Berapa lama masa aktif undangan digital saya?',
-			a: 'Semua undangan di Ketuk.id aktif selamanya tanpa biaya perpanjangan berkala. Link undangan Anda tetap dapat diakses sebagai kenang-kenangan manis pernikahan Anda.',
-		},
-		{
-			q: 'Apakah bisa menambahkan lagu sendiri dan amplop digital transfer?',
-			a: 'Ya! Anda bisa memilih koleksi musik romantis yang tersedia atau menyematkan musik pilihan Anda. Fitur amplop digital mendukung nomor rekening bank (BCA, Mandiri, BRI, BNI) serta QRIS.',
-		},
-	];
 </script>
 
 <svelte:head>
-	<title>Ketuk.id | Undangan Pernikahan Digital Eksklusif & RSVP</title>
+	<title>Ketuk.id | Undangan untuk Acara Kamu</title>
 	<meta
 		name="description"
-		content="Desain undangan pernikahan digital haute-couture dengan RSVP WhatsApp instan, peta Google Maps, amplop digital, dan musik pengiring. Momen indah dimulai dengan undangan berkelas."
+		content="Buat undangan digital untuk pernikahan, ulang tahun, acara keluarga, komunitas, dan bisnis. Pilih desain, isi detail acara, lalu bagikan link-nya."
 	/>
 </svelte:head>
 
-<!-- Hero Section (Replicating The Digital Yes Layout & Aesthetic) -->
-<section class="relative overflow-hidden bg-cream-50 pt-10 pb-16 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-32">
-	<!-- Background subtle architectural radial warmth -->
-	<div
-		class="absolute top-0 right-1/4 -z-10 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle_at_center,rgba(214,188,152,0.25),transparent_70%)] blur-3xl"
-	></div>
-	<div
-		class="absolute bottom-0 left-10 -z-10 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_at_center,rgba(110,27,44,0.08),transparent_70%)] blur-3xl"
-	></div>
+<!--
+	Design Read: editorial stationery untuk produk acara Indonesia.
+	ENERGY 2 / RHYTHM 3 / MOTION 1.
 
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
-			<!-- Left Column: Haute-Couture Typography & CTAs -->
-			<div class="text-center lg:col-span-7 lg:text-left">
-				<!-- Eyebrow Tag -->
-				<div class="inline-flex items-center gap-2 rounded-full border border-champagne-300/80 bg-cream-100/90 px-4 py-1.5 shadow-2xs backdrop-blur-xs">
-					<span class="h-1.5 w-1.5 rounded-full bg-champagne-600"></span>
-					<span class="text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-coffee-700">
-						Undangan Digital Pernikahan & Acara Eksklusif
-					</span>
-				</div>
-
-				<!-- Monumental Serif Headline (Lora) -->
-				<h1
-					class="font-serif mt-6 text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-coffee-950 leading-[1.08]"
-				>
-					Pernikahan <br class="hidden sm:inline" />
-					dimulai dengan <br class="hidden sm:inline" />
-					<span class="italic text-coffee-800 font-normal">undangan.</span>
-				</h1>
-
-				<!-- Refined Descriptive Paragraph -->
-				<p
-					class="mx-auto mt-6 max-w-xl text-base sm:text-lg text-coffee-700 font-normal leading-relaxed lg:mx-0"
-				>
-					Desain mewah yang siap memukau setiap tamu Anda. Lengkap dengan RSVP instan via WhatsApp,
-					peta lokasi akurat, musik pengiring, dan amplop digital dalam satu link eksklusif.
-				</p>
-
-				<!-- Dual Action Buttons -->
-				<div class="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
-					<a
-						href="#katalog"
-						class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-coffee-800 px-8 py-4 text-xs font-bold tracking-widest uppercase text-white shadow-md transition-all duration-200 hover:bg-coffee-900 hover:shadow-lg active:scale-98"
-					>
-						<span>Jelajah Desain</span>
-						<ArrowRight size={15} />
-					</a>
-					<a
-						href="https://wa.me/6281288889999?text=Halo%20Ketuk.id,%20saya%20ingin%20konsultasi%20undangan%20pernikahan"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-coffee-300 bg-white/80 px-7 py-4 text-xs font-semibold tracking-wider uppercase text-coffee-800 transition-all hover:border-coffee-900 hover:bg-white active:scale-98"
-					>
-						<MessageCircle size={15} class="text-emerald-700" />
-						<span>Hubungi Kami</span>
-					</a>
-				</div>
-
-				<!-- Social Proof & Trust Badges -->
-				<div class="mt-10 pt-6 border-t border-cream-200/80 max-w-lg mx-auto lg:mx-0">
-					<!-- Star Rating -->
-					<div class="flex items-center justify-center lg:justify-start gap-3">
-						<div class="flex text-amber-500">
-							{#each Array(5) as _}
-								<Star size={16} class="fill-amber-400 text-amber-400" />
-							{/each}
-						</div>
-						<span class="text-xs font-semibold text-coffee-900">
-							Penilaian 4.9/5
-						</span>
-						<span class="text-xs text-coffee-500">
-							(500+ ulasan pasangan bahagia)
-						</span>
-					</div>
-
-					<!-- Checklist points -->
-					<div class="mt-4 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-xs font-medium text-coffee-700">
-						<span class="inline-flex items-center gap-1.5">
-							<Check size={14} class="text-coffee-700" />
-							100% Kustomisasi
-						</span>
-						<span class="inline-flex items-center gap-1.5">
-							<Check size={14} class="text-coffee-700" />
-							Tanpa Biaya Tersembunyi
-						</span>
-						<span class="inline-flex items-center gap-1.5">
-							<Check size={14} class="text-coffee-700" />
-							Aktif Selamanya
-						</span>
-					</div>
-				</div>
-			</div>
-
-			<!-- Right Column: Interactive Realistic Smartphone Mockup -->
-			<div class="lg:col-span-5 flex items-center justify-center">
-				<PhoneMockup coupleNames="Sarah & Dimas" eventDate="Sabtu, 24 Oktober 2026" />
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- Catalog Section ("Temukan undangan Anda.") -->
-<section id="katalog" class="scroll-mt-14 py-16 sm:py-24 bg-cream-50 border-t border-cream-200/60">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<!-- Event Type Segmented Tabs (Undangan Pernikahan vs Ulang Tahun / Lainnya) -->
-		<div class="flex justify-center">
-			<div
-				class="inline-flex items-center rounded-full border border-cream-200 bg-cream-100/90 p-1.5 shadow-2xs"
-			>
-				<button
-					type="button"
-					class="rounded-full px-5 py-2 text-xs font-semibold tracking-wide transition-all {eventTab ===
-					'wedding'
-						? 'bg-coffee-800 text-white shadow-xs'
-						: 'text-coffee-700 hover:text-coffee-800'}"
-					onclick={() => (eventTab = 'wedding')}
-				>
-					Undangan Pernikahan
-				</button>
-				<button
-					type="button"
-					class="rounded-full px-5 py-2 text-xs font-semibold tracking-wide transition-all {eventTab ===
-					'other'
-						? 'bg-coffee-800 text-white shadow-xs'
-						: 'text-coffee-700 hover:text-coffee-800'}"
-					onclick={() => (eventTab = 'other')}
-				>
-					Undangan Ulang Tahun & Acara Lain
-				</button>
-			</div>
-		</div>
-
-		<!-- Section Header -->
-		<div class="mt-10 text-center max-w-2xl mx-auto">
-			<h2 class="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-coffee-950">
-				Temukan undangan Anda.
-			</h2>
-			<p class="mt-3 text-sm sm:text-base text-coffee-600 leading-relaxed">
-				Koleksi pernikahan kami dirancang dengan teliti untuk setiap gaya, kepribadian, dan cerita cinta istimewa Anda.
+	Hero sengaja tidak memakai badge, glow, angka social proof, atau mockup
+	telepon generik. Kartu di kanan berfungsi sebagai artefak produk: ia
+	menunjukkan bentuk undangan yang akan dibuat user, bukan dekorasi kosong.
+-->
+<section class="overflow-hidden bg-cream-50">
+	<div class="mx-auto grid max-w-7xl gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[1fr_0.82fr] lg:items-center lg:gap-20 lg:px-12 lg:py-24">
+		<div class="max-w-2xl">
+			<p class="text-sm font-medium text-terracotta-600">Ketuk.id</p>
+			<h1 class="mt-5 max-w-xl font-serif text-5xl leading-[0.98] tracking-[-0.04em] text-coffee-950 sm:text-6xl lg:text-7xl">
+				Undangan yang mengikuti acaramu.
+			</h1>
+			<p class="mt-6 max-w-lg text-base leading-7 text-coffee-700 sm:text-lg">
+				Satu tempat untuk menyiapkan undangan, mengatur tamu, dan membagikan informasi acara. Mulai dari jenis acaranya, lalu isi seperlunya.
 			</p>
-		</div>
 
-		<!-- Filter Pills (Scrollable with touch momentum on Android/Tablet) -->
-		<div class="mt-8 flex items-center justify-start sm:justify-center overflow-x-auto pb-2 scrollbar-none px-2">
-			<div class="inline-flex items-center gap-2">
-				{#each filterCategories as cat (cat)}
-					<button
-						type="button"
-						class="shrink-0 rounded-full px-4 py-2 text-xs font-medium tracking-wide transition-all {activeCategory ===
-						cat
-							? 'bg-coffee-800 text-white shadow-xs'
-							: 'border border-cream-300/80 bg-white/80 text-coffee-700 hover:bg-cream-100 hover:border-cream-400'}"
-						onclick={() => (activeCategory = cat)}
-					>
-						{cat}
-					</button>
-				{/each}
-			</div>
-		</div>
-
-		<!-- Responsive Grid of Cards (1 col mobile, 2-3 col tablet, 4 col desktop) -->
-		<div
-			class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-6 lg:gap-7"
-		>
-			{#each filteredTemplates as template (template.id)}
-				<TemplateCard {template} onPreview={handlePreview} />
-			{/each}
-		</div>
-
-		<!-- Bottom Catalog Callout -->
-		<div class="mt-16 text-center">
-			<p class="font-serif text-lg text-coffee-800 italic">
-				Ingin desain kustom yang sepenuhnya unik untuk tema pesta Anda?
-			</p>
-			<div class="mt-3">
+			<div class="mt-8 flex flex-col gap-3 sm:flex-row">
 				<a
-					href="https://wa.me/6281288889999?text=Halo%20Ketuk.id,%20saya%20tertarik%20dengan%20custom%20undangan%20eksklusif"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-full border border-coffee-800 bg-white px-6 py-2.5 text-xs font-semibold tracking-wider uppercase text-coffee-800 shadow-2xs hover:bg-coffee-50 transition-colors"
+					href="/daftar"
+					class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-coffee-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-coffee-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-500"
 				>
-					<span>Konsultasi Custom Design</span>
-					<ArrowRight size={13} />
+					Buat undangan
+					<ArrowRight size={16} />
+				</a>
+				<a
+					href="#katalog"
+					class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-coffee-300 px-5 py-3 text-sm font-semibold text-coffee-800 transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-500"
+				>
+					Lihat desain
 				</a>
 			</div>
+
+			<div class="mt-12 border-t border-coffee-200 pt-5">
+				<p class="text-xs font-semibold uppercase tracking-[0.16em] text-coffee-500">Mulai dari sini</p>
+				<div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-coffee-700">
+					{#each ['Pernikahan', 'Ulang Tahun', 'Acara Keluarga', 'Komunitas'] as label (label)}
+						<span class="inline-flex items-center gap-2">
+							<span class="h-1.5 w-1.5 rounded-full bg-terracotta-500" aria-hidden="true"></span>
+							{label}
+						</span>
+					{/each}
+				</div>
+			</div>
+		</div>
+
+		<div class="relative mx-auto w-full max-w-md lg:mr-0">
+			<div class="absolute -right-8 -top-8 h-32 w-32 rounded-full border border-champagne-300/70" aria-hidden="true"></div>
+			<div class="absolute -bottom-8 -left-8 h-24 w-24 border-l border-b border-terracotta-300" aria-hidden="true"></div>
+			<div class="relative rotate-[-2deg] border border-coffee-300 bg-white p-3 shadow-[14px_18px_0_0_rgba(93,64,55,0.12)] transition-transform duration-300 hover:rotate-0">
+				<div class="border border-champagne-300 px-6 py-8 text-center sm:px-10 sm:py-12">
+					<p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-terracotta-600">Undangan acara</p>
+					<h2 class="mt-8 font-serif text-4xl leading-tight text-coffee-900 sm:text-5xl">Ruang untuk<br />berkumpul.</h2>
+					<div class="mx-auto my-8 h-px w-20 bg-champagne-500"></div>
+					<p class="font-serif text-lg italic text-coffee-700">Nama acara kamu</p>
+					<div class="mt-8 grid grid-cols-2 gap-3 border-t border-coffee-100 pt-5 text-left text-xs text-coffee-600">
+						<span class="inline-flex items-center gap-1.5"><CalendarDays size={14} />Tanggal</span>
+						<span class="inline-flex items-center gap-1.5"><MapPin size={14} />Lokasi</span>
+					</div>
+				</div>
+			</div>
+			<p class="mt-5 text-center text-xs text-coffee-500">Contoh tampilan. Isi dan gaya berubah mengikuti acara yang kamu pilih.</p>
 		</div>
 	</div>
 </section>
 
-<!-- Features Section ("Fitur Lengkap yang Elegan") -->
-<section id="fitur" class="scroll-mt-14 py-16 sm:py-24 bg-cream-100/60 border-t border-cream-200/60">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="max-w-2xl mx-auto text-center">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
-				Fitur Eksklusif
-			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
-				Bukan sekadar tautan undangan biasa
-			</h2>
-			<p class="mt-3 text-sm text-coffee-600">
-				Segala yang Anda dan para tamu butuhkan dirancang secara intuitif dalam satu sentuhan berkelas.
-			</p>
+<section class="border-y border-coffee-200 bg-white">
+	<div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[0.7fr_1.3fr] lg:px-12 lg:py-20">
+		<div>
+			<p class="text-sm font-medium text-terracotta-600">Pilih konteksnya</p>
+			<h2 class="mt-3 max-w-sm font-serif text-3xl leading-tight text-coffee-950 sm:text-4xl">Dashboard yang tidak menyamaratakan semua acara.</h2>
+			<p class="mt-4 max-w-sm text-sm leading-6 text-coffee-600">Pilih jenis acara saat mulai. Kami akan menata rekomendasi fitur dan langkah berikutnya berdasarkan pilihan itu.</p>
 		</div>
+		<div class="grid grid-cols-2 gap-px overflow-hidden border border-coffee-200 bg-coffee-200 sm:grid-cols-3">
+			{#each EVENT_CATEGORIES as category (category.id)}
+				<button
+					type="button"
+					class="min-h-28 bg-white px-4 py-4 text-left transition-colors hover:bg-cream-50 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-terracotta-500 {activeEvent === category.id ? 'bg-cream-100' : ''}"
+					onclick={() => chooseEvent(category.id)}
+					aria-pressed={activeEvent === category.id}
+				>
+					<span class="block text-sm font-semibold text-coffee-900">{category.label}</span>
+					<span class="mt-2 block text-xs leading-5 text-coffee-500">{category.shortDesc}</span>
+				</button>
+			{/each}
+		</div>
+	</div>
+</section>
 
-		<div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			<!-- Feature 1 -->
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-coffee-50 text-coffee-800">
-					<MessageCircle size={22} />
-				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
-					Konfirmasi RSVP via WhatsApp
-				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Tamu mengonfirmasi kehadiran dalam hitungan detik. Data jumlah tamu dan ucapan doa otomatis tercatat di dashboard Anda.
-				</p>
+<section id="fitur" class="bg-coffee-900 text-cream-50">
+	<div class="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24 lg:px-12 lg:py-24">
+		<div>
+			<p class="text-sm font-medium text-champagne-300">Yang bisa kamu atur</p>
+			<h2 class="mt-4 max-w-md font-serif text-4xl leading-tight sm:text-5xl">Informasi yang dibutuhkan tamu, di satu tempat.</h2>
+			<p class="mt-5 max-w-md text-sm leading-6 text-cream-200">Tidak semua acara membutuhkan fitur yang sama. Pilih yang relevan, lengkapi detailnya, dan bagikan link yang mudah dibuka.</p>
+		</div>
+		<div class="divide-y divide-cream-50/15 border-y border-cream-50/20">
+			<div class="grid gap-3 py-5 sm:grid-cols-[auto_1fr] sm:gap-6">
+				<Users size={22} class="text-champagne-300" aria-hidden="true" />
+				<div><h3 class="font-semibold">Daftar tamu dan RSVP</h3><p class="mt-1 text-sm leading-6 text-cream-200">Kumpulkan jawaban hadir dan catatan tamu tanpa mengandalkan spreadsheet terpisah.</p></div>
 			</div>
-
-			<!-- Feature 2 -->
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-champagne-100 text-champagne-700">
-					<MapPin size={22} />
-				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
-					Petunjuk Arah Google Maps
-				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Tamu tidak akan tersasar berkat integrasi titik koordinat langsung ke aplikasi Google Maps & Waze dengan satu klik.
-				</p>
+			<div class="grid gap-3 py-5 sm:grid-cols-[auto_1fr] sm:gap-6">
+				<MapPin size={22} class="text-champagne-300" aria-hidden="true" />
+				<div><h3 class="font-semibold">Tanggal, waktu, dan lokasi</h3><p class="mt-1 text-sm leading-6 text-cream-200">Tampilkan informasi penting dengan format yang mudah dibaca dan link peta yang bisa langsung dibuka.</p></div>
 			</div>
-
-			<!-- Feature 3 -->
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-800">
-					<Music size={22} />
-				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
-					Musik Latar & Lagu Romantis
-				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Alunan melodi favorit menyambut tamu saat undangan dibuka, menghadirkan atmosfer hangat dan menyentuh hati.
-				</p>
-			</div>
-
-			<!-- Feature 4 -->
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800">
-					<Gift size={22} />
-				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
-					Amplop Digital & Kirim Kado
-				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Mudahkan kerabat dan sahabat mengirimkan tanda kasih melalui transfer nomor rekening resmi atau QRIS instan.
-				</p>
-			</div>
-
-			<!-- Feature 5 -->
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-800">
-					<Clock size={22} />
-				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
-					Countdown & Simpan ke Kalender
-				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Hitung mundur hari bahagia serta tombol "Add to Calendar" agar tamu tidak melewatkan hari spesial Anda.
-				</p>
-			</div>
-
-			<!-- Feature 6 -->
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-800">
-					<Shield size={22} />
-				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
-					Privasi & Masa Aktif Selamanya
-				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Data tamu dan kenangan foto Anda aman terjaga. Link undangan tidak akan kedaluwarsa setelah acara selesai.
-				</p>
+			<div class="grid gap-3 py-5 sm:grid-cols-[auto_1fr] sm:gap-6">
+				<Check size={22} class="text-champagne-300" aria-hidden="true" />
+				<div><h3 class="font-semibold">Galeri dan detail acara</h3><p class="mt-1 text-sm leading-6 text-cream-200">Tambahkan cerita, foto, kontak, dan informasi lain yang memang dibutuhkan oleh tamu kamu.</p></div>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- How it works ("3 Langkah Mudah") -->
-<section id="cara-kerja" class="scroll-mt-14 py-16 sm:py-24 bg-cream-50">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="text-center max-w-xl mx-auto">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
-				Proses Mudah & Cepat
-			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
-				Tiga langkah menuju undangan impian
-			</h2>
-		</div>
-
-		<div class="mt-14 grid gap-8 md:grid-cols-3">
-			<div class="relative flex flex-col items-center text-center p-6">
-				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-coffee-800 text-white font-serif text-xl font-semibold shadow-md">
-					1
-				</div>
-				<h3 class="font-serif mt-5 text-xl font-semibold text-coffee-900">Pilih Desain Favorit</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Eksplorasi katalog kurasi kami dengan beragam tema estetis dari klasik hingga modern.
-				</p>
+<section id="katalog" class="scroll-mt-8 bg-cream-50">
+	<div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+		<div class="flex flex-col gap-5 border-b border-coffee-200 pb-8 sm:flex-row sm:items-end sm:justify-between">
+			<div>
+				<p class="text-sm font-medium text-terracotta-600">Koleksi desain</p>
+				<h2 class="mt-3 font-serif text-4xl leading-tight text-coffee-950 sm:text-5xl">Untuk {selectedLabel}.</h2>
+				<p class="mt-3 max-w-xl text-sm leading-6 text-coffee-600">Pilih berdasarkan acara, lalu saring lagi berdasarkan gaya visual.</p>
 			</div>
-
-			<div class="relative flex flex-col items-center text-center p-6">
-				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-coffee-800 text-white font-serif text-xl font-semibold shadow-md">
-					2
-				</div>
-				<h3 class="font-serif mt-5 text-xl font-semibold text-coffee-900">Personalisasi Konten</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Isi identitas pasangan, waktu akad & resepsi, foto pre-wedding, dan musik pilihan Anda.
-				</p>
-			</div>
-
-			<div class="relative flex flex-col items-center text-center p-6">
-				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-coffee-800 text-white font-serif text-xl font-semibold shadow-md">
-					3
-				</div>
-				<h3 class="font-serif mt-5 text-xl font-semibold text-coffee-900">Sebarkan ke Tamu</h3>
-				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
-					Dapatkan link eksklusif Anda dan bagikan langsung ke keluarga dan sahabat via WhatsApp.
-				</p>
-			</div>
-		</div>
-
-		<div class="mt-10 text-center">
-			<a
-				href="/daftar"
-				class="inline-flex items-center gap-2 rounded-full bg-coffee-800 px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-white shadow-md hover:bg-coffee-900 transition-all"
-			>
-				<span>Mulai Bikin Undangan Sekarang</span>
-				<ArrowRight size={14} />
+			<a href="/template" class="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-coffee-800 hover:text-terracotta-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-terracotta-500">
+				Lihat semua desain <ArrowRight size={16} />
 			</a>
 		</div>
-	</div>
-</section>
 
-<!-- Testimonial Section -->
-<section class="py-16 sm:py-24 bg-cream-100/70 border-t border-cream-200/60">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="text-center max-w-xl mx-auto">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
-				Cerita Pengantin
-			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
-				Dipercaya ratusan pasangan bahagia
-			</h2>
-		</div>
-
-		<div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-xs">
-				<div class="flex text-amber-500 mb-3">
-					{#each Array(5) as _}
-						<Star size={14} class="fill-amber-400 text-amber-400" />
-					{/each}
-				</div>
-				<p class="text-xs sm:text-sm text-coffee-700 italic leading-relaxed">
-					"Banyak tamu yang memuji undangan pernikahan kami. Desainnya sangat mahal dan tidak pasaran, musiknya menyentuh, dan RSVP-nya sangat memudahkan kami merekap data katering."
-				</p>
-				<div class="mt-4 pt-3 border-t border-cream-100 flex items-center gap-3">
-					<div class="h-9 w-9 rounded-full bg-coffee-100 text-coffee-800 flex items-center justify-center font-serif font-semibold text-sm">
-						D & R
-					</div>
-					<div>
-						<h4 class="font-serif text-sm font-semibold text-coffee-900">Dian & Raditya</h4>
-						<p class="text-[10px] text-coffee-500">Jakarta • Tema Firenze</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-xs">
-				<div class="flex text-amber-500 mb-3">
-					{#each Array(5) as _}
-						<Star size={14} class="fill-amber-400 text-amber-400" />
-					{/each}
-				</div>
-				<p class="text-xs sm:text-sm text-coffee-700 italic leading-relaxed">
-					"Proses editnya gampang banget bahkan dari HP Android saya. Dalam 10 menit undangan langsung jadi dan siap kirim ke grup keluarga. Terima kasih Ketuk.id!"
-				</p>
-				<div class="mt-4 pt-3 border-t border-cream-100 flex items-center gap-3">
-					<div class="h-9 w-9 rounded-full bg-champagne-100 text-champagne-800 flex items-center justify-center font-serif font-semibold text-sm">
-						N & A
-					</div>
-					<div>
-						<h4 class="font-serif text-sm font-semibold text-coffee-900">Nadia & Adnan</h4>
-						<p class="text-[10px] text-coffee-500">Bandung • Tema Capri Rosa</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-xs sm:col-span-2 lg:col-span-1">
-				<div class="flex text-amber-500 mb-3">
-					{#each Array(5) as _}
-						<Star size={14} class="fill-amber-400 text-amber-400" />
-					{/each}
-				</div>
-				<p class="text-xs sm:text-sm text-coffee-700 italic leading-relaxed">
-					"Fitur amplop digital dan RSVP WhatsApp-nya sangat membantu. Teman-teman yang berhalangan hadir tetap bisa kirim hadiah dengan gampang via transfer bank dan QRIS."
-				</p>
-				<div class="mt-4 pt-3 border-t border-cream-100 flex items-center gap-3">
-					<div class="h-9 w-9 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center font-serif font-semibold text-sm">
-						C & F
-					</div>
-					<div>
-						<h4 class="font-serif text-sm font-semibold text-coffee-900">Clarissa & Fajar</h4>
-						<p class="text-[10px] text-coffee-500">Bali • Tema Tuscan Garden</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- FAQ Section -->
-<section id="faq" class="scroll-mt-14 py-16 sm:py-24 bg-cream-50">
-	<div class="mx-auto max-w-4xl px-4 sm:px-6">
-		<div class="text-center max-w-xl mx-auto">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
-				Bantuan
-			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
-				Pertanyaan yang sering diajukan
-			</h2>
-		</div>
-
-		<div class="mt-12 space-y-3">
-			{#each faqs as faq, i (faq.q)}
-				<div
-					class="overflow-hidden rounded-2xl border border-cream-200 bg-white transition-all duration-200 {openFaq ===
-					i
-						? 'border-champagne-400/60 shadow-xs'
-						: 'hover:border-cream-300'}"
+		<div class="mt-7 flex gap-2 overflow-x-auto pb-2" aria-label="Filter jenis acara">
+			{#each eventFilters as filter (filter.value)}
+				<button
+					type="button"
+					class="min-h-11 shrink-0 border-b-2 px-1 text-sm {activeEvent === filter.value ? 'border-terracotta-500 font-semibold text-coffee-900' : 'border-transparent text-coffee-500 hover:text-coffee-800'}"
+					aria-current={activeEvent === filter.value ? 'true' : undefined}
+					onclick={() => (activeEvent = filter.value)}
 				>
-					<button
-						type="button"
-						class="flex w-full items-center justify-between p-5 text-left text-sm sm:text-base font-medium text-coffee-900"
-						onclick={() => (openFaq = openFaq === i ? null : i)}
-						aria-expanded={openFaq === i}
-					>
-						<span class="font-serif text-base sm:text-lg">{faq.q}</span>
-						<ChevronDown
-							size={18}
-							class="shrink-0 text-coffee-500 transition-transform duration-200 {openFaq === i
-								? 'rotate-180 text-coffee-800'
-								: ''}"
-						/>
-					</button>
+					{filter.label}
+				</button>
+			{/each}
+		</div>
+		<div class="mt-3 flex gap-2 overflow-x-auto pb-2" aria-label="Filter gaya desain">
+			{#each styleFilters as style (style)}
+				<button
+					type="button"
+					class="min-h-10 shrink-0 rounded-full border px-3.5 text-xs {activeStyle === style ? 'border-coffee-900 bg-coffee-900 text-white' : 'border-coffee-200 text-coffee-600 hover:border-coffee-400'}"
+					aria-current={activeStyle === style ? 'true' : undefined}
+					onclick={() => (activeStyle = style)}
+				>
+					{style}
+				</button>
+			{/each}
+		</div>
 
-					{#if openFaq === i}
-						<div class="px-5 pb-5 pt-0 text-xs sm:text-sm text-coffee-600 leading-relaxed border-t border-cream-100/60 mt-1">
-							{faq.a}
-						</div>
-					{/if}
+		{#if filteredTemplates.length > 0}
+			<div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+				{#each filteredTemplates as template (template.id)}
+					<TemplateCard {template} onPreview={handlePreview} />
+				{/each}
+			</div>
+		{:else}
+			<div class="mt-10 border border-dashed border-coffee-300 bg-white px-6 py-12 text-center">
+				<h3 class="font-serif text-2xl text-coffee-900">Desain untuk kategori ini sedang kami siapkan.</h3>
+				<p class="mx-auto mt-3 max-w-md text-sm leading-6 text-coffee-600">Lihat koleksi yang tersedia sekarang, atau mulai dari pilihan acara lain.</p>
+				<button type="button" class="mt-5 min-h-11 rounded-lg bg-coffee-900 px-5 py-3 text-sm font-semibold text-white hover:bg-coffee-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-500" onclick={() => { activeEvent = 'all'; activeStyle = 'Semua'; }}>Lihat koleksi yang tersedia</button>
+			</div>
+		{/if}
+	</div>
+</section>
+
+<section id="cara-kerja" class="border-t border-coffee-200 bg-white">
+	<div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+		<div class="max-w-xl">
+			<p class="text-sm font-medium text-terracotta-600">Cara kerja</p>
+			<h2 class="mt-3 font-serif text-4xl leading-tight text-coffee-950 sm:text-5xl">Dari jenis acara sampai link siap dibagikan.</h2>
+		</div>
+		<div class="mt-12 grid gap-8 border-t border-coffee-200 pt-8 md:grid-cols-3 md:gap-10">
+			<div><p class="font-serif text-5xl text-terracotta-500">01</p><h3 class="mt-5 text-lg font-semibold text-coffee-900">Pilih acaranya</h3><p class="mt-2 text-sm leading-6 text-coffee-600">Pilih kategori dan jenis acara agar dashboard menampilkan hal yang relevan.</p></div>
+			<div><p class="font-serif text-5xl text-terracotta-500">02</p><h3 class="mt-5 text-lg font-semibold text-coffee-900">Isi bagian penting</h3><p class="mt-2 text-sm leading-6 text-coffee-600">Masukkan judul, tanggal, lokasi, tamu, dan detail lain sesuai kebutuhan acara.</p></div>
+			<div><p class="font-serif text-5xl text-terracotta-500">03</p><h3 class="mt-5 text-lg font-semibold text-coffee-900">Bagikan link-nya</h3><p class="mt-2 text-sm leading-6 text-coffee-600">Kirim link undangan ke keluarga, teman, komunitas, atau rekan kerja.</p></div>
+		</div>
+	</div>
+</section>
+
+<section id="faq" class="border-t border-coffee-200 bg-cream-50">
+	<div class="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-24 lg:px-12 lg:py-24">
+		<div>
+			<p class="text-sm font-medium text-terracotta-600">Pertanyaan umum</p>
+			<h2 class="mt-3 font-serif text-4xl leading-tight text-coffee-950">Sebelum kamu mulai.</h2>
+		</div>
+		<div class="divide-y divide-coffee-200 border-y border-coffee-200">
+			{#each faqs as faq, index (faq.question)}
+				<div>
+					<button type="button" class="flex min-h-16 w-full items-center justify-between gap-5 text-left text-sm font-semibold text-coffee-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-500" aria-expanded={openFaq === index} onclick={() => (openFaq = openFaq === index ? null : index)}>
+						{faq.question}
+						<ArrowDown size={16} class="shrink-0 transition-transform {openFaq === index ? 'rotate-180' : ''}" />
+					</button>
+					{#if openFaq === index}<p class="pb-5 pr-8 text-sm leading-6 text-coffee-600">{faq.answer}</p>{/if}
 				</div>
 			{/each}
 		</div>
 	</div>
 </section>
 
-<!-- Final Call to Action Banner -->
-<section class="relative overflow-hidden bg-coffee-900 py-16 sm:py-24 text-white">
-	<div
-		class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,164,120,0.2),transparent_70%)]"
-	></div>
-
-	<div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
-		<span class="font-display text-[10px] sm:text-xs font-semibold tracking-[0.25em] text-champagne-300 uppercase">
-			Momen Bahagia Dimulai Di Sini
-		</span>
-
-		<h2 class="font-serif mt-4 text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-tight">
-			Siap membuat undangan pernikahan impian Anda?
-		</h2>
-
-		<p class="mx-auto mt-4 max-w-xl text-sm sm:text-base text-champagne-100/80 font-normal leading-relaxed">
-			Bergabunglah bersama ribuan pasangan pengantin lainnya. Mulai buat undangan Anda secara gratis, pilih desain favorit, dan bagikan cinta Anda hari ini.
-		</p>
-
-		<div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-			<a
-				href="/daftar"
-				class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase text-coffee-950 shadow-lg hover:bg-champagne-100 transition-all active:scale-98"
-			>
-				<span>Mulai Buat Undangan</span>
-				<ArrowRight size={14} />
-			</a>
-			<a
-				href="#katalog"
-				class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-xs font-semibold tracking-wider uppercase text-white hover:bg-white/15 backdrop-blur-xs transition-all active:scale-98"
-			>
-				<span>Lihat Semua Model</span>
-			</a>
+<section class="bg-terracotta-600 text-white">
+	<div class="mx-auto flex max-w-7xl flex-col gap-7 px-5 py-14 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-12 lg:py-16">
+		<div>
+			<p class="text-sm font-medium text-terracotta-100">Siap menyiapkan acara?</p>
+			<h2 class="mt-2 max-w-2xl font-serif text-4xl leading-tight sm:text-5xl">Mulai dari undangannya.</h2>
 		</div>
+		<a href="/daftar" class="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-lg bg-white px-5 py-3 text-sm font-semibold text-coffee-900 hover:bg-cream-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:self-center">Buat undangan <ArrowRight size={16} /></a>
 	</div>
 </section>
 
-<!-- Interactive Live Preview Modal -->
-<TemplatePreviewModal open={isPreviewOpen} template={selectedTemplate} onclose={closePreview} />
+<TemplatePreviewModal open={isPreviewOpen} template={selectedTemplate} onclose={() => (isPreviewOpen = false)} />

@@ -19,7 +19,7 @@
 	let password = $state('');
 	let submitting = $state(false);
 
-	const next = $derived($page.url.searchParams.get('next') ?? '/dashboard');
+	const next = $derived($page.url.searchParams.get('next') ?? '/app/dashboard');
 
 	async function handleGoogle() {
 		await supabase.auth.signInWithOAuth({

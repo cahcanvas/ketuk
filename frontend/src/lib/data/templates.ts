@@ -1,3 +1,5 @@
+import type { EventCategoryId } from '@ketuk/shared';
+
 export interface PricingTier {
 	id: string;
 	name: string;
@@ -12,6 +14,13 @@ export interface TemplateItem {
 	subtitle: string;
 	tagline?: string;
 	category: string;
+	/**
+	 * Kategori acara yang cocok untuk template ini (dari taxonomy dua level).
+	 * Opsional: template tanpa field ini dianggap cocok hanya untuk filter "Semua"
+	 * — bukan untuk semua kategori — supaya desain pernikahan tidak muncul saat
+	 * user mencari contoh undangan ulang tahun.
+	 */
+	eventTypes?: EventCategoryId[];
 	badge?: string;
 	price: string;
 	slug: string;
@@ -39,6 +48,7 @@ export interface TemplateItem {
 export const TEMPLATES: TemplateItem[] = [
 	{
 		id: 'maison-doree',
+		eventTypes: ['pernikahan'],
 		title: 'La Maison Dorée',
 		subtitle:
 			'Kemewahan klasik Prancis dengan ornamen floral timbul dan stempel lilin sage green eksklusif.',
@@ -101,6 +111,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'capri-rosa',
+		eventTypes: ['pernikahan'],
 		title: 'Capri Rosa',
 		subtitle:
 			'Estetika memikat terinspirasi nuansa keanggunan abadi pesisir Capri dengan sentuhan blush lembut.',
@@ -163,6 +174,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'firenze',
+		eventTypes: ['pernikahan'],
 		title: 'Firenze',
 		subtitle:
 			'Kemegahan arsitektur Renaissance Italia dengan tipografi klasik dan ornamen bingkai halus.',
@@ -226,6 +238,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'tuscan-garden',
+		eventTypes: ['pernikahan'],
 		title: 'Tuscan Garden',
 		subtitle:
 			'Nuansa alam perbukitan Tuscany dengan ilustrasi olive botanical yang tenang dan teduh.',
@@ -289,6 +302,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'veneto-romantis',
+		eventTypes: ['pernikahan'],
 		title: 'Veneto Romantis',
 		subtitle: 'Kemewahan warna bordeaux wine dengan sentuhan foil emas untuk pesta malam berkelas.',
 		tagline: 'Dramatis, elegan, dan memesona untuk pesta resepsi malam yang tak terlupakan.',
@@ -350,6 +364,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'amalfi-sun',
+		eventTypes: ['pernikahan'],
 		title: 'Amalfi Sun',
 		subtitle:
 			'Kehangatan hangat mediterania dengan aksen lemon blossom dan latar kertas bertekstur.',
@@ -412,6 +427,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'monaco-royal',
+		eventTypes: ['pernikahan'],
 		title: 'Monaco Royal',
 		subtitle: 'Simbol kemewahan absolut dengan aksen dark emerald dan sentuhan emas berkilau.',
 		tagline: 'Kemewahan aristokrat sejati untuk momen perayaan cinta paling prestisius.',
@@ -473,6 +489,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'santorini-white',
+		eventTypes: ['pernikahan'],
 		title: 'Santorini White',
 		subtitle: 'Kesederhanaan minimalis modern dengan ruang bernapas lapang dan tipografi monokrom.',
 		tagline: 'Keindahan dalam kesederhanaan, bersih, rapi, dan memukau dalam segala sudut.',
@@ -534,6 +551,7 @@ export const TEMPLATES: TemplateItem[] = [
 	},
 	{
 		id: 'kyoto-blossom',
+		eventTypes: ['pernikahan'],
 		title: 'Kyoto Blossom',
 		subtitle:
 			'Harmoni ketenangan zen dengan dedaunan sakura lembut dan tata letak elegan kontemporer.',

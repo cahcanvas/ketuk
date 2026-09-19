@@ -173,7 +173,10 @@ export const actions: Actions = {
 		const next = url.searchParams.get('next');
 		// Hanya path internal. `next` datang dari URL yang bisa disusun siapa saja,
 		// dan tanpa pemeriksaan ini ia jadi celah open redirect ke domain luar.
-		const target = next?.startsWith('/') && !next.startsWith('//') ? next : '/dashboard';
+		// Pendaftaran baru selalu mendarat di onboarding: user baru belum punya
+		// konteks acara, dan konteks itulah yang menentukan apa yang ia lihat di
+		// dashboard. `next` tetap dihormati bila ada (mis. dari CTA template).
+		const target = next?.startsWith('/') && !next.startsWith('//') ? next : '/app/onboarding';
 
 		throw redirect(303, target);
 	},

@@ -3,6 +3,12 @@
 // per path module (dipaksa oleh linter Biome), bukan dikelompokkan per domain.
 
 export { DISPOSABLE_EMAIL_DOMAINS } from './constants/disposable-email-domains';
+export {
+	EVENT_CATEGORIES,
+	findCategory,
+	findSubType,
+	isEventCategory,
+} from './constants/event-categories';
 export type { ChecklistTemplateItem, EventTypeConfig } from './constants/event-types';
 export { EVENT_TYPE_CONFIGS } from './constants/event-types';
 export type { PaymentMethodConfig, PaymentMethodType } from './constants/payment-methods';
@@ -48,6 +54,13 @@ export type {
 	LoveStoryItem,
 	WeddingInvitation,
 } from './types/invitation';
+export type {
+	EventCategory,
+	EventCategoryId,
+	EventSubType,
+	UserEventPreference,
+} from './types/onboarding';
+export { EVENT_CATEGORY_IDS, isEventCategoryId } from './types/onboarding';
 export type { PaymentStatus, PaymentTransaction } from './types/payment';
 export type { BudgetItem, ChecklistItem, TimelineItem } from './types/planner';
 export type { User } from './types/user';

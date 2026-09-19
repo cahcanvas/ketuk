@@ -69,7 +69,7 @@ export const actions: Actions = {
 
 		const next = url.searchParams.get('next');
 		// Hanya path internal — tanpa pemeriksaan ini, `next` jadi celah open redirect.
-		const target = next?.startsWith('/') && !next.startsWith('//') ? next : '/dashboard';
+		const target = next?.startsWith('/') && !next.startsWith('//') ? next : '/app/dashboard';
 
 		throw redirect(303, target);
 	},

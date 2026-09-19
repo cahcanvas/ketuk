@@ -6,7 +6,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	const { session } = await locals.safeGetSession();
 
 	if (session) {
-		throw redirect(303, '/dashboard');
+		throw redirect(303, '/app/dashboard');
 	}
 
 	return {};

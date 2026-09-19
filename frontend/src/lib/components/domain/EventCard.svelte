@@ -15,7 +15,7 @@
 </script>
 
 <a
-	href="/undangan/{event.id}"
+	href="/app/undangan/{event.id}"
 	class="group flex flex-col gap-3 rounded-xl border border-coffee-100 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-coffee-200 hover:shadow-md"
 >
 	<div class="flex items-start justify-between gap-3">

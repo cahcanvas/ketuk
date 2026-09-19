@@ -262,7 +262,7 @@
 				</div>
 
 				<a
-					href="/dashboard"
+					href="/app/dashboard"
 					class="hidden sm:inline-flex items-center gap-1 rounded-lg border border-coffee-700 bg-coffee-800/80 px-3 py-1.5 text-xs font-medium text-coffee-200 hover:bg-coffee-700 hover:text-white transition-colors"
 				>
 					<span>Dashboard Member</span>
