@@ -14,16 +14,16 @@
 
 <div
 	class="flex flex-col gap-6 rounded-2xl border p-6 sm:p-8
-		{highlighted ? 'border-coral-500 bg-navy-900 text-white shadow-xl' : 'border-navy-100 bg-white'}"
+		{highlighted ? 'border-terracotta-500 bg-coffee-900 text-white shadow-xl' : 'border-coffee-100 bg-white'}"
 >
 	<div>
 		<h3 class="font-display text-xl font-bold">{plan.name}</h3>
-		<p class="mt-1 text-sm {highlighted ? 'text-white/70' : 'text-navy-500'}">{plan.description}</p>
+		<p class="mt-1 text-sm {highlighted ? 'text-white/70' : 'text-coffee-500'}">{plan.description}</p>
 	</div>
 	<p class="font-display text-3xl font-bold">
 		{plan.price === 0 ? 'Gratis' : formatRupiah(plan.price)}
 		{#if plan.price > 0}
-			<span class="text-sm font-normal {highlighted ? 'text-white/60' : 'text-navy-400'}">/acara</span>
+			<span class="text-sm font-normal {highlighted ? 'text-white/60' : 'text-coffee-400'}">/acara</span>
 		{/if}
 	</p>
 	<ul class="flex flex-1 flex-col gap-2.5 text-sm">
@@ -33,11 +33,11 @@
 					? ''
 					: highlighted
 						? 'text-white/40'
-						: 'text-navy-300'}"
+						: 'text-coffee-300'}"
 			>
 				<span class="mt-0.5 shrink-0" aria-hidden="true">
 					{#if feature.included}
-						<Check size={16} class={highlighted ? 'text-coral-400' : 'text-vendor-600'} />
+						<Check size={16} class={highlighted ? 'text-terracotta-400' : 'text-vendor-600'} />
 					{:else}
 						<Minus size={16} />
 					{/if}

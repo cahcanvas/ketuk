@@ -300,11 +300,11 @@ export const TEMPLATES: TemplateItem[] = [
 		reviewCount: 98,
 		envelopeScript: 'Requests the honor of your company',
 		palette: {
-			bgGradient: 'bg-gradient-to-b from-wine-50 via-cream-50 to-wine-100/50',
+			bgGradient: 'bg-gradient-to-b from-coffee-50 via-cream-50 to-coffee-100/50',
 			accentColor: '#5c1421',
 			accentTextColor: '#c5a478',
 			sealColor: '#6f1929',
-			phoneBorder: 'border-wine-950',
+			phoneBorder: 'border-coffee-950',
 		},
 		preview: {
 			coupleName: 'Valerie & Nathan',

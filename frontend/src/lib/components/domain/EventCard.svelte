@@ -16,24 +16,24 @@
 
 <a
 	href="/undangan/{event.id}"
-	class="group flex flex-col gap-3 rounded-xl border border-navy-100 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-navy-200 hover:shadow-md"
+	class="group flex flex-col gap-3 rounded-xl border border-coffee-100 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-coffee-200 hover:shadow-md"
 >
 	<div class="flex items-start justify-between gap-3">
 		<div class="min-w-0 flex-1">
-			<span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50">
-				<Icon size={18} class="text-navy-700" />
+			<span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-coffee-50">
+				<Icon size={18} class="text-coffee-700" />
 			</span>
-			<h3 class="mt-3 truncate font-display text-lg font-semibold text-navy-900">{event.title}</h3>
+			<h3 class="mt-3 truncate font-display text-lg font-semibold text-coffee-900">{event.title}</h3>
 			{#if config?.label}
-				<p class="text-xs text-navy-400">{config.label}</p>
+				<p class="text-xs text-coffee-400">{config.label}</p>
 			{/if}
 		</div>
 		<Badge tone={event.isPublished ? 'success' : 'neutral'}>
 			{event.isPublished ? 'Terbit' : 'Draf'}
 		</Badge>
 	</div>
-	<p class="text-sm text-navy-500">
+	<p class="text-sm text-coffee-500">
 		{event.date ? formatEventDate(event.date) : 'Tanggal belum diatur'}
 	</p>
-	<p class="truncate text-xs text-navy-400">ketuk.id/{event.slug}</p>
+	<p class="truncate text-xs text-coffee-400">ketuk.id/{event.slug}</p>
 </a>

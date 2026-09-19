@@ -32,9 +32,9 @@
 
 <div class="flex flex-col gap-1.5">
 	{#if label}
-		<label for={inputId} class="text-sm font-medium text-navy-800">
+		<label for={inputId} class="text-sm font-medium text-coffee-800">
 			{label}
-			{#if required}<span class="text-coral-500">*</span>{/if}
+			{#if required}<span class="text-terracotta-500">*</span>{/if}
 		</label>
 	{/if}
 	<textarea
@@ -47,16 +47,16 @@
 		{required}
 		bind:value
 		aria-invalid={error ? 'true' : undefined}
-		class="resize-y rounded-lg border px-3.5 py-2.5 text-sm text-navy-900 placeholder:text-navy-400
-			focus-visible:outline-2 disabled:cursor-not-allowed disabled:bg-navy-50
-			{error ? 'border-red-400' : 'border-navy-200'}"
+		class="resize-y rounded-lg border px-3.5 py-2.5 text-sm text-coffee-900 placeholder:text-coffee-400
+			focus-visible:outline-2 disabled:cursor-not-allowed disabled:bg-coffee-50
+			{error ? 'border-red-400' : 'border-coffee-200'}"
 	></textarea>
 	{#if maxlength}
-		<p class="text-right text-xs text-navy-400">{value.length}/{maxlength}</p>
+		<p class="text-right text-xs text-coffee-400">{value.length}/{maxlength}</p>
 	{/if}
 	{#if error}
 		<p class="text-sm text-red-600">{error}</p>
 	{:else if hint}
-		<p class="text-sm text-navy-400">{hint}</p>
+		<p class="text-sm text-coffee-400">{hint}</p>
 	{/if}
 </div>

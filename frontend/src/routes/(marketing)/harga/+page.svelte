@@ -14,10 +14,10 @@
 <section class="py-16 sm:py-24">
 	<div class="mx-auto max-w-6xl px-4 sm:px-6">
 		<div class="mx-auto max-w-2xl text-center">
-			<h1 class="font-display text-3xl font-bold text-navy-900 sm:text-4xl">
+			<h1 class="font-display text-3xl font-bold text-coffee-900 sm:text-4xl">
 				Harga per acara, bukan langganan
 			</h1>
-			<p class="mt-3 text-navy-500">
+			<p class="mt-3 text-coffee-500">
 				Sekali bayar untuk satu acara. Tidak ada biaya bulanan yang jalan terus meski acaranya
 				sudah lewat.
 			</p>

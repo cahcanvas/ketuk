@@ -82,7 +82,7 @@
 		{ name: 'Stone & Champagne Warm', value: 'bg-gradient-to-b from-stone-50 via-cream-50 to-amber-50/40' },
 		{ name: 'Rose & Warm Cream', value: 'bg-gradient-to-b from-rose-50 via-cream-50 to-cream-100' },
 		{ name: 'Botanical Emerald Soft', value: 'bg-gradient-to-b from-emerald-50/70 via-cream-50 to-cream-100' },
-		{ name: 'Wine Velvet Elegance', value: 'bg-gradient-to-b from-wine-50 via-cream-50 to-wine-100/50' },
+		{ name: 'Wine Velvet Elegance', value: 'bg-gradient-to-b from-coffee-50 via-cream-50 to-coffee-100/50' },
 		{ name: 'Royal Starlight Gold', value: 'bg-gradient-to-b from-zinc-50 via-cream-50 to-emerald-50/30' },
 		{ name: 'Minimalist Santorini Pure', value: 'bg-gradient-to-b from-sky-50/50 via-white to-cream-50' },
 	];
@@ -122,8 +122,8 @@
 				accentColor: '#5c1421',
 				accentTextColor: '#882235',
 				sealColor: '#a98350',
-				phoneBorder: 'border-wine-900',
-				fontFamily: 'Cormorant Garamond',
+				phoneBorder: 'border-coffee-900',
+				fontFamily: 'Lora',
 			},
 			preview: {
 				coupleName: 'Aurel & Revan',
@@ -229,17 +229,17 @@
 	{/if}
 
 	<!-- Header with Action Buttons -->
-	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-navy-800/80 pb-6">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-coffee-800/80 pb-6">
 		<div>
 			<div class="flex items-center gap-2">
 				<h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
 					Master Produk & Template Undangan
 				</h1>
-				<span class="rounded-full bg-coral-500/20 px-2.5 py-0.5 text-xs font-semibold text-coral-400 border border-coral-500/30">
+				<span class="rounded-full bg-terracotta-500/20 px-2.5 py-0.5 text-xs font-semibold text-terracotta-400 border border-terracotta-500/30">
 					Visual & Animation Studio
 				</span>
 			</div>
-			<p class="mt-1 text-xs sm:text-sm text-navy-400 max-w-3xl">
+			<p class="mt-1 text-xs sm:text-sm text-coffee-400 max-w-3xl">
 				Konfigurasi desain visual, tipografi, efek animasi buka amplop, partikel, audio latar, serta matriks hak kustomisasi member untuk setiap paket (Gratis, Pro, Lengkap).
 			</p>
 		</div>
@@ -248,16 +248,16 @@
 			<button
 				type="button"
 				onclick={handleCreateNewTemplate}
-				class="inline-flex items-center gap-1.5 rounded-xl border border-navy-700 bg-navy-800/90 px-3.5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-navy-700 hover:text-white transition-all active:scale-95"
+				class="inline-flex items-center gap-1.5 rounded-xl border border-coffee-700 bg-coffee-800/90 px-3.5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-coffee-700 hover:text-white transition-all active:scale-95"
 			>
-				<Plus size={15} class="text-coral-400" />
+				<Plus size={15} class="text-terracotta-400" />
 				<span>Tambah Template</span>
 			</button>
 
 			<button
 				type="button"
 				onclick={handleDuplicateTemplate}
-				class="inline-flex items-center gap-1.5 rounded-xl border border-navy-700 bg-navy-800/90 px-3.5 py-2 text-xs font-semibold text-navy-200 hover:bg-navy-700 hover:text-white transition-all active:scale-95"
+				class="inline-flex items-center gap-1.5 rounded-xl border border-coffee-700 bg-coffee-800/90 px-3.5 py-2 text-xs font-semibold text-coffee-200 hover:bg-coffee-700 hover:text-white transition-all active:scale-95"
 				title="Duplikat template yang sedang dipilih"
 			>
 				<Copy size={14} />
@@ -267,7 +267,7 @@
 			<button
 				type="button"
 				onclick={handleSaveAll}
-				class="inline-flex items-center gap-1.5 rounded-xl bg-coral-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-coral-500/30 hover:bg-coral-600 transition-all hover:scale-102 active:scale-98"
+				class="inline-flex items-center gap-1.5 rounded-xl bg-terracotta-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-terracotta-500/30 hover:bg-terracotta-600 transition-all hover:scale-102 active:scale-98"
 			>
 				<Check size={15} />
 				<span>Simpan Perubahan</span>
@@ -279,27 +279,27 @@
 	<div class="space-y-3">
 		<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 			<div class="flex items-center gap-2">
-				<span class="text-xs font-bold uppercase tracking-wider text-navy-300">PILIH TEMPLATE MASTER:</span>
-				<span class="text-xs text-navy-400">({filteredTemplates.length} dari {templates.length} desain)</span>
+				<span class="text-xs font-bold uppercase tracking-wider text-coffee-300">PILIH TEMPLATE MASTER:</span>
+				<span class="text-xs text-coffee-400">({filteredTemplates.length} dari {templates.length} desain)</span>
 			</div>
 
 			<!-- Search & Filter Controls -->
 			<div class="flex flex-wrap items-center gap-2">
 				<!-- Search -->
 				<div class="relative">
-					<Search size={14} class="absolute left-2.5 top-1/2 -translate-y-1/2 text-navy-400" />
+					<Search size={14} class="absolute left-2.5 top-1/2 -translate-y-1/2 text-coffee-400" />
 					<input
 						type="text"
 						bind:value={searchQuery}
 						placeholder="Cari nama / kategori..."
-						class="w-48 sm:w-56 rounded-lg border border-navy-700 bg-navy-900/90 pl-8 pr-3 py-1 text-xs text-white placeholder-navy-500 focus:border-coral-500 focus:outline-none"
+						class="w-48 sm:w-56 rounded-lg border border-coffee-700 bg-coffee-900/90 pl-8 pr-3 py-1 text-xs text-white placeholder-coffee-500 focus:border-terracotta-500 focus:outline-none"
 					/>
 				</div>
 
 				<!-- Category Filter -->
 				<select
 					bind:value={selectedCategory}
-					class="rounded-lg border border-navy-700 bg-navy-900/90 px-2.5 py-1 text-xs text-navy-200 focus:border-coral-500 focus:outline-none"
+					class="rounded-lg border border-coffee-700 bg-coffee-900/90 px-2.5 py-1 text-xs text-coffee-200 focus:border-terracotta-500 focus:outline-none"
 				>
 					<option value="Semua">Semua Kategori</option>
 					<option value="Klasik">Klasik</option>
@@ -313,15 +313,15 @@
 		</div>
 
 		<!-- Scrollable Template Cards Ribbon -->
-		<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-navy-700">
+		<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-coffee-700">
 			{#each filteredTemplates as tmpl (tmpl.id)}
 				{@const isSelected = tmpl.id === selectedTemplateId}
 				<button
 					type="button"
 					onclick={() => selectTemplate(tmpl.id)}
 					class="group relative flex w-60 shrink-0 flex-col justify-between rounded-2xl border p-3.5 text-left transition-all duration-200 {isSelected
-						? 'border-coral-500 bg-navy-900 shadow-lg shadow-coral-500/10 ring-2 ring-coral-500/30'
-						: 'border-navy-800 bg-navy-900/60 hover:border-navy-700 hover:bg-navy-900'}"
+						? 'border-terracotta-500 bg-coffee-900 shadow-lg shadow-terracotta-500/10 ring-2 ring-terracotta-500/30'
+						: 'border-coffee-800 bg-coffee-900/60 hover:border-coffee-700 hover:bg-coffee-900'}"
 				>
 					<div>
 						<!-- Top badge & Wax Seal Dot -->
@@ -334,12 +334,12 @@
 								>
 									♥
 								</div>
-								<span class="text-[10px] font-medium text-navy-400 uppercase">{tmpl.category}</span>
+								<span class="text-[10px] font-medium text-coffee-400 uppercase">{tmpl.category}</span>
 							</div>
 
 							<div class="flex items-center gap-1">
 								{#if tmpl.badge}
-									<span class="rounded bg-wine-900/80 px-1.5 py-0.5 text-[8px] font-semibold text-champagne-300 uppercase border border-champagne-400/20">
+									<span class="rounded bg-coffee-900/80 px-1.5 py-0.5 text-[8px] font-semibold text-champagne-300 uppercase border border-champagne-400/20">
 										{tmpl.badge}
 									</span>
 								{/if}
@@ -349,24 +349,24 @@
 							</div>
 						</div>
 
-						<h4 class="font-serif text-base font-bold text-white transition-colors group-hover:text-coral-300">
+						<h4 class="font-serif text-base font-bold text-white transition-colors group-hover:text-terracotta-300">
 							{tmpl.title}
 						</h4>
-						<p class="mt-0.5 text-[11px] text-navy-400 line-clamp-1">
+						<p class="mt-0.5 text-[11px] text-coffee-400 line-clamp-1">
 							{tmpl.subtitle}
 						</p>
 					</div>
 
-					<div class="mt-3 pt-2.5 border-t border-navy-800/80 flex items-center justify-between text-[11px]">
+					<div class="mt-3 pt-2.5 border-t border-coffee-800/80 flex items-center justify-between text-[11px]">
 						<span class="font-serif text-champagne-300 font-semibold">
 							Rp {tmpl.basePrice.toLocaleString('id-ID')}
 						</span>
 						{#if isSelected}
-							<span class="flex items-center gap-1 text-coral-400 font-medium">
+							<span class="flex items-center gap-1 text-terracotta-400 font-medium">
 								<Check size={12} /> Aktif Diedit
 							</span>
 						{:else}
-							<span class="text-navy-500 group-hover:text-navy-300">Pilih</span>
+							<span class="text-coffee-500 group-hover:text-coffee-300">Pilih</span>
 						{/if}
 					</div>
 				</button>
@@ -381,14 +381,14 @@
 		<!-- LEFT COLUMN (7 Cols): Studio Editor Tabs -->
 		<div class="lg:col-span-7 space-y-4">
 			<!-- Studio Navigation Tabs -->
-			<div class="flex rounded-xl border border-navy-800 bg-navy-900/90 p-1">
+			<div class="flex rounded-xl border border-coffee-800 bg-coffee-900/90 p-1">
 				<button
 					type="button"
 					onclick={() => (activeTab = 'visual')}
 					class="flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold transition-all {activeTab ===
 					'visual'
-						? 'bg-coral-500 text-white shadow-md'
-						: 'text-navy-400 hover:text-white'}"
+						? 'bg-terracotta-500 text-white shadow-md'
+						: 'text-coffee-400 hover:text-white'}"
 				>
 					<Palette size={15} />
 					<span>1. Desain &amp; Visual</span>
@@ -399,8 +399,8 @@
 					onclick={() => (activeTab = 'animations')}
 					class="flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold transition-all {activeTab ===
 					'animations'
-						? 'bg-coral-500 text-white shadow-md'
-						: 'text-navy-400 hover:text-white'}"
+						? 'bg-terracotta-500 text-white shadow-md'
+						: 'text-coffee-400 hover:text-white'}"
 				>
 					<Sparkles size={15} />
 					<span>2. Efek &amp; Animasi</span>
@@ -411,8 +411,8 @@
 					onclick={() => (activeTab = 'permissions')}
 					class="flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-semibold transition-all {activeTab ===
 					'permissions'
-						? 'bg-coral-500 text-white shadow-md'
-						: 'text-navy-400 hover:text-white'}"
+						? 'bg-terracotta-500 text-white shadow-md'
+						: 'text-coffee-400 hover:text-white'}"
 				>
 					<ShieldCheck size={15} />
 					<span>3. Hak Kustomisasi Member</span>
@@ -423,10 +423,10 @@
 			{#if activeTab === 'visual'}
 				<div class="space-y-4 animate-in fade-in duration-200">
 					<!-- Section 1.1: Metadata Produk -->
-					<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-5 backdrop-blur-md space-y-4">
-						<div class="flex items-center justify-between border-b border-navy-800/80 pb-3">
+					<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-5 backdrop-blur-md space-y-4">
+						<div class="flex items-center justify-between border-b border-coffee-800/80 pb-3">
 							<h3 class="font-display text-sm font-bold text-white flex items-center gap-2">
-								<Layers size={16} class="text-coral-400" />
+								<Layers size={16} class="text-terracotta-400" />
 								<span>Informasi &amp; Identitas Template</span>
 							</h3>
 							<button
@@ -443,31 +443,31 @@
 
 						<div class="grid gap-4 sm:grid-cols-2">
 							<div>
-								<label for="template-title" class="block text-xs font-semibold text-navy-300">Nama Template</label>
+								<label for="template-title" class="block text-xs font-semibold text-coffee-300">Nama Template</label>
 								<input
 									id="template-title"
 									type="text"
 									bind:value={currentTemplate.title}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none font-medium"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none font-medium"
 								/>
 							</div>
 
 							<div>
-								<label for="template-slug" class="block text-xs font-semibold text-navy-300">Slug URL</label>
+								<label for="template-slug" class="block text-xs font-semibold text-coffee-300">Slug URL</label>
 								<input
 									id="template-slug"
 									type="text"
 									bind:value={currentTemplate.slug}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white font-mono focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white font-mono focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 
 							<div>
-								<label for="template-category" class="block text-xs font-semibold text-navy-300">Kategori Desain</label>
+								<label for="template-category" class="block text-xs font-semibold text-coffee-300">Kategori Desain</label>
 								<select
 									id="template-category"
 									bind:value={currentTemplate.category}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
 									<option value="Klasik">Klasik</option>
 									<option value="Elegan">Elegan</option>
@@ -479,11 +479,11 @@
 							</div>
 
 							<div>
-								<label for="template-badge" class="block text-xs font-semibold text-navy-300">Badge Penjualan</label>
+								<label for="template-badge" class="block text-xs font-semibold text-coffee-300">Badge Penjualan</label>
 								<select
 									id="template-badge"
 									bind:value={currentTemplate.badge}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
 									<option value="">Tanpa Badge</option>
 									<option value="BESTSELLER">BESTSELLER</option>
@@ -494,35 +494,35 @@
 							</div>
 
 							<div class="sm:col-span-2">
-								<label for="template-subtitle" class="block text-xs font-semibold text-navy-300">Deskripsi Singkat / Subtitle</label>
+								<label for="template-subtitle" class="block text-xs font-semibold text-coffee-300">Deskripsi Singkat / Subtitle</label>
 								<input
 									id="template-subtitle"
 									type="text"
 									bind:value={currentTemplate.subtitle}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 
 							<div class="sm:col-span-2">
-								<label for="template-tagline" class="block text-xs font-semibold text-navy-300">Tagline Pemasaran</label>
+								<label for="template-tagline" class="block text-xs font-semibold text-coffee-300">Tagline Pemasaran</label>
 								<input
 									id="template-tagline"
 									type="text"
 									bind:value={currentTemplate.tagline}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 						</div>
 					</div>
 
 					<!-- Section 1.2: Palet Warna & Visual Token Engine -->
-					<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-5 backdrop-blur-md space-y-4">
-						<div class="border-b border-navy-800/80 pb-3">
+					<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-5 backdrop-blur-md space-y-4">
+						<div class="border-b border-coffee-800/80 pb-3">
 							<h3 class="font-display text-sm font-bold text-white flex items-center gap-2">
 								<Palette size={16} class="text-champagne-400" />
 								<span>Palet Warna &amp; Styling Engine</span>
 							</h3>
-							<p class="text-[11px] text-navy-400 mt-0.5">
+							<p class="text-[11px] text-coffee-400 mt-0.5">
 								Atur kode warna hex untuk aksen, stempel lilin wax seal, dan border frame smartphone.
 							</p>
 						</div>
@@ -530,36 +530,36 @@
 						<div class="grid gap-4 sm:grid-cols-2">
 							<!-- Accent Color -->
 							<div>
-								<label for="accent-color-hex" class="block text-xs font-semibold text-navy-300">Warna Aksen Utama</label>
+								<label for="accent-color-hex" class="block text-xs font-semibold text-coffee-300">Warna Aksen Utama</label>
 								<div class="mt-1.5 flex items-center gap-2.5">
 									<input
 										type="color"
 										bind:value={currentTemplate.palette.accentColor}
-										class="h-9 w-12 cursor-pointer rounded-lg border border-navy-700 bg-transparent p-1"
+										class="h-9 w-12 cursor-pointer rounded-lg border border-coffee-700 bg-transparent p-1"
 									/>
 									<input
 										id="accent-color-hex"
 										type="text"
 										bind:value={currentTemplate.palette.accentColor}
-										class="flex-1 rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs font-mono text-white focus:border-coral-500 focus:outline-none"
+										class="flex-1 rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs font-mono text-white focus:border-terracotta-500 focus:outline-none"
 									/>
 								</div>
 							</div>
 
 							<!-- Wax Seal Color with Quick Preset Swatches -->
 							<div>
-								<label for="seal-color-hex" class="block text-xs font-semibold text-navy-300">Warna Stempel Lilin (Wax Seal)</label>
+								<label for="seal-color-hex" class="block text-xs font-semibold text-coffee-300">Warna Stempel Lilin (Wax Seal)</label>
 								<div class="mt-1.5 flex items-center gap-2.5">
 									<input
 										type="color"
 										bind:value={currentTemplate.palette.sealColor}
-										class="h-9 w-12 cursor-pointer rounded-lg border border-navy-700 bg-transparent p-1"
+										class="h-9 w-12 cursor-pointer rounded-lg border border-coffee-700 bg-transparent p-1"
 									/>
 									<input
 										id="seal-color-hex"
 										type="text"
 										bind:value={currentTemplate.palette.sealColor}
-										class="flex-1 rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs font-mono text-white focus:border-coral-500 focus:outline-none"
+										class="flex-1 rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs font-mono text-white focus:border-terracotta-500 focus:outline-none"
 									/>
 								</div>
 
@@ -579,32 +579,32 @@
 
 							<!-- Accent Text Color -->
 							<div>
-								<label for="accent-text-hex" class="block text-xs font-semibold text-navy-300">Warna Teks Aksen</label>
+								<label for="accent-text-hex" class="block text-xs font-semibold text-coffee-300">Warna Teks Aksen</label>
 								<div class="mt-1.5 flex items-center gap-2.5">
 									<input
 										type="color"
 										bind:value={currentTemplate.palette.accentTextColor}
-										class="h-9 w-12 cursor-pointer rounded-lg border border-navy-700 bg-transparent p-1"
+										class="h-9 w-12 cursor-pointer rounded-lg border border-coffee-700 bg-transparent p-1"
 									/>
 									<input
 										id="accent-text-hex"
 										type="text"
 										bind:value={currentTemplate.palette.accentTextColor}
-										class="flex-1 rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs font-mono text-white focus:border-coral-500 focus:outline-none"
+										class="flex-1 rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs font-mono text-white focus:border-terracotta-500 focus:outline-none"
 									/>
 								</div>
 							</div>
 
 							<!-- Phone Border Class -->
 							<div>
-								<label for="phone-border-class" class="block text-xs font-semibold text-navy-300">Border Frame Mockup HP</label>
+								<label for="phone-border-class" class="block text-xs font-semibold text-coffee-300">Border Frame Mockup HP</label>
 								<select
 									id="phone-border-class"
 									bind:value={currentTemplate.palette.phoneBorder}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
 									<option value="border-stone-800">Stone Black (Mewah Klasik)</option>
-									<option value="border-wine-900">Wine Bordeaux (Bordeaux Elegan)</option>
+									<option value="border-coffee-900">Wine Bordeaux (Bordeaux Elegan)</option>
 									<option value="border-emerald-950">Emerald Deep (Botanical)</option>
 									<option value="border-zinc-900">Titanium Zinc (Luxury Gold)</option>
 									<option value="border-slate-800">Slate Charcoal (Modern Minimalis)</option>
@@ -614,11 +614,11 @@
 
 							<!-- Background Gradient Presets -->
 							<div class="sm:col-span-2">
-								<label for="bg-gradient-preset" class="block text-xs font-semibold text-navy-300">Gradasi Latar Belakang Kartu &amp; Layar</label>
+								<label for="bg-gradient-preset" class="block text-xs font-semibold text-coffee-300">Gradasi Latar Belakang Kartu &amp; Layar</label>
 								<select
 									id="bg-gradient-preset"
 									bind:value={currentTemplate.palette.bgGradient}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
 									{#each BG_GRADIENT_PRESETS as grad (grad.name)}
 										<option value={grad.value}>{grad.name}</option>
@@ -629,45 +629,45 @@
 					</div>
 
 					<!-- Section 1.3: Tipografi & Monogram -->
-					<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-5 backdrop-blur-md space-y-4">
-						<div class="border-b border-navy-800/80 pb-3">
+					<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-5 backdrop-blur-md space-y-4">
+						<div class="border-b border-coffee-800/80 pb-3">
 							<h3 class="font-display text-sm font-bold text-white flex items-center gap-2">
-								<Wand2 size={16} class="text-coral-400" />
+								<Wand2 size={16} class="text-terracotta-400" />
 								<span>Tipografi &amp; Pratinjau Monogram</span>
 							</h3>
 						</div>
 
 						<div class="grid gap-4 sm:grid-cols-3">
 							<div>
-								<label for="font-family-select" class="block text-xs font-semibold text-navy-300">Font Family Serif</label>
+								<label for="font-family-select" class="block text-xs font-semibold text-coffee-300">Font Family Serif</label>
 								<select
 									id="font-family-select"
 									bind:value={currentTemplate.palette.fontFamily}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
-									<option value="Cormorant Garamond">Cormorant Garamond</option>
+									<option value="Lora">Lora</option>
 									<option value="Playfair Display">Playfair Display</option>
 									<option value="Cinzel">Cinzel Decorative</option>
-									<option value="Montserrat">Montserrat Editorial</option>
+									<option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
 								</select>
 							</div>
 
 							<div>
-								<label for="monogram-initials" class="block text-xs font-semibold text-navy-300">Inisial Monogram Segel</label>
+								<label for="monogram-initials" class="block text-xs font-semibold text-coffee-300">Inisial Monogram Segel</label>
 								<input
 									id="monogram-initials"
 									type="text"
 									bind:value={currentTemplate.preview.monogram}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs text-white text-center font-serif text-base focus:border-coral-500 focus:outline-none font-bold"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs text-white text-center font-serif text-base focus:border-terracotta-500 focus:outline-none font-bold"
 								/>
 							</div>
 
 							<div>
-								<label for="seal-symbol" class="block text-xs font-semibold text-navy-300">Simbol Segel Lilin</label>
+								<label for="seal-symbol" class="block text-xs font-semibold text-coffee-300">Simbol Segel Lilin</label>
 								<select
 									id="seal-symbol"
 									bind:value={currentTemplate.envelope.sealSymbol}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
 									<option value="heart">♥ Simbol Hati Romansa</option>
 									<option value="monogram">Inisial Monogram (Huruf)</option>
@@ -677,43 +677,43 @@
 							</div>
 
 							<div class="sm:col-span-3">
-								<label for="envelope-script" class="block text-xs font-semibold text-navy-300">Teks Kaligrafi Luar Amplop</label>
+								<label for="envelope-script" class="block text-xs font-semibold text-coffee-300">Teks Kaligrafi Luar Amplop</label>
 								<input
 									id="envelope-script"
 									type="text"
 									bind:value={currentTemplate.envelope.envelopeScript}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white italic font-serif focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white italic font-serif focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 
 							<!-- Dummy Couple preview data -->
 							<div>
-								<label for="dummy-couple-name" class="block text-xs font-semibold text-navy-300">Nama Pasangan Preview</label>
+								<label for="dummy-couple-name" class="block text-xs font-semibold text-coffee-300">Nama Pasangan Preview</label>
 								<input
 									id="dummy-couple-name"
 									type="text"
 									bind:value={currentTemplate.preview.coupleName}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 
 							<div>
-								<label for="dummy-event-date" class="block text-xs font-semibold text-navy-300">Tanggal Acara Preview</label>
+								<label for="dummy-event-date" class="block text-xs font-semibold text-coffee-300">Tanggal Acara Preview</label>
 								<input
 									id="dummy-event-date"
 									type="text"
 									bind:value={currentTemplate.preview.date}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 
 							<div>
-								<label for="dummy-venue-loc" class="block text-xs font-semibold text-navy-300">Lokasi Venue Preview</label>
+								<label for="dummy-venue-loc" class="block text-xs font-semibold text-coffee-300">Lokasi Venue Preview</label>
 								<input
 									id="dummy-venue-loc"
 									type="text"
 									bind:value={currentTemplate.preview.location}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								/>
 							</div>
 						</div>
@@ -724,13 +724,13 @@
 			{:else if activeTab === 'animations'}
 				<div class="space-y-4 animate-in fade-in duration-200">
 					<!-- Section 2.1: Opening Effect Selector -->
-					<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-5 backdrop-blur-md space-y-4">
-						<div class="border-b border-navy-800/80 pb-3">
+					<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-5 backdrop-blur-md space-y-4">
+						<div class="border-b border-coffee-800/80 pb-3">
 							<h3 class="font-display text-sm font-bold text-white flex items-center gap-2">
-								<Sparkles size={16} class="text-coral-400" />
+								<Sparkles size={16} class="text-terracotta-400" />
 								<span>Animasi Pembuka Undangan (Opening Transition)</span>
 							</h3>
-							<p class="text-[11px] text-navy-400 mt-0.5">
+							<p class="text-[11px] text-coffee-400 mt-0.5">
 								Tentukan animasi transisi ketika tamu pertama kali mengetuk stempel lilin wax seal atau tombol pembuka undangan.
 							</p>
 						</div>
@@ -741,15 +741,15 @@
 								type="button"
 								onclick={() => (currentTemplate.animations.openingEffect = 'wax_seal_crack')}
 								class="flex items-start gap-3 rounded-xl border p-3.5 text-left transition-all {currentTemplate.animations.openingEffect === 'wax_seal_crack'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
-								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-navy-800 text-coral-400 shrink-0">
+								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-coffee-800 text-terracotta-400 shrink-0">
 									<Heart size={14} />
 								</div>
 								<div>
 									<h4 class="text-xs font-bold text-white">Wax Seal Crack &amp; Flap</h4>
-									<p class="text-[11px] text-navy-400 mt-0.5 leading-relaxed">
+									<p class="text-[11px] text-coffee-400 mt-0.5 leading-relaxed">
 										Stempel lilin bergetar realistis, retak secara 3D dan tutup amplop terbuka ke atas.
 									</p>
 								</div>
@@ -760,15 +760,15 @@
 								type="button"
 								onclick={() => (currentTemplate.animations.openingEffect = 'velvet_curtain')}
 								class="flex items-start gap-3 rounded-xl border p-3.5 text-left transition-all {currentTemplate.animations.openingEffect === 'velvet_curtain'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
-								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-navy-800 text-amber-400 shrink-0">
+								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-coffee-800 text-amber-400 shrink-0">
 									<Layers size={14} />
 								</div>
 								<div>
 									<h4 class="text-xs font-bold text-white">Velvet Curtain Pull</h4>
-									<p class="text-[11px] text-navy-400 mt-0.5 leading-relaxed">
+									<p class="text-[11px] text-coffee-400 mt-0.5 leading-relaxed">
 										Tirai beludru mewah bergeser perlahan ke samping menyingkap isi undangan kerajaan.
 									</p>
 								</div>
@@ -779,15 +779,15 @@
 								type="button"
 								onclick={() => (currentTemplate.animations.openingEffect = 'blooming_rose')}
 								class="flex items-start gap-3 rounded-xl border p-3.5 text-left transition-all {currentTemplate.animations.openingEffect === 'blooming_rose'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
-								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-navy-800 text-rose-400 shrink-0">
+								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-coffee-800 text-rose-400 shrink-0">
 									<Sparkles size={14} />
 								</div>
 								<div>
 									<h4 class="text-xs font-bold text-white">Blooming Rose Unfold</h4>
-									<p class="text-[11px] text-navy-400 mt-0.5 leading-relaxed">
+									<p class="text-[11px] text-coffee-400 mt-0.5 leading-relaxed">
 										Kelopak bunga bermekaran memutar perlahan sebelum halaman surat undangan muncul.
 									</p>
 								</div>
@@ -798,15 +798,15 @@
 								type="button"
 								onclick={() => (currentTemplate.animations.openingEffect = 'gate_fold')}
 								class="flex items-start gap-3 rounded-xl border p-3.5 text-left transition-all {currentTemplate.animations.openingEffect === 'gate_fold'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
-								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-navy-800 text-emerald-400 shrink-0">
+								<div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-coffee-800 text-emerald-400 shrink-0">
 									<ShieldCheck size={14} />
 								</div>
 								<div>
 									<h4 class="text-xs font-bold text-white">Royal Gate Opening</h4>
-									<p class="text-[11px] text-navy-400 mt-0.5 leading-relaxed">
+									<p class="text-[11px] text-coffee-400 mt-0.5 leading-relaxed">
 										Pintu gerbang ornamen vintage terbelah ganda dengan transisi perspektif 3D.
 									</p>
 								</div>
@@ -814,10 +814,10 @@
 						</div>
 
 						<!-- Opening Duration Slider -->
-						<div class="pt-3 border-t border-navy-800/80">
+						<div class="pt-3 border-t border-coffee-800/80">
 							<div class="flex items-center justify-between text-xs">
-								<span class="font-semibold text-navy-300">Durasi Transisi Buka</span>
-								<span class="font-mono text-coral-400 font-bold">{currentTemplate.animations.openingDurationMs} ms</span>
+								<span class="font-semibold text-coffee-300">Durasi Transisi Buka</span>
+								<span class="font-mono text-terracotta-400 font-bold">{currentTemplate.animations.openingDurationMs} ms</span>
 							</div>
 							<input
 								type="range"
@@ -825,19 +825,19 @@
 								max="1500"
 								step="50"
 								bind:value={currentTemplate.animations.openingDurationMs}
-								class="mt-2 w-full accent-coral-500"
+								class="mt-2 w-full accent-terracotta-500"
 							/>
 						</div>
 					</div>
 
 					<!-- Section 2.2: Particle Effect Engine -->
-					<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-5 backdrop-blur-md space-y-4">
-						<div class="border-b border-navy-800/80 pb-3">
+					<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-5 backdrop-blur-md space-y-4">
+						<div class="border-b border-coffee-800/80 pb-3">
 							<h3 class="font-display text-sm font-bold text-white flex items-center gap-2">
 								<Sparkles size={16} class="text-champagne-400" />
 								<span>Efek Partikel Visual Melayang (Floating Particles)</span>
 							</h3>
-							<p class="text-[11px] text-navy-400 mt-0.5">
+							<p class="text-[11px] text-coffee-400 mt-0.5">
 								Animasi latar belakang interaktif saat tamu membaca isi undangan.
 							</p>
 						</div>
@@ -847,74 +847,74 @@
 								type="button"
 								onclick={() => (currentTemplate.animations.particleEffect = 'falling_petals')}
 								class="rounded-xl border p-3 text-center transition-all {currentTemplate.animations.particleEffect === 'falling_petals'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
 								<span class="text-xl">🌸</span>
 								<h5 class="text-xs font-bold text-white mt-1">Kelopak Bunga Gugur</h5>
-								<p class="text-[10px] text-navy-400 mt-0.5">Petals sakura &amp; mawar</p>
+								<p class="text-[10px] text-coffee-400 mt-0.5">Petals sakura &amp; mawar</p>
 							</button>
 
 							<button
 								type="button"
 								onclick={() => (currentTemplate.animations.particleEffect = 'gold_stardust')}
 								class="rounded-xl border p-3 text-center transition-all {currentTemplate.animations.particleEffect === 'gold_stardust'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
 								<span class="text-xl">✨</span>
 								<h5 class="text-xs font-bold text-white mt-1">Debu Bintang Emas</h5>
-								<p class="text-[10px] text-navy-400 mt-0.5">Gold Stardust Glow</p>
+								<p class="text-[10px] text-coffee-400 mt-0.5">Gold Stardust Glow</p>
 							</button>
 
 							<button
 								type="button"
 								onclick={() => (currentTemplate.animations.particleEffect = 'confetti')}
 								class="rounded-xl border p-3 text-center transition-all {currentTemplate.animations.particleEffect === 'confetti'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
 								<span class="text-xl">🎉</span>
 								<h5 class="text-xs font-bold text-white mt-1">Confetti Pesta</h5>
-								<p class="text-[10px] text-navy-400 mt-0.5">Kertas emas &amp; blush</p>
+								<p class="text-[10px] text-coffee-400 mt-0.5">Kertas emas &amp; blush</p>
 							</button>
 
 							<button
 								type="button"
 								onclick={() => (currentTemplate.animations.particleEffect = 'floating_lanterns')}
 								class="rounded-xl border p-3 text-center transition-all {currentTemplate.animations.particleEffect === 'floating_lanterns'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
 								<span class="text-xl">🏮</span>
 								<h5 class="text-xs font-bold text-white mt-1">Lentera Mengambang</h5>
-								<p class="text-[10px] text-navy-400 mt-0.5">Warm Glowing Orbs</p>
+								<p class="text-[10px] text-coffee-400 mt-0.5">Warm Glowing Orbs</p>
 							</button>
 
 							<button
 								type="button"
 								onclick={() => (currentTemplate.animations.particleEffect = 'none')}
 								class="sm:col-span-2 rounded-xl border p-3 text-center transition-all {currentTemplate.animations.particleEffect === 'none'
-									? 'border-coral-500 bg-coral-500/10 ring-1 ring-coral-500'
-									: 'border-navy-700 bg-navy-950/60 hover:border-navy-600'}"
+									? 'border-terracotta-500 bg-terracotta-500/10 ring-1 ring-terracotta-500'
+									: 'border-coffee-700 bg-coffee-950/60 hover:border-coffee-600'}"
 							>
 								<span class="text-xl">🚫</span>
 								<h5 class="text-xs font-bold text-white mt-1">Tanpa Partikel (Clean &amp; Minimal)</h5>
-								<p class="text-[10px] text-navy-400 mt-0.5">Fokus penuh pada tipografi</p>
+								<p class="text-[10px] text-coffee-400 mt-0.5">Fokus penuh pada tipografi</p>
 							</button>
 						</div>
 
 						<!-- Particle Density -->
-						<div class="pt-3 border-t border-navy-800/80 flex items-center justify-between">
-							<span class="text-xs font-semibold text-navy-300">Kepadatan Partikel:</span>
+						<div class="pt-3 border-t border-coffee-800/80 flex items-center justify-between">
+							<span class="text-xs font-semibold text-coffee-300">Kepadatan Partikel:</span>
 							<div class="flex gap-2">
 								{#each ['low', 'medium', 'high'] as den}
 									<button
 										type="button"
 										onclick={() => (currentTemplate.animations.particleDensity = den as ParticleDensity)}
 										class="rounded-lg px-3 py-1 text-xs font-semibold uppercase transition-colors {currentTemplate.animations.particleDensity === den
-											? 'bg-coral-500 text-white'
-											: 'bg-navy-800 text-navy-400 hover:text-white'}"
+											? 'bg-terracotta-500 text-white'
+											: 'bg-coffee-800 text-coffee-400 hover:text-white'}"
 									>
 										{den}
 									</button>
@@ -924,24 +924,24 @@
 					</div>
 
 					<!-- Section 2.3: Audio & Soundscape Presets -->
-					<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-5 backdrop-blur-md space-y-4">
-						<div class="border-b border-navy-800/80 pb-3">
+					<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-5 backdrop-blur-md space-y-4">
+						<div class="border-b border-coffee-800/80 pb-3">
 							<h3 class="font-display text-sm font-bold text-white flex items-center gap-2">
 								<Music size={16} class="text-undangan-400" />
 								<span>Preset Musik &amp; Soundscape Latar</span>
 							</h3>
-							<p class="text-[11px] text-navy-400 mt-0.5">
+							<p class="text-[11px] text-coffee-400 mt-0.5">
 								Pilihan lagu default yang menyala saat tamu membuka undangan digital.
 							</p>
 						</div>
 
 						<div class="space-y-3">
 							<div>
-								<label for="track-preset-select" class="block text-xs font-semibold text-navy-300">Lagu Preset Bawaan</label>
+								<label for="track-preset-select" class="block text-xs font-semibold text-coffee-300">Lagu Preset Bawaan</label>
 								<select
 									id="track-preset-select"
 									bind:value={currentTemplate.audio.presetTrackName}
-									class="mt-1.5 w-full rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2 text-xs text-white focus:border-coral-500 focus:outline-none"
+									class="mt-1.5 w-full rounded-xl border border-coffee-700 bg-coffee-950/80 px-3.5 py-2 text-xs text-white focus:border-terracotta-500 focus:outline-none"
 								>
 									{#each AUDIO_PRESETS as track (track.name)}
 										<option value={track.name}>{track.name}</option>
@@ -950,27 +950,27 @@
 							</div>
 
 							<div class="grid gap-3 sm:grid-cols-2 pt-2">
-								<label class="flex items-center gap-3 rounded-xl border border-navy-700 bg-navy-950/60 p-3 cursor-pointer">
+								<label class="flex items-center gap-3 rounded-xl border border-coffee-700 bg-coffee-950/60 p-3 cursor-pointer">
 									<input
 										type="checkbox"
 										bind:checked={currentTemplate.audio.autoplay}
-										class="h-4 w-4 rounded accent-coral-500"
+										class="h-4 w-4 rounded accent-terracotta-500"
 									/>
 									<div>
 										<p class="text-xs font-bold text-white">Autoplay Saat Dibuka</p>
-										<p class="text-[10px] text-navy-400">Musik otomatis memudar masuk</p>
+										<p class="text-[10px] text-coffee-400">Musik otomatis memudar masuk</p>
 									</div>
 								</label>
 
-								<label class="flex items-center gap-3 rounded-xl border border-navy-700 bg-navy-950/60 p-3 cursor-pointer">
+								<label class="flex items-center gap-3 rounded-xl border border-coffee-700 bg-coffee-950/60 p-3 cursor-pointer">
 									<input
 										type="checkbox"
 										bind:checked={currentTemplate.audio.showVisualizer}
-										class="h-4 w-4 rounded accent-coral-500"
+										class="h-4 w-4 rounded accent-terracotta-500"
 									/>
 									<div>
 										<p class="text-xs font-bold text-white">Audio Wave Visualizer</p>
-										<p class="text-[10px] text-navy-400">Tampilkan gelombang bergetar</p>
+										<p class="text-[10px] text-coffee-400">Tampilkan gelombang bergetar</p>
 									</div>
 								</label>
 							</div>
@@ -982,7 +982,7 @@
 			{:else if activeTab === 'permissions'}
 				<div class="space-y-4 animate-in fade-in duration-200">
 					<!-- Explanation Banner -->
-					<div class="rounded-2xl border border-champagne-400/30 bg-gradient-to-r from-wine-950/60 via-navy-900 to-navy-900 p-4 sm:p-5">
+					<div class="rounded-2xl border border-champagne-400/30 bg-gradient-to-r from-coffee-950/60 via-coffee-900 to-coffee-900 p-4 sm:p-5">
 						<div class="flex items-start gap-3">
 							<div class="rounded-lg bg-champagne-400/20 p-2 text-champagne-300 shrink-0">
 								<ShieldCheck size={20} />
@@ -991,7 +991,7 @@
 								<h3 class="font-display text-sm font-bold text-white">
 									Matriks Hak Kustomisasi Member (Package Feature Gates)
 								</h3>
-								<p class="mt-1 text-xs text-navy-300 leading-relaxed">
+								<p class="mt-1 text-xs text-coffee-300 leading-relaxed">
 									Atur secara fleksibel hal apa saja yang bisa diedit oleh pengguna/member yang membeli jasa paket pada tema ini. Batasan ini akan langsung diterapkan di dashboard editor pengantin.
 								</p>
 							</div>
@@ -999,20 +999,20 @@
 					</div>
 
 					<!-- Comparison Matrix Table -->
-					<div class="overflow-x-auto rounded-2xl border border-navy-800 bg-navy-900/90 shadow-xl">
+					<div class="overflow-x-auto rounded-2xl border border-coffee-800 bg-coffee-900/90 shadow-xl">
 						<table class="w-full text-left text-xs border-collapse">
 							<thead>
-								<tr class="border-b border-navy-800 bg-navy-950/70 text-navy-300">
+								<tr class="border-b border-coffee-800 bg-coffee-950/70 text-coffee-300">
 									<th class="p-3.5 font-bold uppercase tracking-wider text-[10px] w-5/12">
 										Fitur Kustomisasi Member
 									</th>
-									<th class="p-3.5 text-center font-bold uppercase tracking-wider text-[10px] w-7/36 bg-navy-900/40">
-										<span class="block text-navy-300">Paket Gratis</span>
-										<span class="text-[9px] text-navy-400 font-normal">Rp 0</span>
+									<th class="p-3.5 text-center font-bold uppercase tracking-wider text-[10px] w-7/36 bg-coffee-900/40">
+										<span class="block text-coffee-300">Paket Gratis</span>
+										<span class="text-[9px] text-coffee-400 font-normal">Rp 0</span>
 									</th>
-									<th class="p-3.5 text-center font-bold uppercase tracking-wider text-[10px] w-7/36 bg-coral-950/30 text-coral-300 border-x border-coral-500/20">
+									<th class="p-3.5 text-center font-bold uppercase tracking-wider text-[10px] w-7/36 bg-terracotta-950/30 text-terracotta-300 border-x border-terracotta-500/20">
 										<span class="block">Paket Pro</span>
-										<span class="text-[9px] text-coral-400 font-normal">Rp 99.000</span>
+										<span class="text-[9px] text-terracotta-400 font-normal">Rp 99.000</span>
 									</th>
 									<th class="p-3.5 text-center font-bold uppercase tracking-wider text-[10px] w-7/36 bg-champagne-950/30 text-champagne-300">
 										<span class="block">Paket Lengkap</span>
@@ -1021,23 +1021,23 @@
 								</tr>
 							</thead>
 
-							<tbody class="divide-y divide-navy-800/60 text-navy-200">
+							<tbody class="divide-y divide-coffee-800/60 text-coffee-200">
 								<!-- Row 1: Kuota Tamu -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<div class="flex items-center gap-2">
 											<span class="font-bold text-white">Batas Kuota Tamu RSVP</span>
 										</div>
-										<span class="text-[10px] text-navy-400 block">Maksimal nama tamu yang dapat di-generate tautan personal</span>
+										<span class="text-[10px] text-coffee-400 block">Maksimal nama tamu yang dapat di-generate tautan personal</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="number"
 											bind:value={currentTemplate.customizationMatrix.gratis.guestLimit}
-											class="w-16 rounded border border-navy-700 bg-navy-950 px-2 py-1 text-center text-xs text-white"
+											class="w-16 rounded border border-coffee-700 bg-coffee-950 px-2 py-1 text-center text-xs text-white"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20 font-bold text-emerald-400">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20 font-bold text-emerald-400">
 										Unlimited
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20 font-bold text-emerald-400">
@@ -1046,233 +1046,233 @@
 								</tr>
 
 								<!-- Row 2: Galeri Foto -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Batas Foto Galeri Momen</span>
-										<span class="text-[10px] text-navy-400 block">Jumlah foto prewedding resolusi tinggi</span>
+										<span class="text-[10px] text-coffee-400 block">Jumlah foto prewedding resolusi tinggi</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="number"
 											bind:value={currentTemplate.customizationMatrix.gratis.galleryPhotoLimit}
-											class="w-16 rounded border border-navy-700 bg-navy-950 px-2 py-1 text-center text-xs text-white"
+											class="w-16 rounded border border-coffee-700 bg-coffee-950 px-2 py-1 text-center text-xs text-white"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="number"
 											bind:value={currentTemplate.customizationMatrix.pro.galleryPhotoLimit}
-											class="w-16 rounded border border-coral-500/40 bg-navy-950 px-2 py-1 text-center text-xs text-coral-300 font-bold"
+											class="w-16 rounded border border-terracotta-500/40 bg-coffee-950 px-2 py-1 text-center text-xs text-terracotta-300 font-bold"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="number"
 											bind:value={currentTemplate.customizationMatrix.lengkap.galleryPhotoLimit}
-											class="w-16 rounded border border-champagne-400/40 bg-navy-950 px-2 py-1 text-center text-xs text-champagne-300 font-bold"
+											class="w-16 rounded border border-champagne-400/40 bg-coffee-950 px-2 py-1 text-center text-xs text-champagne-300 font-bold"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 3: Upload Musik Sendiri -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Upload Musik Kustom (MP3 Sendiri)</span>
-										<span class="text-[10px] text-navy-400 block">Jika nonaktif, pengantin hanya boleh memakai preset audio bawaan</span>
+										<span class="text-[10px] text-coffee-400 block">Jika nonaktif, pengantin hanya boleh memakai preset audio bawaan</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.allowCustomMusic}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.allowCustomMusic}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.allowCustomMusic}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 4: Amplop Digital & QRIS -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Amplop Digital &amp; Rekening QRIS</span>
-										<span class="text-[10px] text-navy-400 block">Kirim kado pernikahan transfer langsung BCA/Mandiri/QRIS</span>
+										<span class="text-[10px] text-coffee-400 block">Kirim kado pernikahan transfer langsung BCA/Mandiri/QRIS</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.allowDigitalEnvelope}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.allowDigitalEnvelope}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.allowDigitalEnvelope}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 5: Cerita Cinta / Love Story Timeline -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Timeline Cerita Cinta (Love Story)</span>
-										<span class="text-[10px] text-navy-400 block">Kisah awal bertemu, lamaran, hingga menuju pernikahan</span>
+										<span class="text-[10px] text-coffee-400 block">Kisah awal bertemu, lamaran, hingga menuju pernikahan</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.allowLoveStory}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.allowLoveStory}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.allowLoveStory}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 6: Custom Domain -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Custom Domain Pribadi (.com / .id)</span>
-										<span class="text-[10px] text-navy-400 block">Contoh: julian-elena.com tanpa embel-embel ketuk.id</span>
+										<span class="text-[10px] text-coffee-400 block">Contoh: julian-elena.com tanpa embel-embel ketuk.id</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.allowCustomDomain}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.allowCustomDomain}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.allowCustomDomain}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 7: Override Palet Warna oleh Member -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Member Boleh Ganti Warna Aksen &amp; Stempel</span>
-										<span class="text-[10px] text-navy-400 block">Pengantin bebas memilih warna tema sesuai konsep busana</span>
+										<span class="text-[10px] text-coffee-400 block">Pengantin bebas memilih warna tema sesuai konsep busana</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.allowCustomPaletteOverride}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.allowCustomPaletteOverride}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.allowCustomPaletteOverride}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 8: Hilangkan Watermark -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Hilangkan Watermark "Powered by Ketuk.id"</span>
-										<span class="text-[10px] text-navy-400 block">Tampilan 100% white-label eksklusif nama pengantin</span>
+										<span class="text-[10px] text-coffee-400 block">Tampilan 100% white-label eksklusif nama pengantin</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.removeKetukWatermark}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.removeKetukWatermark}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.removeKetukWatermark}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
 
 								<!-- Row 9: WhatsApp Blast Generator -->
-								<tr class="hover:bg-navy-800/30">
+								<tr class="hover:bg-coffee-800/30">
 									<td class="p-3.5 font-medium">
 										<span class="font-bold text-white">Generator WhatsApp Blast Personal</span>
-										<span class="text-[10px] text-navy-400 block">Tombol kirim satu-satu pesan sopan otomatis ke kontak WA tamu</span>
+										<span class="text-[10px] text-coffee-400 block">Tombol kirim satu-satu pesan sopan otomatis ke kontak WA tamu</span>
 									</td>
-									<td class="p-3.5 text-center bg-navy-900/40">
+									<td class="p-3.5 text-center bg-coffee-900/40">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.gratis.allowWhatsAppBlast}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
-									<td class="p-3.5 text-center bg-coral-950/20 border-x border-coral-500/20">
+									<td class="p-3.5 text-center bg-terracotta-950/20 border-x border-terracotta-500/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.pro.allowWhatsAppBlast}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 									<td class="p-3.5 text-center bg-champagne-950/20">
 										<input
 											type="checkbox"
 											bind:checked={currentTemplate.customizationMatrix.lengkap.allowWhatsAppBlast}
-											class="h-4 w-4 rounded accent-coral-500 cursor-pointer"
+											class="h-4 w-4 rounded accent-terracotta-500 cursor-pointer"
 										/>
 									</td>
 								</tr>
@@ -1290,7 +1290,7 @@
 								);
 								showNotification('Matriks kustomisasi direset ke standar paket.');
 							}}
-							class="text-xs text-navy-400 hover:text-white underline"
+							class="text-xs text-coffee-400 hover:text-white underline"
 						>
 							Reset Matriks ke Nilai Standar
 						</button>
@@ -1298,7 +1298,7 @@
 						<button
 							type="button"
 							onclick={handleSaveAll}
-							class="inline-flex items-center gap-1.5 rounded-xl bg-coral-500 px-4 py-2 text-xs font-bold uppercase text-white shadow-md hover:bg-coral-600"
+							class="inline-flex items-center gap-1.5 rounded-xl bg-terracotta-500 px-4 py-2 text-xs font-bold uppercase text-white shadow-md hover:bg-terracotta-600"
 						>
 							<Check size={14} />
 							<span>Simpan Matriks Paket</span>
@@ -1310,11 +1310,11 @@
 
 		<!-- RIGHT COLUMN (5 Cols): Real-Time Interactive Live Simulator -->
 		<div class="lg:col-span-5 sticky top-20 space-y-4">
-			<div class="rounded-3xl border border-navy-800 bg-navy-900/90 p-5 backdrop-blur-xl shadow-2xl">
+			<div class="rounded-3xl border border-coffee-800 bg-coffee-900/90 p-5 backdrop-blur-xl shadow-2xl">
 				<!-- Simulator Stage Controls Header -->
-				<div class="flex items-center justify-between border-b border-navy-800/80 pb-3">
+				<div class="flex items-center justify-between border-b border-coffee-800/80 pb-3">
 					<div>
-						<span class="text-[10px] font-semibold uppercase tracking-widest text-navy-400">
+						<span class="text-[10px] font-semibold uppercase tracking-widest text-coffee-400">
 							LIVE SIMULATOR
 						</span>
 						<h4 class="font-display text-sm font-bold text-white truncate max-w-[200px]">
@@ -1323,14 +1323,14 @@
 					</div>
 
 					<!-- Switcher: Envelope View vs Phone View -->
-					<div class="flex rounded-lg border border-navy-700 bg-navy-950 p-0.5 text-xs">
+					<div class="flex rounded-lg border border-coffee-700 bg-coffee-950 p-0.5 text-xs">
 						<button
 							type="button"
 							onclick={() => (previewMode = 'envelope')}
 							class="flex items-center gap-1.5 rounded-md px-2.5 py-1 font-medium transition-all {previewMode ===
 							'envelope'
-								? 'bg-coral-500 text-white shadow-xs'
-								: 'text-navy-400 hover:text-white'}"
+								? 'bg-terracotta-500 text-white shadow-xs'
+								: 'text-coffee-400 hover:text-white'}"
 							title="Pratinjau Amplop Segel Lilin"
 						>
 							<Mail size={13} />
@@ -1341,8 +1341,8 @@
 							onclick={() => (previewMode = 'phone')}
 							class="flex items-center gap-1.5 rounded-md px-2.5 py-1 font-medium transition-all {previewMode ===
 							'phone'
-								? 'bg-coral-500 text-white shadow-xs'
-								: 'text-navy-400 hover:text-white'}"
+								? 'bg-terracotta-500 text-white shadow-xs'
+								: 'text-coffee-400 hover:text-white'}"
 							title="Pratinjau Layar Smartphone"
 						>
 							<Smartphone size={13} />
@@ -1395,7 +1395,7 @@
 							{#if !isEnvelopeOpen}
 								<!-- CLOSED ENVELOPE: Wax Seal & Script Text -->
 								<div class="absolute inset-0 flex flex-col items-center justify-between p-6 z-20">
-									<span class="text-[8px] font-semibold uppercase tracking-[0.25em] text-espresso-400 pt-2">
+									<span class="text-[8px] font-semibold uppercase tracking-[0.25em] text-coffee-400 pt-2">
 										The Wedding Collection
 									</span>
 
@@ -1428,7 +1428,7 @@
 											</div>
 
 											<!-- Tooltip Pulse -->
-											<span class="absolute -bottom-6 whitespace-nowrap rounded bg-espresso-950/90 px-2 py-0.5 text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
+											<span class="absolute -bottom-6 whitespace-nowrap rounded bg-coffee-950/90 px-2 py-0.5 text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
 												Klik Buka
 											</span>
 										</button>
@@ -1441,13 +1441,13 @@
 											>
 												"{currentTemplate.envelope.envelopeScript}"
 											</p>
-											<p class="font-serif mt-1 text-xs text-espresso-600 italic">
+											<p class="font-serif mt-1 text-xs text-coffee-600 italic">
 												{currentTemplate.preview.coupleName}
 											</p>
 										</div>
 									</div>
 
-									<span class="text-[9px] font-medium tracking-wider text-espresso-500 pb-1">
+									<span class="text-[9px] font-medium tracking-wider text-coffee-500 pb-1">
 										{currentTemplate.preview.date}
 									</span>
 								</div>
@@ -1455,13 +1455,13 @@
 								<!-- OPENED ENVELOPE: Letter Contents -->
 								<div class="absolute inset-0 z-20 flex flex-col justify-between p-5 bg-gradient-to-b from-cream-50 via-white to-cream-50 text-center animate-in fade-in duration-300">
 									<div class="flex items-center justify-between pb-2 border-b border-cream-200 text-[10px]">
-										<span class="text-espresso-600 font-medium">
+										<span class="text-coffee-600 font-medium">
 											Animasi: {currentTemplate.animations.openingEffect}
 										</span>
 										<button
 											type="button"
 											onclick={triggerTestAnimation}
-											class="text-wine-800 font-bold hover:underline"
+											class="text-coffee-800 font-bold hover:underline"
 										>
 											Tutup Amplop
 										</button>
@@ -1479,13 +1479,13 @@
 										</h4>
 										<div class="mx-auto h-0.5 w-8 rounded-full bg-champagne-400"></div>
 
-										<div class="rounded-xl border border-cream-200 bg-cream-50/80 p-3 text-left space-y-1.5 text-[10px] text-espresso-800">
+										<div class="rounded-xl border border-cream-200 bg-cream-50/80 p-3 text-left space-y-1.5 text-[10px] text-coffee-800">
 											<p class="flex items-center gap-1.5 font-serif font-semibold">
-												<Calendar size={11} class="text-wine-700" />
+												<Calendar size={11} class="text-coffee-700" />
 												<span>{currentTemplate.preview.date}</span>
 											</p>
 											<p class="flex items-center gap-1.5 font-serif">
-												<MapPin size={11} class="text-wine-700" />
+												<MapPin size={11} class="text-coffee-700" />
 												<span class="truncate">{currentTemplate.preview.location}</span>
 											</p>
 										</div>
@@ -1498,7 +1498,7 @@
 										</div>
 									</div>
 
-									<span class="font-serif text-[10px] italic text-espresso-500">
+									<span class="font-serif text-[10px] italic text-coffee-500">
 										Simulasi Tampilan Surat Selesai
 									</span>
 								</div>
@@ -1544,12 +1544,12 @@
 									</div>
 
 									<div class="space-y-0.5">
-										<p class="text-[9px] font-semibold text-espresso-800">{currentTemplate.preview.date}</p>
-										<p class="text-[8px] text-espresso-500 line-clamp-1">{currentTemplate.preview.location}</p>
+										<p class="text-[9px] font-semibold text-coffee-800">{currentTemplate.preview.date}</p>
+										<p class="text-[8px] text-coffee-500 line-clamp-1">{currentTemplate.preview.location}</p>
 									</div>
 
 									<!-- Countdown Mini Pill -->
-									<div class="grid grid-cols-3 gap-1 pt-1 text-[8px] font-semibold text-espresso-700">
+									<div class="grid grid-cols-3 gap-1 pt-1 text-[8px] font-semibold text-coffee-700">
 										<div class="rounded bg-white p-1 shadow-2xs">24 Hari</div>
 										<div class="rounded bg-white p-1 shadow-2xs">12 Jam</div>
 										<div class="rounded bg-white p-1 shadow-2xs">45 Mnt</div>
@@ -1566,8 +1566,8 @@
 									</div>
 
 									<!-- Floating Audio Indicator if Autoplay is on -->
-									<div class="flex items-center justify-center gap-1.5 text-[8px] text-espresso-600">
-										<Music size={10} class="text-wine-800 animate-pulse" />
+									<div class="flex items-center justify-center gap-1.5 text-[8px] text-coffee-600">
+										<Music size={10} class="text-coffee-800 animate-pulse" />
 										<span class="truncate max-w-[160px]">{currentTemplate.audio.presetTrackName}</span>
 									</div>
 								</div>
@@ -1580,11 +1580,11 @@
 				</div>
 
 				<!-- Simulator Action Controls Footer -->
-				<div class="mt-4 pt-3 border-t border-navy-800/80 flex items-center justify-between">
+				<div class="mt-4 pt-3 border-t border-coffee-800/80 flex items-center justify-between">
 					<button
 						type="button"
 						onclick={triggerTestAnimation}
-						class="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-coral-600 to-coral-500 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-coral-500/20 hover:scale-102 active:scale-98 transition-all"
+						class="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-terracotta-600 to-terracotta-500 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-terracotta-500/20 hover:scale-102 active:scale-98 transition-all"
 					>
 						<Zap size={14} />
 						<span>{isEnvelopeOpen ? 'Tutup & Reset Amplop' : '⚡ Uji Buka Animasi'}</span>
@@ -1593,25 +1593,25 @@
 					<button
 						type="button"
 						onclick={() => (simulatedMusicPlaying = !simulatedMusicPlaying)}
-						class="ml-2 flex h-9 w-9 items-center justify-center rounded-xl border border-navy-700 bg-navy-800 text-navy-200 hover:text-white transition-colors"
+						class="ml-2 flex h-9 w-9 items-center justify-center rounded-xl border border-coffee-700 bg-coffee-800 text-coffee-200 hover:text-white transition-colors"
 						title={simulatedMusicPlaying ? 'Jeda Audio Simulasi' : 'Uji Putar Musik'}
 					>
 						{#if simulatedMusicPlaying}
-							<Volume2 size={16} class="text-coral-400 animate-pulse" />
+							<Volume2 size={16} class="text-terracotta-400 animate-pulse" />
 						{:else}
-							<VolumeX size={16} class="text-navy-400" />
+							<VolumeX size={16} class="text-coffee-400" />
 						{/if}
 					</button>
 				</div>
 			</div>
 
 			<!-- Quick Summary Card of Permissions configured -->
-			<div class="rounded-2xl border border-navy-800 bg-navy-900/60 p-4 text-xs space-y-2">
-				<div class="flex items-center justify-between text-navy-300 font-semibold">
+			<div class="rounded-2xl border border-coffee-800 bg-coffee-900/60 p-4 text-xs space-y-2">
+				<div class="flex items-center justify-between text-coffee-300 font-semibold">
 					<span>Ringkasan Hak Member (Pro Tier)</span>
-					<span class="text-coral-400">Rp 99.000</span>
+					<span class="text-terracotta-400">Rp 99.000</span>
 				</div>
-				<ul class="space-y-1 text-[11px] text-navy-400">
+				<ul class="space-y-1 text-[11px] text-coffee-400">
 					<li class="flex items-center gap-1.5">
 						<Check size={12} class="text-emerald-400" />
 						<span>Tamu RSVP: {currentTemplate.customizationMatrix.pro.guestLimit === -1 ? 'Unlimited' : `${currentTemplate.customizationMatrix.pro.guestLimit} Tamu`}</span>
@@ -1634,7 +1634,7 @@
 							<Check size={12} class="text-emerald-400" />
 							<span>Amplop Digital &amp; QRIS: <strong>Aktif</strong></span>
 						{:else}
-							<X size={12} class="text-navy-500" />
+							<X size={12} class="text-coffee-500" />
 							<span>Amplop Digital: Nonaktif</span>
 						{/if}
 					</li>
@@ -1643,9 +1643,9 @@
 		</div>
 	</div>
 	{:else}
-		<div class="rounded-2xl border border-navy-800 bg-navy-900/80 p-8 text-center">
+		<div class="rounded-2xl border border-coffee-800 bg-coffee-900/80 p-8 text-center">
 			<h2 class="font-display text-lg font-semibold text-white">Belum ada template</h2>
-			<p class="mt-2 text-sm text-navy-400">Klik Tambah Template untuk mulai mengatur desain undangan.</p>
+			<p class="mt-2 text-sm text-coffee-400">Klik Tambah Template untuk mulai mengatur desain undangan.</p>
 		</div>
 	{/if}
 </div>

@@ -44,7 +44,7 @@
 	<Input label="Nama" bind:value={name} placeholder="Nama kamu" required />
 	<Textarea label="Ucapan" bind:value={message} rows={3} maxlength={500} required />
 	{#if error}
-		<p class="text-sm text-coral-300">{error}</p>
+		<p class="text-sm text-terracotta-300">{error}</p>
 	{/if}
 	<Button type="submit" loading={submitting}>Kirim Ucapan</Button>
 </form>

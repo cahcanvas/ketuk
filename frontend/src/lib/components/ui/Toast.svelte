@@ -7,7 +7,7 @@
 	const toneClasses = {
 		success: 'bg-vendor-600',
 		error: 'bg-red-600',
-		info: 'bg-navy-900',
+		info: 'bg-coffee-900',
 	} as const;
 
 	const toneIcons = {

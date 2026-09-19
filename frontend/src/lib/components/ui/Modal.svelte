@@ -19,7 +19,7 @@
 
 {#if open}
 	<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-		<button type="button" class="absolute inset-0 bg-navy-950/50" aria-label="Tutup" onclick={onclose}
+		<button type="button" class="absolute inset-0 bg-coffee-950/50" aria-label="Tutup" onclick={onclose}
 		></button>
 		<div
 			role="dialog"
@@ -28,7 +28,7 @@
 			class="relative z-10 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl"
 		>
 			{#if title}
-				<h2 id="modal-title" class="mb-4 font-display text-lg font-semibold text-navy-900">
+				<h2 id="modal-title" class="mb-4 font-display text-lg font-semibold text-coffee-900">
 					{title}
 				</h2>
 			{/if}

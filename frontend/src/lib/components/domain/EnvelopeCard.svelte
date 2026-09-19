@@ -96,7 +96,7 @@
 				<!-- Top branding watermark -->
 				<div class="pt-3 text-center">
 					<span
-						class="text-[9px] font-semibold uppercase tracking-[0.3em] text-espresso-400"
+						class="text-[9px] font-semibold uppercase tracking-[0.3em] text-coffee-400"
 					>
 						The Wedding Collection
 					</span>
@@ -135,7 +135,7 @@
 
 						<!-- Pulse hint on hover -->
 						<span
-							class="absolute -bottom-8 whitespace-nowrap rounded-full bg-espresso-950/80 px-3 py-1 text-[10px] font-medium tracking-wider text-white opacity-0 transition-opacity group-hover:opacity-100"
+							class="absolute -bottom-8 whitespace-nowrap rounded-full bg-coffee-950/80 px-3 py-1 text-[10px] font-medium tracking-wider text-white opacity-0 transition-opacity group-hover:opacity-100"
 						>
 							Ketuk untuk membuka
 						</span>
@@ -144,12 +144,12 @@
 					<!-- Elegant Script Typography on the Envelope -->
 					<div class="mt-8 text-center px-4">
 						<p
-							class="font-serif text-xl sm:text-2xl italic tracking-wide text-espresso-800 leading-relaxed font-normal"
+							class="font-serif text-xl sm:text-2xl italic tracking-wide text-coffee-800 leading-relaxed font-normal"
 							style="color: {template.palette.accentColor};"
 						>
 							"{template.envelopeScript}"
 						</p>
-						<p class="font-serif mt-2 text-sm text-espresso-600 italic">
+						<p class="font-serif mt-2 text-sm text-coffee-600 italic">
 							{template.preview.coupleName}
 						</p>
 					</div>
@@ -158,7 +158,7 @@
 				<!-- Bottom subtle date -->
 				<div class="pb-2 text-center">
 					<span
-						class="text-[10px] font-medium tracking-[0.2em] uppercase text-espresso-500"
+						class="text-[10px] font-medium tracking-[0.2em] uppercase text-coffee-500"
 					>
 						{template.preview.date}
 					</span>
@@ -173,21 +173,21 @@
 				<div class="flex items-center justify-between pb-2 border-b border-cream-200">
 					<button
 						type="button"
-						class="flex items-center gap-1.5 text-[11px] font-medium text-espresso-700 hover:text-wine-800"
+						class="flex items-center gap-1.5 text-[11px] font-medium text-coffee-700 hover:text-coffee-800"
 						onclick={() => (musicPlaying = !musicPlaying)}
 					>
 						{#if musicPlaying}
-							<Volume2 size={14} class="text-wine-700 animate-pulse" />
+							<Volume2 size={14} class="text-coffee-700 animate-pulse" />
 							<span>Musik: Romansa</span>
 						{:else}
-							<VolumeX size={14} class="text-espresso-400" />
+							<VolumeX size={14} class="text-coffee-400" />
 							<span>Musik Dijeda</span>
 						{/if}
 					</button>
 
 					<button
 						type="button"
-						class="inline-flex items-center gap-1 rounded-full bg-cream-200/80 px-2.5 py-1 text-[11px] font-semibold text-wine-900 hover:bg-cream-300 transition-colors"
+						class="inline-flex items-center gap-1 rounded-full bg-cream-200/80 px-2.5 py-1 text-[11px] font-semibold text-coffee-900 hover:bg-cream-300 transition-colors"
 						onclick={toggleOpen}
 					>
 						<span>Tutup Surat</span>
@@ -204,7 +204,7 @@
 							Pernikahan Suci
 						</span>
 						<h3
-							class="font-serif text-3xl sm:text-4xl font-medium italic text-espresso-950"
+							class="font-serif text-3xl sm:text-4xl font-medium italic text-coffee-950"
 							style="color: {template.palette.accentColor};"
 						>
 							{template.preview.coupleName}
@@ -212,7 +212,7 @@
 						<div class="mx-auto h-0.5 w-12 rounded-full bg-champagne-400"></div>
 					</div>
 
-					<p class="font-serif text-xs italic text-espresso-600 leading-relaxed px-2">
+					<p class="font-serif text-xs italic text-coffee-600 leading-relaxed px-2">
 						"Dengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami bermaksud merayakan ikatan suci janji suci kami."
 					</p>
 
@@ -221,33 +221,33 @@
 						class="rounded-xl border border-cream-200 bg-cream-50/70 p-4 text-left space-y-3"
 					>
 						<div>
-							<div class="flex items-center gap-1.5 text-xs font-semibold text-espresso-900 font-serif">
-								<Calendar size={13} class="text-wine-700" />
+							<div class="flex items-center gap-1.5 text-xs font-semibold text-coffee-900 font-serif">
+								<Calendar size={13} class="text-coffee-700" />
 								<span>Waktu & Tanggal</span>
 							</div>
-							<p class="text-xs text-espresso-700 mt-0.5">{template.preview.date}</p>
-							<p class="text-[11px] text-espresso-500">Akad: 08.00 WIB | Resepsi: 19.00 WIB</p>
+							<p class="text-xs text-coffee-700 mt-0.5">{template.preview.date}</p>
+							<p class="text-[11px] text-coffee-500">Akad: 08.00 WIB | Resepsi: 19.00 WIB</p>
 						</div>
 
 						<div class="border-t border-cream-200 pt-2">
-							<div class="flex items-center gap-1.5 text-xs font-semibold text-espresso-900 font-serif">
-								<MapPin size={13} class="text-wine-700" />
+							<div class="flex items-center gap-1.5 text-xs font-semibold text-coffee-900 font-serif">
+								<MapPin size={13} class="text-coffee-700" />
 								<span>Lokasi Acara</span>
 							</div>
-							<p class="text-xs text-espresso-700 mt-0.5">{template.preview.location}</p>
+							<p class="text-xs text-coffee-700 mt-0.5">{template.preview.location}</p>
 						</div>
 					</div>
 
 					<!-- Quick RSVP Interaction -->
 					<div class="rounded-xl border border-cream-200 bg-white p-3.5 shadow-2xs">
-						<p class="text-xs font-medium text-espresso-800">Konfirmasi Kehadiran Tamu</p>
+						<p class="text-xs font-medium text-coffee-800">Konfirmasi Kehadiran Tamu</p>
 						<div class="mt-2.5 flex gap-2">
 							<button
 								type="button"
 								class="flex-1 rounded-lg py-2 text-xs font-medium transition-all {rsvpAttending ===
 								true
 									? 'bg-emerald-600 text-white'
-									: 'bg-cream-100 text-espresso-800 hover:bg-cream-200'}"
+									: 'bg-cream-100 text-coffee-800 hover:bg-cream-200'}"
 								onclick={() => (rsvpAttending = true)}
 							>
 								{#if rsvpAttending === true}
@@ -259,8 +259,8 @@
 								type="button"
 								class="flex-1 rounded-lg py-2 text-xs font-medium transition-all {rsvpAttending ===
 								false
-									? 'bg-wine-800 text-white'
-									: 'bg-cream-100 text-espresso-800 hover:bg-cream-200'}"
+									? 'bg-coffee-800 text-white'
+									: 'bg-cream-100 text-coffee-800 hover:bg-cream-200'}"
 								onclick={() => (rsvpAttending = false)}
 							>
 								Maaf, Berhalangan
@@ -275,7 +275,7 @@
 				</div>
 
 				<div class="pt-2 text-center">
-					<span class="font-serif text-xs italic text-espresso-500">
+					<span class="font-serif text-xs italic text-coffee-500">
 						Terima kasih atas doa & restu Anda
 					</span>
 				</div>
@@ -285,13 +285,13 @@
 
 	<!-- Controls Bar below the Card (Interactive Demo & Expand button) -->
 	<div
-		class="mt-4 flex w-full items-center justify-between px-2 text-xs text-espresso-600 {isModal
+		class="mt-4 flex w-full items-center justify-between px-2 text-xs text-coffee-600 {isModal
 			? 'max-w-[min(100%,360px)] sm:max-w-[min(100%,420px)] md:max-w-[460px]'
 			: 'max-w-[min(100%,320px)] sm:max-w-[min(100%,380px)] md:max-w-[400px]'}"
 	>
 		<button
 			type="button"
-			class="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-espresso-500 hover:text-wine-800 transition-colors"
+			class="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-coffee-500 hover:text-coffee-800 transition-colors"
 			onclick={toggleOpen}
 		>
 			<span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -301,10 +301,10 @@
 		{#if onExpand}
 			<button
 				type="button"
-				class="inline-flex items-center gap-1.5 rounded-full border border-cream-300 bg-white/90 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-espresso-800 shadow-2xs hover:bg-white hover:border-espresso-900 transition-all active:scale-95"
+				class="inline-flex items-center gap-1.5 rounded-full border border-cream-300 bg-white/90 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-coffee-800 shadow-2xs hover:bg-white hover:border-coffee-900 transition-all active:scale-95"
 				onclick={onExpand}
 			>
-				<Maximize2 size={11} class="text-wine-800" />
+				<Maximize2 size={11} class="text-coffee-800" />
 				<span>EXPAND</span>
 			</button>
 		{/if}

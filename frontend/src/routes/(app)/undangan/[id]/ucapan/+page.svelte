@@ -32,8 +32,8 @@
 	}
 </script>
 
-<h2 class="font-display text-lg font-semibold text-navy-900">Moderasi Ucapan</h2>
-<p class="mt-1 text-sm text-navy-500">
+<h2 class="font-display text-lg font-semibold text-coffee-900">Moderasi Ucapan</h2>
+<p class="mt-1 text-sm text-coffee-500">
 	Hapus ucapan yang tidak pantas. Tamu tetap bisa melihat sisanya di halaman undangan.
 </p>
 
@@ -41,14 +41,14 @@
 	{#if data.error}
 		<p class="rounded-lg bg-red-50 p-4 text-sm text-red-600">{data.error}</p>
 	{:else if data.wishes.length === 0}
-		<p class="text-sm text-navy-400">Belum ada ucapan masuk.</p>
+		<p class="text-sm text-coffee-400">Belum ada ucapan masuk.</p>
 	{:else}
 		<ul class="flex flex-col gap-3">
 			{#each data.wishes as wish (wish.id)}
-				<li class="flex items-start justify-between gap-4 rounded-xl border border-navy-100 bg-white p-4">
+				<li class="flex items-start justify-between gap-4 rounded-xl border border-coffee-100 bg-white p-4">
 					<div>
-						<p class="font-medium text-navy-900">{wish.name}</p>
-						<p class="mt-1 text-sm text-navy-600">{wish.message}</p>
+						<p class="font-medium text-coffee-900">{wish.name}</p>
+						<p class="mt-1 text-sm text-coffee-600">{wish.message}</p>
 					</div>
 					<button
 						type="button"

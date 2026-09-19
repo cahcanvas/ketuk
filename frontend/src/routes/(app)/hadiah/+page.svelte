@@ -31,8 +31,8 @@
 </svelte:head>
 
 <div class="mx-auto max-w-4xl">
-	<h1 class="font-display text-2xl font-bold text-navy-900 sm:text-3xl">Hadiah Masuk</h1>
-	<p class="mt-1.5 text-navy-500">Semua hadiah yang dikirim tamu ke acaramu.</p>
+	<h1 class="font-display text-2xl font-bold text-coffee-900 sm:text-3xl">Hadiah Masuk</h1>
+	<p class="mt-1.5 text-coffee-500">Semua hadiah yang dikirim tamu ke acaramu.</p>
 
 	<div class="mt-8">
 		{#if data.error}
@@ -49,15 +49,15 @@
 					<li>
 						<a
 							href="/hadiah/{order.id}"
-							class="flex items-center justify-between gap-4 rounded-xl border border-navy-100 bg-white p-4 transition-all hover:border-navy-200 hover:shadow-sm"
+							class="flex items-center justify-between gap-4 rounded-xl border border-coffee-100 bg-white p-4 transition-all hover:border-coffee-200 hover:shadow-sm"
 						>
 							<div class="min-w-0 flex-1">
-								<p class="flex items-center gap-2 truncate font-medium text-navy-900">
+								<p class="flex items-center gap-2 truncate font-medium text-coffee-900">
 									<span>{order.sender_name}</span>
-									<ArrowRight size={14} class="shrink-0 text-navy-300" />
+									<ArrowRight size={14} class="shrink-0 text-coffee-300" />
 									<span>{order.recipient_name}</span>
 								</p>
-								<p class="mt-0.5 text-sm text-navy-500">
+								<p class="mt-0.5 text-sm text-coffee-500">
 									{formatRupiah(order.total_amount)} · {order.quantity}x
 								</p>
 							</div>

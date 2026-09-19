@@ -32,9 +32,9 @@
 	};
 
 	const variantClasses: Record<NonNullable<Props['variant']>, string> = {
-		primary: 'bg-coral-500 text-white hover:bg-coral-600',
-		secondary: 'bg-white border border-navy-200 text-navy-900 hover:bg-navy-50',
-		ghost: 'bg-transparent text-navy-900 hover:bg-navy-100',
+		primary: 'bg-terracotta-500 text-white hover:bg-terracotta-600',
+		secondary: 'bg-white border border-coffee-200 text-coffee-900 hover:bg-coffee-50',
+		ghost: 'bg-transparent text-coffee-900 hover:bg-coffee-100',
 		outline: 'bg-white/10 border border-white/25 text-white hover:bg-white/15 backdrop-blur',
 		danger: 'bg-red-600 text-white hover:bg-red-700',
 	};

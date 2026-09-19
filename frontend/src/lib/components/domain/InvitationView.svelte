@@ -194,7 +194,7 @@
 {/if}
 
 {#if coverOpen}
-	<div class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-navy-900 px-6 text-center text-white">
+	<div class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-coffee-900 px-6 text-center text-white">
 		<p class="inline-flex items-center gap-2 text-sm text-white/60">
 			<EventIcon size={16} />
 			{config?.label ?? ''}
@@ -210,7 +210,7 @@
 		<Button size="lg" onclick={openInvitation}>Buka Undangan</Button>
 	</div>
 {:else}
-	<div class="bg-navy-900 text-white">
+	<div class="bg-coffee-900 text-white">
 		<!-- Kontrol musik, selalu terlihat -->
 		{#if invitation?.musicUrl}
 			<button
@@ -324,7 +324,7 @@
 					<h2 class="text-center font-display text-2xl font-semibold">Kisah Kami</h2>
 					{#each invitation.loveStory as chapter (chapter.title)}
 						<div>
-							<h3 class="font-display font-semibold text-coral-300">{chapter.title}</h3>
+							<h3 class="font-display font-semibold text-terracotta-300">{chapter.title}</h3>
 							<p class="mt-1 text-white/80">{chapter.description}</p>
 						</div>
 					{/each}
@@ -408,14 +408,14 @@
 >
 	{#if orderResult}
 		<div class="flex flex-col gap-3 text-center">
-			<p class="font-medium text-navy-900">Pesanan dibuat! Selesaikan pembayaran:</p>
+			<p class="font-medium text-coffee-900">Pesanan dibuat! Selesaikan pembayaran:</p>
 			{#if orderResult.paymentUrl}
 				<Button href={orderResult.paymentUrl}>Bayar Sekarang</Button>
 			{:else if orderResult.vaNumber}
-				<p class="text-sm text-navy-500">Nomor Virtual Account</p>
-				<p class="font-mono text-xl text-navy-900">{orderResult.vaNumber}</p>
+				<p class="text-sm text-coffee-500">Nomor Virtual Account</p>
+				<p class="font-mono text-xl text-coffee-900">{orderResult.vaNumber}</p>
 			{:else if orderResult.qrString}
-				<p class="text-sm text-navy-500">Scan QRIS di aplikasi pembayaranmu.</p>
+				<p class="text-sm text-coffee-500">Scan QRIS di aplikasi pembayaranmu.</p>
 			{/if}
 		</div>
 	{:else}

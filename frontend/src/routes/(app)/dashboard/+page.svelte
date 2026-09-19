@@ -50,15 +50,15 @@
 
 <div class="mx-auto max-w-6xl">
 	<div>
-		<h1 class="font-display text-2xl font-bold text-navy-900 sm:text-3xl">Mau melakukan apa?</h1>
-		<p class="mt-1.5 text-navy-500">Pilih salah satu untuk mulai.</p>
+		<h1 class="font-display text-2xl font-bold text-coffee-900 sm:text-3xl">Mau melakukan apa?</h1>
+		<p class="mt-1.5 text-coffee-500">Pilih salah satu untuk mulai.</p>
 	</div>
 
 	<div class="mt-8 grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
 		{#each actions as action (action.href)}
 			<a
 				href={action.href}
-				class="group flex flex-col gap-4 rounded-2xl border border-navy-100 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-navy-200 hover:shadow-md sm:p-6"
+				class="group flex flex-col gap-4 rounded-2xl border border-coffee-100 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-coffee-200 hover:shadow-md sm:p-6"
 			>
 				<span
 					class="inline-flex h-12 w-12 items-center justify-center rounded-xl {action.bgClass}"
@@ -66,13 +66,13 @@
 					<action.icon size={22} class={action.iconClass} />
 				</span>
 				<div class="flex-1">
-					<h2 class="font-display text-base font-semibold text-navy-900 sm:text-lg">
+					<h2 class="font-display text-base font-semibold text-coffee-900 sm:text-lg">
 						{action.title}
 					</h2>
-					<p class="mt-1.5 text-sm text-navy-500">{action.desc}</p>
+					<p class="mt-1.5 text-sm text-coffee-500">{action.desc}</p>
 				</div>
 				<span
-					class="inline-flex items-center gap-1 text-sm font-medium text-coral-500 opacity-0 transition-opacity group-hover:opacity-100"
+					class="inline-flex items-center gap-1 text-sm font-medium text-terracotta-500 opacity-0 transition-opacity group-hover:opacity-100"
 				>
 					Buka <ArrowRight size={14} />
 				</span>

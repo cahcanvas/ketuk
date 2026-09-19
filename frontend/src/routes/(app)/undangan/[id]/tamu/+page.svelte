@@ -96,15 +96,15 @@
 <div class="flex flex-wrap items-center justify-between gap-3">
 	<div class="flex gap-6 text-sm">
 		<div>
-			<p class="text-navy-400">Total Tamu</p>
-			<p class="font-display text-xl font-bold text-navy-900">{statTotals.total}</p>
+			<p class="text-coffee-400">Total Tamu</p>
+			<p class="font-display text-xl font-bold text-coffee-900">{statTotals.total}</p>
 		</div>
 		<div>
-			<p class="text-navy-400">Hadir</p>
+			<p class="text-coffee-400">Hadir</p>
 			<p class="font-display text-xl font-bold text-vendor-600">{statTotals.attending}</p>
 		</div>
 		<div>
-			<p class="text-navy-400">Tidak Hadir</p>
+			<p class="text-coffee-400">Tidak Hadir</p>
 			<p class="font-display text-xl font-bold text-red-500">{statTotals.notAttending}</p>
 		</div>
 	</div>

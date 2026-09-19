@@ -75,7 +75,7 @@
 		<div class="mb-6 sm:mb-8">
 			<a
 				href="/template"
-				class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-espresso-600 hover:text-wine-800 transition-colors"
+				class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-coffee-600 hover:text-coffee-800 transition-colors"
 			>
 				<ArrowLeft size={14} />
 				<span>KEMBALI KE SEMUA DESAIN</span>
@@ -96,23 +96,23 @@
 					<div class="flex items-center gap-2">
 						{#if template.badge}
 							<span
-								class="inline-block rounded-md bg-wine-900 px-2.5 py-1 text-[9px] font-semibold tracking-[0.15em] text-champagne-200 uppercase shadow-xs border border-champagne-400/20"
+								class="inline-block rounded-md bg-coffee-900 px-2.5 py-1 text-[9px] font-semibold tracking-[0.15em] text-champagne-200 uppercase shadow-xs border border-champagne-400/20"
 							>
 								{template.badge}
 							</span>
 						{/if}
-						<span class="text-xs text-espresso-500 font-medium">Koleksi {template.category}</span>
+						<span class="text-xs text-coffee-500 font-medium">Koleksi {template.category}</span>
 					</div>
 
-					<!-- Title in Cormorant Garamond -->
+					<!-- Title in Lora -->
 					<h1
-						class="font-serif mt-3 text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-espresso-950 leading-tight"
+						class="font-serif mt-3 text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-coffee-950 leading-tight"
 					>
 						{template.title}
 					</h1>
 
 					<!-- Tagline / Subtitle -->
-					<p class="mt-3 text-sm sm:text-base text-espresso-700 leading-relaxed max-w-xl font-normal">
+					<p class="mt-3 text-sm sm:text-base text-coffee-700 leading-relaxed max-w-xl font-normal">
 						{template.tagline || template.subtitle}
 					</p>
 
@@ -123,13 +123,13 @@
 								<Star size={15} class="fill-amber-400 text-amber-400" />
 							{/each}
 						</div>
-						<span class="font-semibold text-espresso-900">{template.rating}</span>
-						<span class="text-espresso-500">({template.reviewCount}+ pasangan merekomendasikan)</span>
+						<span class="font-semibold text-coffee-900">{template.rating}</span>
+						<span class="text-coffee-500">({template.reviewCount}+ pasangan merekomendasikan)</span>
 					</div>
 
 					<!-- Pricing Tier Selector Cards -->
 					<div class="mt-8 space-y-3">
-						<span class="block text-xs font-semibold uppercase tracking-wider text-espresso-600">
+						<span class="block text-xs font-semibold uppercase tracking-wider text-coffee-600">
 							PILIH PAKET UNDANGAN:
 						</span>
 
@@ -139,7 +139,7 @@
 									type="button"
 									class="w-full text-left rounded-2xl border p-4 transition-all duration-200 {selectedTier.id ===
 									tier.id
-										? 'border-wine-800 bg-white shadow-md ring-1 ring-wine-800'
+										? 'border-coffee-800 bg-white shadow-md ring-1 ring-coffee-800'
 										: 'border-cream-300/80 bg-cream-100/60 hover:bg-cream-100 hover:border-cream-400'}"
 									onclick={() => (selectedTier = tier)}
 								>
@@ -148,8 +148,8 @@
 											<div
 												class="h-4 w-4 rounded-full border flex items-center justify-center {selectedTier.id ===
 												tier.id
-													? 'border-wine-800 bg-wine-800'
-													: 'border-espresso-400 bg-white'}"
+													? 'border-coffee-800 bg-coffee-800'
+													: 'border-coffee-400 bg-white'}"
 											>
 												{#if selectedTier.id === tier.id}
 													<span class="h-1.5 w-1.5 rounded-full bg-white"></span>
@@ -157,25 +157,25 @@
 											</div>
 											<div>
 												<div class="flex items-center gap-2">
-													<span class="font-serif text-lg font-semibold text-espresso-950">
+													<span class="font-serif text-lg font-semibold text-coffee-950">
 														{tier.name}
 													</span>
 													{#if tier.popular}
 														<span
-															class="rounded-full bg-wine-100 px-2 py-0.5 text-[9px] font-semibold text-wine-800 uppercase"
+															class="rounded-full bg-coffee-100 px-2 py-0.5 text-[9px] font-semibold text-coffee-800 uppercase"
 														>
 															REKOMENDASI
 														</span>
 													{/if}
 												</div>
-												<p class="text-xs text-espresso-600 mt-0.5 leading-normal">
+												<p class="text-xs text-coffee-600 mt-0.5 leading-normal">
 													{tier.description}
 												</p>
 											</div>
 										</div>
 
 										<div class="text-right shrink-0 pl-3">
-											<span class="font-serif text-lg font-bold text-wine-900">
+											<span class="font-serif text-lg font-bold text-coffee-900">
 												{tier.price}
 											</span>
 										</div>
@@ -186,7 +186,7 @@
 					</div>
 
 					<!-- Value Checklist -->
-					<div class="mt-6 space-y-2 text-xs text-espresso-700">
+					<div class="mt-6 space-y-2 text-xs text-coffee-700">
 						<div class="flex items-center gap-2">
 							<Check size={14} class="text-emerald-700 shrink-0" />
 							<span>Website undangan lengkap siap kirim dalam satu tautan eksklusif</span>
@@ -205,19 +205,19 @@
 					<div class="mt-8 space-y-3">
 						<a
 							href="/daftar?template={template.slug}&tier={selectedTier.id}"
-							class="w-full flex items-center justify-center gap-2 rounded-full bg-wine-800 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-lg transition-all hover:bg-wine-900 active:scale-98"
+							class="w-full flex items-center justify-center gap-2 rounded-full bg-coffee-800 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-lg transition-all hover:bg-coffee-900 active:scale-98"
 						>
 							<span>PESAN PAKET {selectedTier.name.toUpperCase()} ({selectedTier.price})</span>
 							<ArrowRight size={15} />
 						</a>
 
-						<p class="text-center text-xs text-espresso-500">
+						<p class="text-center text-xs text-coffee-500">
 							Ada pertanyaan khusus?{' '}
 							<a
 								href="https://wa.me/6281288889999?text=Halo%20Ketuk.id,%20saya%20ingin%20tanya%20tentang%20desain%20{template.title}"
 								target="_blank"
 								rel="noopener noreferrer"
-								class="text-wine-800 font-semibold underline hover:text-wine-900"
+								class="text-coffee-800 font-semibold underline hover:text-coffee-900"
 							>
 								Konsultasi langsung via WhatsApp
 							</a>
@@ -230,10 +230,10 @@
 		<!-- What's Included / Feature Details -->
 		<div class="mt-20 pt-12 border-t border-cream-200/80">
 			<div class="text-center max-w-xl mx-auto mb-10">
-				<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-espresso-500">
+				<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-coffee-500">
 					KELENGKAPAN FITUR
 				</span>
-				<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-espresso-950">
+				<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
 					Segala yang Anda Dapatkan
 				</h2>
 			</div>
@@ -241,10 +241,10 @@
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 				{#each template.features as feature, idx (feature)}
 					<div class="rounded-2xl border border-cream-200 bg-white p-5 shadow-2xs">
-						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-wine-50 text-wine-800 font-serif text-xs font-semibold mb-3">
+						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-coffee-50 text-coffee-800 font-serif text-xs font-semibold mb-3">
 							0{idx + 1}
 						</div>
-						<p class="text-xs text-espresso-800 leading-relaxed font-medium">
+						<p class="text-xs text-coffee-800 leading-relaxed font-medium">
 							{feature}
 						</p>
 					</div>
@@ -254,38 +254,38 @@
 
 		<!-- Timeline: 3 Easy Steps -->
 		<div class="mt-20 rounded-3xl border border-cream-200 bg-cream-100/80 p-8 sm:p-12 text-center">
-			<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-espresso-500">
+			<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-coffee-500">
 				ALUR PENGERJAAN
 			</span>
-			<h2 class="font-serif mt-2 text-3xl font-medium text-espresso-950">
+			<h2 class="font-serif mt-2 text-3xl font-medium text-coffee-950">
 				Proses Mudah dan Terarah
 			</h2>
 
 			<div class="mt-10 grid gap-6 md:grid-cols-3">
 				<div class="flex flex-col items-center p-4">
-					<span class="h-10 w-10 rounded-full bg-wine-800 text-white font-serif flex items-center justify-center text-sm font-semibold shadow-xs">
+					<span class="h-10 w-10 rounded-full bg-coffee-800 text-white font-serif flex items-center justify-center text-sm font-semibold shadow-xs">
 						1
 					</span>
-					<h3 class="font-serif mt-3 text-lg font-semibold text-espresso-900">Pilih Desain</h3>
-					<p class="text-xs text-espresso-600 mt-1">
+					<h3 class="font-serif mt-3 text-lg font-semibold text-coffee-900">Pilih Desain</h3>
+					<p class="text-xs text-coffee-600 mt-1">
 						Pilih paket {template.title} dan mulai dalam 1 menit.
 					</p>
 				</div>
 				<div class="flex flex-col items-center p-4">
-					<span class="h-10 w-10 rounded-full bg-wine-800 text-white font-serif flex items-center justify-center text-sm font-semibold shadow-xs">
+					<span class="h-10 w-10 rounded-full bg-coffee-800 text-white font-serif flex items-center justify-center text-sm font-semibold shadow-xs">
 						2
 					</span>
-					<h3 class="font-serif mt-3 text-lg font-semibold text-espresso-900">Kustomisasi Isi</h3>
-					<p class="text-xs text-espresso-600 mt-1">
+					<h3 class="font-serif mt-3 text-lg font-semibold text-coffee-900">Kustomisasi Isi</h3>
+					<p class="text-xs text-coffee-600 mt-1">
 						Lengkapi tanggal, denah peta, musik, dan nomor rekening kado.
 					</p>
 				</div>
 				<div class="flex flex-col items-center p-4">
-					<span class="h-10 w-10 rounded-full bg-wine-800 text-white font-serif flex items-center justify-center text-sm font-semibold shadow-xs">
+					<span class="h-10 w-10 rounded-full bg-coffee-800 text-white font-serif flex items-center justify-center text-sm font-semibold shadow-xs">
 						3
 					</span>
-					<h3 class="font-serif mt-3 text-lg font-semibold text-espresso-900">Sebar ke Tamu</h3>
-					<p class="text-xs text-espresso-600 mt-1">
+					<h3 class="font-serif mt-3 text-lg font-semibold text-coffee-900">Sebar ke Tamu</h3>
+					<p class="text-xs text-coffee-600 mt-1">
 						Undangan siap dibagikan ke WhatsApp keluarga dan sahabat.
 					</p>
 				</div>
@@ -295,10 +295,10 @@
 		<!-- FAQ Accordion -->
 		<div class="mt-20 max-w-3xl mx-auto">
 			<div class="text-center mb-10">
-				<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-espresso-500">
+				<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-coffee-500">
 					PERTANYAAN UMUM
 				</span>
-				<h2 class="font-serif mt-2 text-3xl font-medium text-espresso-950">
+				<h2 class="font-serif mt-2 text-3xl font-medium text-coffee-950">
 					Pertanyaan Seputar Desain Ini
 				</h2>
 			</div>
@@ -313,20 +313,20 @@
 					>
 						<button
 							type="button"
-							class="flex w-full items-center justify-between p-5 text-left text-sm font-serif sm:text-base font-semibold text-espresso-900"
+							class="flex w-full items-center justify-between p-5 text-left text-sm font-serif sm:text-base font-semibold text-coffee-900"
 							onclick={() => (openFaq = openFaq === i ? null : i)}
 							aria-expanded={openFaq === i}
 						>
 							<span>{faq.q}</span>
 							<ChevronDown
 								size={16}
-								class="shrink-0 text-espresso-500 transition-transform {openFaq === i
-									? 'rotate-180 text-wine-800'
+								class="shrink-0 text-coffee-500 transition-transform {openFaq === i
+									? 'rotate-180 text-coffee-800'
 									: ''}"
 							/>
 						</button>
 						{#if openFaq === i}
-							<div class="px-5 pb-5 pt-0 text-xs sm:text-sm text-espresso-600 leading-relaxed border-t border-cream-100/70 mt-1">
+							<div class="px-5 pb-5 pt-0 text-xs sm:text-sm text-coffee-600 leading-relaxed border-t border-cream-100/70 mt-1">
 								{faq.a}
 							</div>
 						{/if}
@@ -339,16 +339,16 @@
 		<div class="mt-24 pt-12 border-t border-cream-200/80">
 			<div class="flex items-center justify-between mb-8">
 				<div>
-					<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-espresso-500">
+					<span class="text-[10px] font-semibold tracking-[0.25em] uppercase text-coffee-500">
 						EKSPLORASI LAINNYA
 					</span>
-					<h2 class="font-serif text-2xl sm:text-3xl font-medium text-espresso-950">
+					<h2 class="font-serif text-2xl sm:text-3xl font-medium text-coffee-950">
 						Desain Lain yang Mungkin Anda Sukai
 					</h2>
 				</div>
 				<a
 					href="/template"
-					class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-wine-800 hover:text-wine-900 transition-colors"
+					class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-coffee-800 hover:text-coffee-900 transition-colors"
 				>
 					<span>Lihat Semua</span>
 					<ArrowRight size={13} />
@@ -370,12 +370,12 @@
 >
 	<div class="flex items-center justify-between gap-3">
 		<div>
-			<span class="block text-[10px] uppercase tracking-wider text-espresso-500">Paket {selectedTier.name}</span>
-			<span class="font-serif text-lg font-bold text-wine-900">{selectedTier.price}</span>
+			<span class="block text-[10px] uppercase tracking-wider text-coffee-500">Paket {selectedTier.name}</span>
+			<span class="font-serif text-lg font-bold text-coffee-900">{selectedTier.price}</span>
 		</div>
 		<a
 			href="/daftar?template={template.slug}&tier={selectedTier.id}"
-			class="flex-1 text-center rounded-full bg-wine-800 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md active:bg-wine-900"
+			class="flex-1 text-center rounded-full bg-coffee-800 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md active:bg-coffee-900"
 		>
 			Pesan Sekarang
 		</a>

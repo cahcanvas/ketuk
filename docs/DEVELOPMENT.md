@@ -6,35 +6,35 @@ Panduan praktis untuk developer baru yang ingin menjalankan proyek ini secara lo
 
 Sebelum mulai, pastikan sudah terpasang:
 
-- **Bun** — package manager dan runtime development. Install dari [bun.sh](https://bun.sh).
-- **Node.js 20+** — runtime yang dipakai saat production dan oleh beberapa tooling. Versi yang disarankan tercantum di `.nvmrc`.
+- **Bun** — package manager dan development runner untuk frontend. Install dari [bun.sh](https://bun.sh).
+- **Go 1.23+** — bahasa dan runtime backend API. Install dari [go.dev](https://go.dev).
+- **Node.js 20+** — dipakai oleh tooling frontend dan Vercel adapter. Versi yang disarankan tercantum di `.nvmrc`.
 - **Akun Supabase** — untuk database Postgres, autentikasi, dan storage. Buat project baru di [supabase.com](https://supabase.com) dan catat URL project, anon key, service role key, serta connection string database-nya.
 - **Akun Duitku sandbox** — untuk integrasi pembayaran. Daftar di [duitku.com](https://duitku.com), aktifkan mode sandbox, dan catat merchant code serta API key sandbox.
 
 ## Setup dari clone sampai jalan
 
 1. Clone repository dan masuk ke foldernya.
-2. Jalankan `bun install` di root. Ini akan menginstal dependency untuk semua workspace (`frontend`, `backend`, `packages/shared`) sekaligus.
-3. Salin `.env.example` menjadi `.env`, lalu isi semua variabel dengan kredensial Supabase dan Duitku sandbox milikmu. Jangan pernah commit file `.env`.
+2. Jalankan `bun install` di root. Ini akan menginstal dependency untuk workspace frontend dan `packages/shared`. Backend Go mengelola dependency-nya sendiri lewat `go mod` di folder `backend/`.
+3. Salin `.env.example` menjadi `.env`, lalu isi semua variabel dengan kredensial Supabase dan Duitku sandbox milikmu. Backend membutuhkan `backend/.env` tersendiri (lihat `backend/.env.example`); jangan pernah commit file `.env`.
 4. Jalankan migrasi database (lihat bagian [Migrasi database](#migrasi-database) di bawah).
-5. Jalankan `bun run dev` untuk menjalankan frontend dan backend sekaligus, atau `bun run dev:fe` / `bun run dev:be` untuk menjalankan salah satunya saja.
+5. Jalankan `bun run dev` untuk frontend, dan `make run` di folder `backend/` untuk backend. Keduanya adalah proses terpisah dengan port berbeda (frontend dev server dan `:8080` untuk API).
 
 ## Penjelasan script
 
-Semua script berikut dijalankan dari root repository dan didelegasikan ke sub-package lewat `bun run --filter`.
+Script frontend dijalankan dari root repository lewat `bun run --filter`. Script backend dijalankan dari folder `backend/` lewat `make`.
 
 | Script | Fungsi |
 |---|---|
-| `bun run dev` | Menjalankan mode development untuk semua package sekaligus (frontend + backend). |
-| `bun run dev:fe` | Menjalankan mode development khusus `frontend`. |
-| `bun run dev:be` | Menjalankan mode development khusus `backend`. |
-| `bun run build` | Build production untuk semua package. |
-| `bun run check` | Menjalankan type-check (`tsc --noEmit`) di semua package. |
+| `bun run dev` | Menjalankan frontend dalam mode development. |
+| `bun run build` | Build production frontend dan `@ketuk/shared`. |
+| `bun run check` | Menjalankan type-check (`tsc --noEmit`) di frontend dan shared. |
 | `bun run lint` | Menjalankan Biome untuk memeriksa lint dan format di seluruh repo. |
 | `bun run format` | Menjalankan Biome untuk merapikan format kode secara otomatis. |
-| `bun run db:generate` | Menghasilkan file migrasi Drizzle dari perubahan schema di `backend`. |
-| `bun run db:migrate` | Menjalankan migrasi yang sudah digenerate ke database Supabase. |
-| `bun run db:studio` | Membuka Drizzle Studio untuk melihat dan mengedit data secara visual. |
+| `make run` (di `backend/`) | Menjalankan API server lewat `go run ./cmd/api`. |
+| `make tidy` (di `backend/`) | Merapikan `go.mod` dan `go.sum`. |
+| `make test` (di `backend/`) | Menjalankan `go test ./...`. |
+| `make bundle-api` (di `backend/`) | Membundle `api/openapi.yaml` lewat Redocly. |
 
 ## Menjaga dependency konsisten dengan CI
 
@@ -51,11 +51,11 @@ CI tetap menggunakan `--frozen-lockfile` agar dependency yang dipasang mengikuti
 
 ## Migrasi database
 
-Schema database dikelola dengan Drizzle ORM di dalam `backend`. Setelah mengubah schema:
+Schema database dikelola dengan goose v3 di dalam `backend`, dengan file migrasi SQL tersimpan di `backend/internal/migrate/sql/`. Setelah mengubah schema:
 
-1. Jalankan `bun run db:generate` untuk menghasilkan file migrasi baru berdasarkan perubahan schema.
-2. Review file migrasi yang dihasilkan sebelum menjalankannya.
-3. Jalankan `bun run db:migrate` untuk menerapkan migrasi ke database yang alamatnya tercantum di `DATABASE_URL`.
+1. Tulis file migrasi baru bernomor (`NNN_nama.sql`) di folder tersebut, satu pasangan up/down per file.
+2. Review isi migrasi sebelum menjalankannya.
+3. Jalankan `make run` dari `backend/` dengan `MIGRATE_ON_START=true` untuk menerapkan migrasi saat startup, atau jalankan tool migrasi langsung ke database yang alamatnya tercantum di `DATABASE_URL`.
 
 Detail schema dan RLS policy dijelaskan lebih lanjut saat `backend` diimplementasikan (lihat `docs/prompts/02-BACKEND.md`).
 

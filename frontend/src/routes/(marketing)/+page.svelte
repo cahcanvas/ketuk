@@ -107,23 +107,23 @@
 				<!-- Eyebrow Tag -->
 				<div class="inline-flex items-center gap-2 rounded-full border border-champagne-300/80 bg-cream-100/90 px-4 py-1.5 shadow-2xs backdrop-blur-xs">
 					<span class="h-1.5 w-1.5 rounded-full bg-champagne-600"></span>
-					<span class="text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-espresso-700">
+					<span class="text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-coffee-700">
 						Undangan Digital Pernikahan & Acara Eksklusif
 					</span>
 				</div>
 
-				<!-- Monumental Serif Headline (Cormorant Garamond) -->
+				<!-- Monumental Serif Headline (Lora) -->
 				<h1
-					class="font-serif mt-6 text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-espresso-950 leading-[1.08]"
+					class="font-serif mt-6 text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-coffee-950 leading-[1.08]"
 				>
 					Pernikahan <br class="hidden sm:inline" />
 					dimulai dengan <br class="hidden sm:inline" />
-					<span class="italic text-wine-800 font-normal">undangan.</span>
+					<span class="italic text-coffee-800 font-normal">undangan.</span>
 				</h1>
 
 				<!-- Refined Descriptive Paragraph -->
 				<p
-					class="mx-auto mt-6 max-w-xl text-base sm:text-lg text-espresso-700 font-normal leading-relaxed lg:mx-0"
+					class="mx-auto mt-6 max-w-xl text-base sm:text-lg text-coffee-700 font-normal leading-relaxed lg:mx-0"
 				>
 					Desain mewah yang siap memukau setiap tamu Anda. Lengkap dengan RSVP instan via WhatsApp,
 					peta lokasi akurat, musik pengiring, dan amplop digital dalam satu link eksklusif.
@@ -133,7 +133,7 @@
 				<div class="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
 					<a
 						href="#katalog"
-						class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-wine-800 px-8 py-4 text-xs font-bold tracking-widest uppercase text-white shadow-md transition-all duration-200 hover:bg-wine-900 hover:shadow-lg active:scale-98"
+						class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-coffee-800 px-8 py-4 text-xs font-bold tracking-widest uppercase text-white shadow-md transition-all duration-200 hover:bg-coffee-900 hover:shadow-lg active:scale-98"
 					>
 						<span>Jelajah Desain</span>
 						<ArrowRight size={15} />
@@ -142,7 +142,7 @@
 						href="https://wa.me/6281288889999?text=Halo%20Ketuk.id,%20saya%20ingin%20konsultasi%20undangan%20pernikahan"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-espresso-300 bg-white/80 px-7 py-4 text-xs font-semibold tracking-wider uppercase text-espresso-800 transition-all hover:border-espresso-900 hover:bg-white active:scale-98"
+						class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-coffee-300 bg-white/80 px-7 py-4 text-xs font-semibold tracking-wider uppercase text-coffee-800 transition-all hover:border-coffee-900 hover:bg-white active:scale-98"
 					>
 						<MessageCircle size={15} class="text-emerald-700" />
 						<span>Hubungi Kami</span>
@@ -158,26 +158,26 @@
 								<Star size={16} class="fill-amber-400 text-amber-400" />
 							{/each}
 						</div>
-						<span class="text-xs font-semibold text-espresso-900">
+						<span class="text-xs font-semibold text-coffee-900">
 							Penilaian 4.9/5
 						</span>
-						<span class="text-xs text-espresso-500">
+						<span class="text-xs text-coffee-500">
 							(500+ ulasan pasangan bahagia)
 						</span>
 					</div>
 
 					<!-- Checklist points -->
-					<div class="mt-4 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-xs font-medium text-espresso-700">
+					<div class="mt-4 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-xs font-medium text-coffee-700">
 						<span class="inline-flex items-center gap-1.5">
-							<Check size={14} class="text-wine-700" />
+							<Check size={14} class="text-coffee-700" />
 							100% Kustomisasi
 						</span>
 						<span class="inline-flex items-center gap-1.5">
-							<Check size={14} class="text-wine-700" />
+							<Check size={14} class="text-coffee-700" />
 							Tanpa Biaya Tersembunyi
 						</span>
 						<span class="inline-flex items-center gap-1.5">
-							<Check size={14} class="text-wine-700" />
+							<Check size={14} class="text-coffee-700" />
 							Aktif Selamanya
 						</span>
 					</div>
@@ -204,8 +204,8 @@
 					type="button"
 					class="rounded-full px-5 py-2 text-xs font-semibold tracking-wide transition-all {eventTab ===
 					'wedding'
-						? 'bg-wine-800 text-white shadow-xs'
-						: 'text-espresso-700 hover:text-wine-800'}"
+						? 'bg-coffee-800 text-white shadow-xs'
+						: 'text-coffee-700 hover:text-coffee-800'}"
 					onclick={() => (eventTab = 'wedding')}
 				>
 					Undangan Pernikahan
@@ -214,8 +214,8 @@
 					type="button"
 					class="rounded-full px-5 py-2 text-xs font-semibold tracking-wide transition-all {eventTab ===
 					'other'
-						? 'bg-wine-800 text-white shadow-xs'
-						: 'text-espresso-700 hover:text-wine-800'}"
+						? 'bg-coffee-800 text-white shadow-xs'
+						: 'text-coffee-700 hover:text-coffee-800'}"
 					onclick={() => (eventTab = 'other')}
 				>
 					Undangan Ulang Tahun & Acara Lain
@@ -225,10 +225,10 @@
 
 		<!-- Section Header -->
 		<div class="mt-10 text-center max-w-2xl mx-auto">
-			<h2 class="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-espresso-950">
+			<h2 class="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-coffee-950">
 				Temukan undangan Anda.
 			</h2>
-			<p class="mt-3 text-sm sm:text-base text-espresso-600 leading-relaxed">
+			<p class="mt-3 text-sm sm:text-base text-coffee-600 leading-relaxed">
 				Koleksi pernikahan kami dirancang dengan teliti untuk setiap gaya, kepribadian, dan cerita cinta istimewa Anda.
 			</p>
 		</div>
@@ -241,8 +241,8 @@
 						type="button"
 						class="shrink-0 rounded-full px-4 py-2 text-xs font-medium tracking-wide transition-all {activeCategory ===
 						cat
-							? 'bg-wine-800 text-white shadow-xs'
-							: 'border border-cream-300/80 bg-white/80 text-espresso-700 hover:bg-cream-100 hover:border-cream-400'}"
+							? 'bg-coffee-800 text-white shadow-xs'
+							: 'border border-cream-300/80 bg-white/80 text-coffee-700 hover:bg-cream-100 hover:border-cream-400'}"
 						onclick={() => (activeCategory = cat)}
 					>
 						{cat}
@@ -262,7 +262,7 @@
 
 		<!-- Bottom Catalog Callout -->
 		<div class="mt-16 text-center">
-			<p class="font-serif text-lg text-espresso-800 italic">
+			<p class="font-serif text-lg text-coffee-800 italic">
 				Ingin desain kustom yang sepenuhnya unik untuk tema pesta Anda?
 			</p>
 			<div class="mt-3">
@@ -270,7 +270,7 @@
 					href="https://wa.me/6281288889999?text=Halo%20Ketuk.id,%20saya%20tertarik%20dengan%20custom%20undangan%20eksklusif"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-full border border-wine-800 bg-white px-6 py-2.5 text-xs font-semibold tracking-wider uppercase text-wine-800 shadow-2xs hover:bg-wine-50 transition-colors"
+					class="inline-flex items-center gap-2 rounded-full border border-coffee-800 bg-white px-6 py-2.5 text-xs font-semibold tracking-wider uppercase text-coffee-800 shadow-2xs hover:bg-coffee-50 transition-colors"
 				>
 					<span>Konsultasi Custom Design</span>
 					<ArrowRight size={13} />
@@ -284,13 +284,13 @@
 <section id="fitur" class="scroll-mt-14 py-16 sm:py-24 bg-cream-100/60 border-t border-cream-200/60">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="max-w-2xl mx-auto text-center">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-wine-800">
+			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
 				Fitur Eksklusif
 			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-espresso-950">
+			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
 				Bukan sekadar tautan undangan biasa
 			</h2>
-			<p class="mt-3 text-sm text-espresso-600">
+			<p class="mt-3 text-sm text-coffee-600">
 				Segala yang Anda dan para tamu butuhkan dirancang secara intuitif dalam satu sentuhan berkelas.
 			</p>
 		</div>
@@ -298,13 +298,13 @@
 		<div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 			<!-- Feature 1 -->
 			<div class="rounded-2xl border border-cream-200 bg-white p-6 shadow-2xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-wine-50 text-wine-800">
+				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-coffee-50 text-coffee-800">
 					<MessageCircle size={22} />
 				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-espresso-900">
+				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
 					Konfirmasi RSVP via WhatsApp
 				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Tamu mengonfirmasi kehadiran dalam hitungan detik. Data jumlah tamu dan ucapan doa otomatis tercatat di dashboard Anda.
 				</p>
 			</div>
@@ -314,10 +314,10 @@
 				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-champagne-100 text-champagne-700">
 					<MapPin size={22} />
 				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-espresso-900">
+				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
 					Petunjuk Arah Google Maps
 				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Tamu tidak akan tersasar berkat integrasi titik koordinat langsung ke aplikasi Google Maps & Waze dengan satu klik.
 				</p>
 			</div>
@@ -327,10 +327,10 @@
 				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-800">
 					<Music size={22} />
 				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-espresso-900">
+				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
 					Musik Latar & Lagu Romantis
 				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Alunan melodi favorit menyambut tamu saat undangan dibuka, menghadirkan atmosfer hangat dan menyentuh hati.
 				</p>
 			</div>
@@ -340,10 +340,10 @@
 				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800">
 					<Gift size={22} />
 				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-espresso-900">
+				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
 					Amplop Digital & Kirim Kado
 				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Mudahkan kerabat dan sahabat mengirimkan tanda kasih melalui transfer nomor rekening resmi atau QRIS instan.
 				</p>
 			</div>
@@ -353,10 +353,10 @@
 				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-800">
 					<Clock size={22} />
 				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-espresso-900">
+				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
 					Countdown & Simpan ke Kalender
 				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Hitung mundur hari bahagia serta tombol "Add to Calendar" agar tamu tidak melewatkan hari spesial Anda.
 				</p>
 			</div>
@@ -366,10 +366,10 @@
 				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-800">
 					<Shield size={22} />
 				</div>
-				<h3 class="font-serif mt-4 text-xl font-semibold text-espresso-900">
+				<h3 class="font-serif mt-4 text-xl font-semibold text-coffee-900">
 					Privasi & Masa Aktif Selamanya
 				</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Data tamu dan kenangan foto Anda aman terjaga. Link undangan tidak akan kedaluwarsa setelah acara selesai.
 				</p>
 			</div>
@@ -381,41 +381,41 @@
 <section id="cara-kerja" class="scroll-mt-14 py-16 sm:py-24 bg-cream-50">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="text-center max-w-xl mx-auto">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-wine-800">
+			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
 				Proses Mudah & Cepat
 			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-espresso-950">
+			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
 				Tiga langkah menuju undangan impian
 			</h2>
 		</div>
 
 		<div class="mt-14 grid gap-8 md:grid-cols-3">
 			<div class="relative flex flex-col items-center text-center p-6">
-				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-wine-800 text-white font-serif text-xl font-semibold shadow-md">
+				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-coffee-800 text-white font-serif text-xl font-semibold shadow-md">
 					1
 				</div>
-				<h3 class="font-serif mt-5 text-xl font-semibold text-espresso-900">Pilih Desain Favorit</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<h3 class="font-serif mt-5 text-xl font-semibold text-coffee-900">Pilih Desain Favorit</h3>
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Eksplorasi katalog kurasi kami dengan beragam tema estetis dari klasik hingga modern.
 				</p>
 			</div>
 
 			<div class="relative flex flex-col items-center text-center p-6">
-				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-wine-800 text-white font-serif text-xl font-semibold shadow-md">
+				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-coffee-800 text-white font-serif text-xl font-semibold shadow-md">
 					2
 				</div>
-				<h3 class="font-serif mt-5 text-xl font-semibold text-espresso-900">Personalisasi Konten</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<h3 class="font-serif mt-5 text-xl font-semibold text-coffee-900">Personalisasi Konten</h3>
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Isi identitas pasangan, waktu akad & resepsi, foto pre-wedding, dan musik pilihan Anda.
 				</p>
 			</div>
 
 			<div class="relative flex flex-col items-center text-center p-6">
-				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-wine-800 text-white font-serif text-xl font-semibold shadow-md">
+				<div class="flex h-14 w-14 items-center justify-center rounded-full bg-coffee-800 text-white font-serif text-xl font-semibold shadow-md">
 					3
 				</div>
-				<h3 class="font-serif mt-5 text-xl font-semibold text-espresso-900">Sebarkan ke Tamu</h3>
-				<p class="mt-2 text-xs sm:text-sm text-espresso-600 leading-relaxed">
+				<h3 class="font-serif mt-5 text-xl font-semibold text-coffee-900">Sebarkan ke Tamu</h3>
+				<p class="mt-2 text-xs sm:text-sm text-coffee-600 leading-relaxed">
 					Dapatkan link eksklusif Anda dan bagikan langsung ke keluarga dan sahabat via WhatsApp.
 				</p>
 			</div>
@@ -424,7 +424,7 @@
 		<div class="mt-10 text-center">
 			<a
 				href="/daftar"
-				class="inline-flex items-center gap-2 rounded-full bg-wine-800 px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-white shadow-md hover:bg-wine-900 transition-all"
+				class="inline-flex items-center gap-2 rounded-full bg-coffee-800 px-8 py-3.5 text-xs font-semibold uppercase tracking-wider text-white shadow-md hover:bg-coffee-900 transition-all"
 			>
 				<span>Mulai Bikin Undangan Sekarang</span>
 				<ArrowRight size={14} />
@@ -437,10 +437,10 @@
 <section class="py-16 sm:py-24 bg-cream-100/70 border-t border-cream-200/60">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="text-center max-w-xl mx-auto">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-wine-800">
+			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
 				Cerita Pengantin
 			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-espresso-950">
+			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
 				Dipercaya ratusan pasangan bahagia
 			</h2>
 		</div>
@@ -452,16 +452,16 @@
 						<Star size={14} class="fill-amber-400 text-amber-400" />
 					{/each}
 				</div>
-				<p class="text-xs sm:text-sm text-espresso-700 italic leading-relaxed">
+				<p class="text-xs sm:text-sm text-coffee-700 italic leading-relaxed">
 					"Banyak tamu yang memuji undangan pernikahan kami. Desainnya sangat mahal dan tidak pasaran, musiknya menyentuh, dan RSVP-nya sangat memudahkan kami merekap data katering."
 				</p>
 				<div class="mt-4 pt-3 border-t border-cream-100 flex items-center gap-3">
-					<div class="h-9 w-9 rounded-full bg-wine-100 text-wine-800 flex items-center justify-center font-serif font-semibold text-sm">
+					<div class="h-9 w-9 rounded-full bg-coffee-100 text-coffee-800 flex items-center justify-center font-serif font-semibold text-sm">
 						D & R
 					</div>
 					<div>
-						<h4 class="font-serif text-sm font-semibold text-espresso-900">Dian & Raditya</h4>
-						<p class="text-[10px] text-espresso-500">Jakarta • Tema Firenze</p>
+						<h4 class="font-serif text-sm font-semibold text-coffee-900">Dian & Raditya</h4>
+						<p class="text-[10px] text-coffee-500">Jakarta • Tema Firenze</p>
 					</div>
 				</div>
 			</div>
@@ -472,7 +472,7 @@
 						<Star size={14} class="fill-amber-400 text-amber-400" />
 					{/each}
 				</div>
-				<p class="text-xs sm:text-sm text-espresso-700 italic leading-relaxed">
+				<p class="text-xs sm:text-sm text-coffee-700 italic leading-relaxed">
 					"Proses editnya gampang banget bahkan dari HP Android saya. Dalam 10 menit undangan langsung jadi dan siap kirim ke grup keluarga. Terima kasih Ketuk.id!"
 				</p>
 				<div class="mt-4 pt-3 border-t border-cream-100 flex items-center gap-3">
@@ -480,8 +480,8 @@
 						N & A
 					</div>
 					<div>
-						<h4 class="font-serif text-sm font-semibold text-espresso-900">Nadia & Adnan</h4>
-						<p class="text-[10px] text-espresso-500">Bandung • Tema Capri Rosa</p>
+						<h4 class="font-serif text-sm font-semibold text-coffee-900">Nadia & Adnan</h4>
+						<p class="text-[10px] text-coffee-500">Bandung • Tema Capri Rosa</p>
 					</div>
 				</div>
 			</div>
@@ -492,7 +492,7 @@
 						<Star size={14} class="fill-amber-400 text-amber-400" />
 					{/each}
 				</div>
-				<p class="text-xs sm:text-sm text-espresso-700 italic leading-relaxed">
+				<p class="text-xs sm:text-sm text-coffee-700 italic leading-relaxed">
 					"Fitur amplop digital dan RSVP WhatsApp-nya sangat membantu. Teman-teman yang berhalangan hadir tetap bisa kirim hadiah dengan gampang via transfer bank dan QRIS."
 				</p>
 				<div class="mt-4 pt-3 border-t border-cream-100 flex items-center gap-3">
@@ -500,8 +500,8 @@
 						C & F
 					</div>
 					<div>
-						<h4 class="font-serif text-sm font-semibold text-espresso-900">Clarissa & Fajar</h4>
-						<p class="text-[10px] text-espresso-500">Bali • Tema Tuscan Garden</p>
+						<h4 class="font-serif text-sm font-semibold text-coffee-900">Clarissa & Fajar</h4>
+						<p class="text-[10px] text-coffee-500">Bali • Tema Tuscan Garden</p>
 					</div>
 				</div>
 			</div>
@@ -513,10 +513,10 @@
 <section id="faq" class="scroll-mt-14 py-16 sm:py-24 bg-cream-50">
 	<div class="mx-auto max-w-4xl px-4 sm:px-6">
 		<div class="text-center max-w-xl mx-auto">
-			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-wine-800">
+			<span class="text-[11px] font-semibold tracking-[0.2em] uppercase text-coffee-800">
 				Bantuan
 			</span>
-			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-espresso-950">
+			<h2 class="font-serif mt-2 text-3xl sm:text-4xl font-medium text-coffee-950">
 				Pertanyaan yang sering diajukan
 			</h2>
 		</div>
@@ -531,21 +531,21 @@
 				>
 					<button
 						type="button"
-						class="flex w-full items-center justify-between p-5 text-left text-sm sm:text-base font-medium text-espresso-900"
+						class="flex w-full items-center justify-between p-5 text-left text-sm sm:text-base font-medium text-coffee-900"
 						onclick={() => (openFaq = openFaq === i ? null : i)}
 						aria-expanded={openFaq === i}
 					>
 						<span class="font-serif text-base sm:text-lg">{faq.q}</span>
 						<ChevronDown
 							size={18}
-							class="shrink-0 text-espresso-500 transition-transform duration-200 {openFaq === i
-								? 'rotate-180 text-wine-800'
+							class="shrink-0 text-coffee-500 transition-transform duration-200 {openFaq === i
+								? 'rotate-180 text-coffee-800'
 								: ''}"
 						/>
 					</button>
 
 					{#if openFaq === i}
-						<div class="px-5 pb-5 pt-0 text-xs sm:text-sm text-espresso-600 leading-relaxed border-t border-cream-100/60 mt-1">
+						<div class="px-5 pb-5 pt-0 text-xs sm:text-sm text-coffee-600 leading-relaxed border-t border-cream-100/60 mt-1">
 							{faq.a}
 						</div>
 					{/if}
@@ -556,7 +556,7 @@
 </section>
 
 <!-- Final Call to Action Banner -->
-<section class="relative overflow-hidden bg-wine-900 py-16 sm:py-24 text-white">
+<section class="relative overflow-hidden bg-coffee-900 py-16 sm:py-24 text-white">
 	<div
 		class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,164,120,0.2),transparent_70%)]"
 	></div>
@@ -577,7 +577,7 @@
 		<div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
 			<a
 				href="/daftar"
-				class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase text-wine-950 shadow-lg hover:bg-champagne-100 transition-all active:scale-98"
+				class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase text-coffee-950 shadow-lg hover:bg-champagne-100 transition-all active:scale-98"
 			>
 				<span>Mulai Buat Undangan</span>
 				<ArrowRight size={14} />

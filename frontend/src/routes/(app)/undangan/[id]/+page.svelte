@@ -41,35 +41,35 @@
 </svelte:head>
 
 <div class="grid gap-6 lg:grid-cols-3">
-	<div class="flex flex-col gap-4 rounded-xl border border-navy-100 bg-white p-6 lg:col-span-2">
+	<div class="flex flex-col gap-4 rounded-xl border border-coffee-100 bg-white p-6 lg:col-span-2">
 		<div class="flex items-center justify-between">
-			<h2 class="font-display text-lg font-semibold text-navy-900">Info Acara</h2>
+			<h2 class="font-display text-lg font-semibold text-coffee-900">Info Acara</h2>
 			<Badge tone={data.event.isPublished ? 'success' : 'neutral'}>
 				{data.event.isPublished ? 'Terbit' : 'Draf'}
 			</Badge>
 		</div>
 		<dl class="grid gap-4 text-sm sm:grid-cols-2">
 			<div>
-				<dt class="text-navy-400">Tanggal</dt>
-				<dd class="text-navy-900">{data.event.date ? formatEventDate(data.event.date) : 'Belum diatur'}</dd>
+				<dt class="text-coffee-400">Tanggal</dt>
+				<dd class="text-coffee-900">{data.event.date ? formatEventDate(data.event.date) : 'Belum diatur'}</dd>
 			</div>
 			<div>
-				<dt class="text-navy-400">Lokasi</dt>
-				<dd class="text-navy-900">{data.event.venue ?? data.event.location ?? 'Belum diatur'}</dd>
+				<dt class="text-coffee-400">Lokasi</dt>
+				<dd class="text-coffee-900">{data.event.venue ?? data.event.location ?? 'Belum diatur'}</dd>
 			</div>
 			<div>
-				<dt class="text-navy-400">Alamat undangan</dt>
-				<dd class="text-navy-900">ketuk.id/{data.event.slug}</dd>
+				<dt class="text-coffee-400">Alamat undangan</dt>
+				<dd class="text-coffee-900">ketuk.id/{data.event.slug}</dd>
 			</div>
 			<div>
-				<dt class="text-navy-400">Dilihat</dt>
-				<dd class="text-navy-900">{data.event.viewCount}x</dd>
+				<dt class="text-coffee-400">Dilihat</dt>
+				<dd class="text-coffee-900">{data.event.viewCount}x</dd>
 			</div>
 		</dl>
 	</div>
 
-	<div class="flex flex-col gap-3 rounded-xl border border-navy-100 bg-white p-6">
-		<h2 class="font-display text-lg font-semibold text-navy-900">Aksi</h2>
+	<div class="flex flex-col gap-3 rounded-xl border border-coffee-100 bg-white p-6">
+		<h2 class="font-display text-lg font-semibold text-coffee-900">Aksi</h2>
 		{#if !data.event.isPublished}
 			<Button onclick={handlePublish} loading={publishing} fullWidth>Publikasikan</Button>
 		{:else}

@@ -16,6 +16,6 @@
 	};
 </script>
 
-<div class="rounded-xl border border-navy-100 bg-white {paddingClasses[padding]}">
+<div class="rounded-xl border border-coffee-100 bg-white {paddingClasses[padding]}">
 	{@render children()}
 </div>

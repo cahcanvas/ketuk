@@ -177,7 +177,7 @@ export const MASTER_TEMPLATES: MasterTemplateProduct[] = [
 			accentTextColor: '#7e6f65',
 			sealColor: '#7a9a7a',
 			phoneBorder: 'border-stone-800',
-			fontFamily: 'Cormorant Garamond',
+			fontFamily: 'Lora',
 		},
 		preview: {
 			coupleName: 'Elena & Julian',
@@ -326,7 +326,7 @@ export const MASTER_TEMPLATES: MasterTemplateProduct[] = [
 			accentTextColor: '#15803d',
 			sealColor: '#2e5c3e',
 			phoneBorder: 'border-emerald-950',
-			fontFamily: 'Cormorant Garamond',
+			fontFamily: 'Lora',
 		},
 		preview: {
 			coupleName: 'Tara & Julian',
@@ -428,7 +428,7 @@ export const MASTER_TEMPLATES: MasterTemplateProduct[] = [
 			accentTextColor: '#0284c7',
 			sealColor: '#334155',
 			phoneBorder: 'border-slate-800',
-			fontFamily: 'Montserrat',
+			fontFamily: 'Plus Jakarta Sans',
 		},
 		preview: {
 			coupleName: 'Stella & Andre',
