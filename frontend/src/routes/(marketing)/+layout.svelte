@@ -20,9 +20,9 @@
 	];
 </script>
 
-<div class="flex min-h-screen flex-col bg-cream-50 text-espresso-900 selection:bg-wine-100 selection:text-wine-900 font-sans">
+<div class="flex min-h-screen flex-col bg-cream-50 text-coffee-900 selection:bg-coffee-100 selection:text-coffee-900 font-sans">
 	<!-- Top Announcement / Guarantee Bar -->
-	<div class="bg-wine-900 py-2 px-4 text-center text-[10px] sm:text-[11px] font-medium tracking-[0.18em] uppercase text-champagne-200">
+	<div class="bg-coffee-900 py-2 px-4 text-center text-[10px] sm:text-[11px] font-medium tracking-[0.18em] uppercase text-champagne-200">
 		<span class="inline-flex items-center gap-2">
 			<span class="h-1.5 w-1.5 rounded-full bg-champagne-400"></span>
 			<span>Koleksi Desain 2026: Diskon Spesial 50% untuk Seluruh Template Pernikahan</span>
@@ -35,15 +35,15 @@
 			<!-- Logo -->
 			<a href="/" class="group flex items-center gap-2.5">
 				<div
-					class="flex h-9 w-9 items-center justify-center rounded-full bg-wine-800 text-champagne-200 shadow-xs transition-transform group-hover:scale-105"
+					class="flex h-9 w-9 items-center justify-center rounded-full bg-coffee-800 text-champagne-200 shadow-xs transition-transform group-hover:scale-105"
 				>
 					<span class="font-serif text-lg font-normal">K</span>
 				</div>
 				<div class="flex flex-col">
-					<span class="font-serif text-xl sm:text-2xl font-semibold tracking-wide text-espresso-950">
-						Ketuk<span class="text-wine-700 italic font-normal">.id</span>
+					<span class="font-serif text-xl sm:text-2xl font-semibold tracking-wide text-coffee-950">
+						Ketuk<span class="text-coffee-700 italic font-normal">.id</span>
 					</span>
-					<span class="text-[9px] font-medium tracking-[0.2em] uppercase text-espresso-500 -mt-1">
+					<span class="text-[9px] font-medium tracking-[0.2em] uppercase text-coffee-500 -mt-1">
 						Digital Invitations
 					</span>
 				</div>
@@ -54,7 +54,7 @@
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
-						class="text-xs font-medium uppercase tracking-widest text-espresso-700 transition-colors hover:text-wine-800"
+						class="text-xs font-medium uppercase tracking-widest text-coffee-700 transition-colors hover:text-coffee-800"
 					>
 						{link.label}
 					</a>
@@ -65,13 +65,13 @@
 			<div class="hidden items-center gap-4 lg:flex">
 				<a
 					href="/masuk"
-					class="text-xs font-medium uppercase tracking-widest text-espresso-700 transition-colors hover:text-wine-800"
+					class="text-xs font-medium uppercase tracking-widest text-coffee-700 transition-colors hover:text-coffee-800"
 				>
 					Masuk
 				</a>
 				<a
 					href="/daftar"
-					class="inline-flex items-center gap-2 rounded-full bg-wine-800 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white shadow-xs transition-all hover:bg-wine-900 active:scale-98 hover:shadow-md"
+					class="inline-flex items-center gap-2 rounded-full bg-coffee-800 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white shadow-xs transition-all hover:bg-coffee-900 active:scale-98 hover:shadow-md"
 				>
 					<span>Buat Undangan</span>
 					<ArrowRight size={13} />
@@ -81,7 +81,7 @@
 			<!-- Mobile & Tablet Menu Toggle Button -->
 			<button
 				type="button"
-				class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cream-200 bg-cream-100/80 text-espresso-800 transition-colors hover:bg-cream-200/60 active:scale-95 lg:hidden"
+				class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cream-200 bg-cream-100/80 text-coffee-800 transition-colors hover:bg-cream-200/60 active:scale-95 lg:hidden"
 				onclick={() => (mobileOpen = !mobileOpen)}
 				aria-label={mobileOpen ? 'Tutup menu' : 'Buka menu'}
 				aria-expanded={mobileOpen}
@@ -103,7 +103,7 @@
 					{#each navLinks as link (link.href)}
 						<a
 							href={link.href}
-							class="rounded-xl px-4 py-3 text-sm font-medium tracking-wide text-espresso-800 transition-colors hover:bg-cream-100 hover:text-wine-800 active:bg-cream-200"
+							class="rounded-xl px-4 py-3 text-sm font-medium tracking-wide text-coffee-800 transition-colors hover:bg-cream-100 hover:text-coffee-800 active:bg-cream-200"
 							onclick={() => (mobileOpen = false)}
 						>
 							{link.label}
@@ -113,14 +113,14 @@
 					<div class="mt-3 flex flex-col gap-2.5 border-t border-cream-200 pt-4">
 						<a
 							href="/masuk"
-							class="rounded-xl border border-cream-300 py-3 text-center text-xs font-semibold uppercase tracking-wider text-espresso-800 hover:bg-cream-100"
+							class="rounded-xl border border-cream-300 py-3 text-center text-xs font-semibold uppercase tracking-wider text-coffee-800 hover:bg-cream-100"
 							onclick={() => (mobileOpen = false)}
 						>
 							Masuk ke Akun
 						</a>
 						<a
 							href="/daftar"
-							class="flex items-center justify-center gap-2 rounded-xl bg-wine-800 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-white shadow-md active:bg-wine-900"
+							class="flex items-center justify-center gap-2 rounded-xl bg-coffee-800 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-white shadow-md active:bg-coffee-900"
 							onclick={() => (mobileOpen = false)}
 						>
 							<span>Buat Undangan Sekarang</span>
@@ -138,24 +138,24 @@
 	</main>
 
 	<!-- Editorial Luxury Footer -->
-	<footer class="border-t border-cream-200 bg-cream-100/90 pt-16 pb-12 text-espresso-700">
+	<footer class="border-t border-cream-200 bg-cream-100/90 pt-16 pb-12 text-coffee-700">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6">
 			<div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
 				<!-- Brand Column -->
 				<div class="lg:col-span-2 space-y-4">
 					<div class="flex items-center gap-2.5">
-						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-wine-800 text-champagne-200 shadow-xs">
+						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-coffee-800 text-champagne-200 shadow-xs">
 							<span class="font-serif text-xl font-normal">K</span>
 						</div>
-						<span class="font-serif text-2xl font-bold tracking-wide text-espresso-950">
-							Ketuk<span class="text-wine-700 italic font-normal">.id</span>
+						<span class="font-serif text-2xl font-bold tracking-wide text-coffee-950">
+							Ketuk<span class="text-coffee-700 italic font-normal">.id</span>
 						</span>
 					</div>
-					<p class="text-sm text-espresso-600 leading-relaxed max-w-sm">
+					<p class="text-sm text-coffee-600 leading-relaxed max-w-sm">
 						Platform undangan digital pernikahan dan event modern dengan estetika haute-couture.
 						RSVP real-time, peta lokasi terintegrasi, dan amplop digital dalam satu sentuhan elegan.
 					</p>
-					<div class="flex items-center gap-4 text-xs text-espresso-500 pt-1">
+					<div class="flex items-center gap-4 text-xs text-coffee-500 pt-1">
 						<span class="inline-flex items-center gap-1">
 							<ShieldCheck size={14} class="text-emerald-700" />
 							Privasi Terjamin
@@ -169,57 +169,57 @@
 
 				<!-- Nav Column 1 -->
 				<div>
-					<h4 class="font-serif text-base font-semibold text-espresso-950 tracking-wide mb-3">
+					<h4 class="font-serif text-base font-semibold text-coffee-950 tracking-wide mb-3">
 						Koleksi Desain
 					</h4>
-					<ul class="space-y-2.5 text-xs text-espresso-600">
-						<li><a href="/#katalog" class="hover:text-wine-800 transition-colors">Undangan Pernikahan</a></li>
-						<li><a href="/#katalog" class="hover:text-wine-800 transition-colors">Tema Klasik & Botanical</a></li>
-						<li><a href="/#katalog" class="hover:text-wine-800 transition-colors">Tema Minimalis Modern</a></li>
-						<li><a href="/#katalog" class="hover:text-wine-800 transition-colors">Tema Luxury Gold</a></li>
-						<li><a href="/#katalog" class="hover:text-wine-800 transition-colors">Undangan Ulang Tahun & Acara</a></li>
+					<ul class="space-y-2.5 text-xs text-coffee-600">
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Undangan Pernikahan</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Tema Klasik & Botanical</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Tema Minimalis Modern</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Tema Luxury Gold</a></li>
+						<li><a href="/#katalog" class="hover:text-coffee-800 transition-colors">Undangan Ulang Tahun & Acara</a></li>
 					</ul>
 				</div>
 
 				<!-- Nav Column 2 -->
 				<div>
-					<h4 class="font-serif text-base font-semibold text-espresso-950 tracking-wide mb-3">
+					<h4 class="font-serif text-base font-semibold text-coffee-950 tracking-wide mb-3">
 						Fitur Eksklusif
 					</h4>
-					<ul class="space-y-2.5 text-xs text-espresso-600">
-						<li><a href="/#fitur" class="hover:text-wine-800 transition-colors">RSVP Otomatis WhatsApp</a></li>
-						<li><a href="/#fitur" class="hover:text-wine-800 transition-colors">Amplop & Kado Digital</a></li>
-						<li><a href="/#fitur" class="hover:text-wine-800 transition-colors">Navigasi Google Maps</a></li>
-						<li><a href="/#fitur" class="hover:text-wine-800 transition-colors">Galeri Foto & Background Musik</a></li>
-						<li><a href="/#fitur" class="hover:text-wine-800 transition-colors">Hitung Mundur Acara</a></li>
+					<ul class="space-y-2.5 text-xs text-coffee-600">
+						<li><a href="/#fitur" class="hover:text-coffee-800 transition-colors">RSVP Otomatis WhatsApp</a></li>
+						<li><a href="/#fitur" class="hover:text-coffee-800 transition-colors">Amplop & Kado Digital</a></li>
+						<li><a href="/#fitur" class="hover:text-coffee-800 transition-colors">Navigasi Google Maps</a></li>
+						<li><a href="/#fitur" class="hover:text-coffee-800 transition-colors">Galeri Foto & Background Musik</a></li>
+						<li><a href="/#fitur" class="hover:text-coffee-800 transition-colors">Hitung Mundur Acara</a></li>
 					</ul>
 				</div>
 
 				<!-- Nav Column 3 -->
 				<div>
-					<h4 class="font-serif text-base font-semibold text-espresso-950 tracking-wide mb-3">
+					<h4 class="font-serif text-base font-semibold text-coffee-950 tracking-wide mb-3">
 						Bantuan & Kontak
 					</h4>
-					<ul class="space-y-2.5 text-xs text-espresso-600">
+					<ul class="space-y-2.5 text-xs text-coffee-600">
 						<li class="flex items-center gap-1.5">
 							<Mail size={13} class="text-champagne-600" />
-							<a href="mailto:halo@ketuk.id" class="hover:text-wine-800 transition-colors">halo@ketuk.id</a>
+							<a href="mailto:halo@ketuk.id" class="hover:text-coffee-800 transition-colors">halo@ketuk.id</a>
 						</li>
 						<li class="flex items-center gap-1.5">
 							<Phone size={13} class="text-champagne-600" />
 							<span>WhatsApp CS: 0812-8888-9999</span>
 						</li>
-						<li><a href="/tentang" class="hover:text-wine-800 transition-colors">Tentang Kami</a></li>
-						<li><a href="/#faq" class="hover:text-wine-800 transition-colors">Pertanyaan Umum (FAQ)</a></li>
+						<li><a href="/tentang" class="hover:text-coffee-800 transition-colors">Tentang Kami</a></li>
+						<li><a href="/#faq" class="hover:text-coffee-800 transition-colors">Pertanyaan Umum (FAQ)</a></li>
 					</ul>
 				</div>
 			</div>
 
 			<!-- Footer Bottom -->
-			<div class="mt-12 pt-8 border-t border-cream-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-espresso-500">
+			<div class="mt-12 pt-8 border-t border-cream-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-coffee-500">
 				<p>© {new Date().getFullYear()} Ketuk.id. Hak cipta dilindungi undang-undang.</p>
 				<p class="flex items-center gap-1">
-					Dibuat dengan rasa cinta <Heart size={12} class="text-wine-700 fill-wine-700" /> untuk momen terindah Anda.
+					Dibuat dengan rasa cinta <Heart size={12} class="text-coffee-700 fill-coffee-700" /> untuk momen terindah Anda.
 				</p>
 			</div>
 		</div>

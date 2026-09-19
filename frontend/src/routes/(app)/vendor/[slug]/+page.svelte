@@ -21,24 +21,24 @@
 <div class="mx-auto max-w-3xl">
 	<a
 		href="/vendor"
-		class="inline-flex items-center gap-1.5 text-sm text-navy-500 hover:text-navy-900"
+		class="inline-flex items-center gap-1.5 text-sm text-coffee-500 hover:text-coffee-900"
 	>
 		<ArrowLeft size={14} />
 		Semua Vendor
 	</a>
 
-	<div class="mt-4 flex flex-col gap-6 rounded-2xl border border-navy-100 bg-white p-6 sm:p-8">
+	<div class="mt-4 flex flex-col gap-6 rounded-2xl border border-coffee-100 bg-white p-6 sm:p-8">
 		<div class="flex items-start justify-between gap-4">
 			<div class="min-w-0 flex-1">
 				<span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-vendor-100">
 					<Icon size={24} class="text-vendor-600" />
 				</span>
-				<h1 class="mt-3 font-display text-2xl font-bold text-navy-900 sm:text-3xl">
+				<h1 class="mt-3 font-display text-2xl font-bold text-coffee-900 sm:text-3xl">
 					{data.vendor.name}
 				</h1>
-				<p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-navy-500">
+				<p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-coffee-500">
 					<span>{config?.label ?? data.vendor.category}</span>
-					<span class="text-navy-300">·</span>
+					<span class="text-coffee-300">·</span>
 					<span class="inline-flex items-center gap-1">
 						<MapPin size={13} />
 						{data.vendor.city ?? 'Lokasi belum diatur'}
@@ -56,23 +56,23 @@
 		</div>
 
 		{#if data.vendor.description}
-			<p class="leading-relaxed text-navy-700">{data.vendor.description}</p>
+			<p class="leading-relaxed text-coffee-700">{data.vendor.description}</p>
 		{/if}
 
-		<div class="rounded-xl bg-navy-50 p-4">
-			<p class="text-xs font-medium tracking-wide text-navy-500 uppercase">Kisaran harga</p>
-			<p class="mt-1 font-display text-xl font-semibold text-navy-900">
+		<div class="rounded-xl bg-coffee-50 p-4">
+			<p class="text-xs font-medium tracking-wide text-coffee-500 uppercase">Kisaran harga</p>
+			<p class="mt-1 font-display text-xl font-semibold text-coffee-900">
 				{formatRupiah(data.vendor.priceMin)} – {formatRupiah(data.vendor.priceMax)}
 			</p>
 		</div>
 
-		<div class="flex flex-wrap items-center gap-4 border-t border-navy-100 pt-4 text-sm">
-			<p class="inline-flex items-center gap-1.5 text-navy-500">
+		<div class="flex flex-wrap items-center gap-4 border-t border-coffee-100 pt-4 text-sm">
+			<p class="inline-flex items-center gap-1.5 text-coffee-500">
 				<Star size={14} class="fill-amber-400 text-amber-400" />
 				{data.vendor.rating.toFixed(1)} ({data.vendor.reviewCount} ulasan)
 			</p>
 			{#if data.vendor.phone}
-				<p class="inline-flex items-center gap-1.5 text-navy-700">
+				<p class="inline-flex items-center gap-1.5 text-coffee-700">
 					<Phone size={14} />
 					{data.vendor.phone}
 				</p>

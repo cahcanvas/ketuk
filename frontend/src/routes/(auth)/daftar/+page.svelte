@@ -55,7 +55,7 @@
 </svelte:head>
 
 {#if form?.emailConfirmationRequired}
-	<h1 class="font-display text-xl font-semibold text-navy-900 sm:text-2xl">Cek email kamu</h1>
+	<h1 class="font-display text-xl font-semibold text-coffee-900 sm:text-2xl">Cek email kamu</h1>
 	<div
 		class="mt-6 flex items-start gap-3 rounded-xl border border-vendor-200 bg-vendor-50 p-4 text-sm text-vendor-700"
 	>
@@ -66,8 +66,8 @@
 		</p>
 	</div>
 {:else}
-	<h1 class="font-display text-xl font-semibold text-navy-900 sm:text-2xl">Mulai gratis</h1>
-	<p class="mt-1.5 text-sm text-navy-500">
+	<h1 class="font-display text-xl font-semibold text-coffee-900 sm:text-2xl">Mulai gratis</h1>
+	<p class="mt-1.5 text-sm text-coffee-500">
 		Isi lima kolom di bawah, langsung bisa dipakai. Tidak perlu kartu kredit.
 	</p>
 
@@ -158,10 +158,10 @@
 		<Button type="submit" loading={submitting} fullWidth>Daftar Gratis</Button>
 	</form>
 
-	<div class="my-6 flex items-center gap-3 text-xs text-navy-400">
-		<span class="h-px flex-1 bg-navy-100"></span>
+	<div class="my-6 flex items-center gap-3 text-xs text-coffee-400">
+		<span class="h-px flex-1 bg-coffee-100"></span>
 		atau
-		<span class="h-px flex-1 bg-navy-100"></span>
+		<span class="h-px flex-1 bg-coffee-100"></span>
 	</div>
 
 	<Button variant="secondary" fullWidth onclick={handleGoogle}>
@@ -193,7 +193,7 @@
 	</Button>
 {/if}
 
-<p class="mt-6 text-center text-sm text-navy-500">
+<p class="mt-6 text-center text-sm text-coffee-500">
 	Sudah punya akun?
-	<a href="/masuk" class="font-medium text-coral-500 hover:text-coral-600">Masuk</a>
+	<a href="/masuk" class="font-medium text-terracotta-500 hover:text-terracotta-600">Masuk</a>
 </p>

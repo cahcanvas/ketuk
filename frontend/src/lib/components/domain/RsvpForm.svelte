@@ -72,7 +72,7 @@
 					onclick={() => (status = 'attending')}
 					class="flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors
 						{status === 'attending'
-						? 'border-coral-400 bg-coral-500 text-white'
+						? 'border-terracotta-400 bg-terracotta-500 text-white'
 						: 'border-white/20 text-white hover:border-white/40'}"
 				>
 					Hadir
@@ -82,7 +82,7 @@
 					onclick={() => (status = 'not_attending')}
 					class="flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors
 						{status === 'not_attending'
-						? 'border-coral-400 bg-coral-500 text-white'
+						? 'border-terracotta-400 bg-terracotta-500 text-white'
 						: 'border-white/20 text-white hover:border-white/40'}"
 				>
 					Tidak Bisa Hadir
@@ -97,7 +97,7 @@
 		<Textarea label="Pesan (opsional)" bind:value={message} rows={3} maxlength={500} />
 
 		{#if error}
-			<p class="text-sm text-coral-300">{error}</p>
+			<p class="text-sm text-terracotta-300">{error}</p>
 		{/if}
 
 		<Button type="submit" loading={submitting} fullWidth>Kirim RSVP</Button>

@@ -22,12 +22,12 @@
 <div class="relative mx-auto w-full max-w-[290px] sm:max-w-[320px] md:max-w-[340px] select-none">
 	<!-- Ambient Glow behind the phone -->
 	<div
-		class="absolute -inset-4 -z-10 rounded-[54px] bg-gradient-to-tr from-wine-600/20 via-champagne-400/20 to-wine-900/10 blur-2xl"
+		class="absolute -inset-4 -z-10 rounded-[54px] bg-gradient-to-tr from-coffee-600/20 via-champagne-400/20 to-coffee-900/10 blur-2xl"
 	></div>
 
 	<!-- Phone Shell -->
 	<div
-		class="relative overflow-hidden rounded-[48px] border-[10px] border-wine-900 bg-cream-50 shadow-[0_25px_60px_-15px_rgba(70,13,23,0.35),0_10px_20px_-5px_rgba(0,0,0,0.15)] ring-1 ring-champagne-400/40"
+		class="relative overflow-hidden rounded-[48px] border-[10px] border-coffee-900 bg-cream-50 shadow-[0_25px_60px_-15px_rgba(70,13,23,0.35),0_10px_20px_-5px_rgba(0,0,0,0.15)] ring-1 ring-champagne-400/40"
 	>
 		<!-- Dynamic Island & Camera cutout -->
 		<div class="absolute top-2.5 left-1/2 z-30 -translate-x-1/2">
@@ -39,14 +39,14 @@
 
 		<!-- Status Bar -->
 		<div
-			class="relative z-20 flex h-10 items-center justify-between px-6 pt-1 text-[11px] font-semibold text-espresso-700"
+			class="relative z-20 flex h-10 items-center justify-between px-6 pt-1 text-[11px] font-semibold text-coffee-700"
 		>
 			<span>09:41</span>
 			<div class="flex items-center gap-1.5 text-[10px]">
 				<span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
 				<span>5G</span>
-				<div class="h-2.5 w-5 rounded-sm border border-espresso-700 p-0.5">
-					<div class="h-full w-full rounded-2xs bg-espresso-700"></div>
+				<div class="h-2.5 w-5 rounded-sm border border-coffee-700 p-0.5">
+					<div class="h-full w-full rounded-2xs bg-coffee-700"></div>
 				</div>
 			</div>
 		</div>
@@ -75,17 +75,17 @@
 				</div>
 
 				<span
-					class="font-display text-[10px] font-semibold tracking-[0.25em] text-wine-700 uppercase"
+					class="font-display text-[10px] font-semibold tracking-[0.25em] text-coffee-700 uppercase"
 				>
 					The Wedding Celebration
 				</span>
 
 				<!-- Couple Names in Editorial Serif -->
-				<h3 class="font-serif mt-2 text-3xl font-medium tracking-wide text-espresso-900 italic">
+				<h3 class="font-serif mt-2 text-3xl font-medium tracking-wide text-coffee-900 italic">
 					{coupleNames}
 				</h3>
 
-				<p class="font-serif mt-1 text-xs text-espresso-600 italic">
+				<p class="font-serif mt-1 text-xs text-coffee-600 italic">
 					Kami mengundang Anda untuk merayakan cinta kami
 				</p>
 
@@ -101,18 +101,18 @@
 					<div
 						class="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-champagne-400/50 bg-cream-50/80 shadow-inner"
 					>
-						<span class="font-serif text-2xl font-normal text-wine-800">S & D</span>
+						<span class="font-serif text-2xl font-normal text-coffee-800">S & D</span>
 					</div>
 
 					<div class="mt-4 space-y-2">
 						<div
-							class="inline-flex items-center gap-1.5 rounded-full bg-wine-50 px-3 py-1 text-[11px] font-medium text-wine-800 border border-wine-100"
+							class="inline-flex items-center gap-1.5 rounded-full bg-coffee-50 px-3 py-1 text-[11px] font-medium text-coffee-800 border border-coffee-100"
 						>
-							<Calendar size={12} class="text-wine-600" />
+							<Calendar size={12} class="text-coffee-600" />
 							<span>{eventDate}</span>
 						</div>
 
-						<p class="text-[11px] text-espresso-600 flex items-center justify-center gap-1">
+						<p class="text-[11px] text-coffee-600 flex items-center justify-center gap-1">
 							<MapPin size={11} class="text-champagne-600 shrink-0" />
 							<span class="truncate">{locationName}</span>
 						</p>
@@ -120,23 +120,23 @@
 
 					<!-- Countdown Badge -->
 					<div
-						class="mt-4 grid grid-cols-4 gap-1.5 rounded-xl border border-cream-200 bg-white/70 p-2 text-center text-espresso-800"
+						class="mt-4 grid grid-cols-4 gap-1.5 rounded-xl border border-cream-200 bg-white/70 p-2 text-center text-coffee-800"
 					>
 						<div>
-							<span class="font-serif block text-sm font-semibold text-wine-900">28</span>
-							<span class="text-[9px] uppercase tracking-wider text-espresso-500">Hari</span>
+							<span class="font-serif block text-sm font-semibold text-coffee-900">28</span>
+							<span class="text-[9px] uppercase tracking-wider text-coffee-500">Hari</span>
 						</div>
 						<div>
-							<span class="font-serif block text-sm font-semibold text-wine-900">14</span>
-							<span class="text-[9px] uppercase tracking-wider text-espresso-500">Jam</span>
+							<span class="font-serif block text-sm font-semibold text-coffee-900">14</span>
+							<span class="text-[9px] uppercase tracking-wider text-coffee-500">Jam</span>
 						</div>
 						<div>
-							<span class="font-serif block text-sm font-semibold text-wine-900">32</span>
-							<span class="text-[9px] uppercase tracking-wider text-espresso-500">Mnt</span>
+							<span class="font-serif block text-sm font-semibold text-coffee-900">32</span>
+							<span class="text-[9px] uppercase tracking-wider text-coffee-500">Mnt</span>
 						</div>
 						<div>
-							<span class="font-serif block text-sm font-semibold text-wine-900">45</span>
-							<span class="text-[9px] uppercase tracking-wider text-espresso-500">Dtk</span>
+							<span class="font-serif block text-sm font-semibold text-coffee-900">45</span>
+							<span class="text-[9px] uppercase tracking-wider text-coffee-500">Dtk</span>
 						</div>
 					</div>
 				</div>
@@ -147,8 +147,8 @@
 						type="button"
 						class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
 						'invitation'
-							? 'bg-wine-800 text-white shadow-xs'
-							: 'text-espresso-700 hover:text-wine-900'}"
+							? 'bg-coffee-800 text-white shadow-xs'
+							: 'text-coffee-700 hover:text-coffee-900'}"
 						onclick={() => (activeTab = 'invitation')}
 					>
 						Akad & Resepsi
@@ -157,8 +157,8 @@
 						type="button"
 						class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
 						'details'
-							? 'bg-wine-800 text-white shadow-xs'
-							: 'text-espresso-700 hover:text-wine-900'}"
+							? 'bg-coffee-800 text-white shadow-xs'
+							: 'text-coffee-700 hover:text-coffee-900'}"
 						onclick={() => (activeTab = 'details')}
 					>
 						RSVP Cepat
@@ -167,8 +167,8 @@
 						type="button"
 						class="flex-1 rounded-full py-1 text-[11px] font-medium transition-all {activeTab ===
 						'gift'
-							? 'bg-wine-800 text-white shadow-xs'
-							: 'text-espresso-700 hover:text-wine-900'}"
+							? 'bg-coffee-800 text-white shadow-xs'
+							: 'text-coffee-700 hover:text-coffee-900'}"
 						onclick={() => (activeTab = 'gift')}
 					>
 						Amplop Digital
@@ -181,22 +181,22 @@
 						<div class="rounded-xl border border-cream-200 bg-white p-3.5 shadow-xs space-y-2">
 							<div class="flex items-start justify-between">
 								<div>
-									<h4 class="font-serif text-sm font-semibold text-espresso-900">Akad Nikah</h4>
-									<p class="text-[10px] text-espresso-500">Pukul 08.00 - 10.00 WIB</p>
+									<h4 class="font-serif text-sm font-semibold text-coffee-900">Akad Nikah</h4>
+									<p class="text-[10px] text-coffee-500">Pukul 08.00 - 10.00 WIB</p>
 								</div>
 								<span
-									class="rounded-full bg-cream-100 px-2 py-0.5 text-[9px] font-medium text-espresso-700"
+									class="rounded-full bg-cream-100 px-2 py-0.5 text-[9px] font-medium text-coffee-700"
 								>
 									Khidmat
 								</span>
 							</div>
 							<div class="border-t border-cream-100 pt-2 flex items-start justify-between">
 								<div>
-									<h4 class="font-serif text-sm font-semibold text-espresso-900">Resepsi Malam</h4>
-									<p class="text-[10px] text-espresso-500">Pukul 19.00 - 21.30 WIB</p>
+									<h4 class="font-serif text-sm font-semibold text-coffee-900">Resepsi Malam</h4>
+									<p class="text-[10px] text-coffee-500">Pukul 19.00 - 21.30 WIB</p>
 								</div>
 								<span
-									class="rounded-full bg-wine-50 px-2 py-0.5 text-[9px] font-medium text-wine-800"
+									class="rounded-full bg-coffee-50 px-2 py-0.5 text-[9px] font-medium text-coffee-800"
 								>
 									Gala Dinner
 								</span>
@@ -204,14 +204,14 @@
 						</div>
 					{:else if activeTab === 'details'}
 						<div class="rounded-xl border border-cream-200 bg-white p-3.5 shadow-xs text-center">
-							<p class="text-[11px] text-espresso-700">Apakah Anda bersedia hadir?</p>
+							<p class="text-[11px] text-coffee-700">Apakah Anda bersedia hadir?</p>
 							<div class="mt-2 flex gap-2">
 								<button
 									type="button"
 									class="flex-1 rounded-lg border py-1.5 text-[10px] font-medium transition-all {rsvpStatus ===
 									'attending'
 										? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-										: 'border-cream-300 bg-cream-50 text-espresso-800 hover:bg-cream-100'}"
+										: 'border-cream-300 bg-cream-50 text-coffee-800 hover:bg-cream-100'}"
 									onclick={() => (rsvpStatus = 'attending')}
 								>
 									{#if rsvpStatus === 'attending'}
@@ -223,8 +223,8 @@
 									type="button"
 									class="flex-1 rounded-lg border py-1.5 text-[10px] font-medium transition-all {rsvpStatus ===
 									'not_attending'
-										? 'border-wine-500 bg-wine-50 text-wine-700'
-										: 'border-cream-300 bg-cream-50 text-espresso-800 hover:bg-cream-100'}"
+										? 'border-coffee-500 bg-coffee-50 text-coffee-700'
+										: 'border-cream-300 bg-cream-50 text-coffee-800 hover:bg-cream-100'}"
 									onclick={() => (rsvpStatus = 'not_attending')}
 								>
 									Maaf, Belum Bisa
@@ -243,13 +243,13 @@
 									<Gift size={14} />
 								</div>
 								<div>
-									<h4 class="font-serif text-xs font-semibold text-espresso-900">
+									<h4 class="font-serif text-xs font-semibold text-coffee-900">
 										BCA Transfer Digital
 									</h4>
-									<p class="text-[10px] text-espresso-500 font-mono">8720 1928 331 (Sarah)</p>
+									<p class="text-[10px] text-coffee-500 font-mono">8720 1928 331 (Sarah)</p>
 								</div>
 							</div>
-							<p class="mt-2 text-[10px] text-espresso-600 italic">
+							<p class="mt-2 text-[10px] text-coffee-600 italic">
 								Bisa langsung salin nomor rekening atau kirim kado via alamat.
 							</p>
 						</div>
@@ -257,7 +257,7 @@
 				</div>
 
 				<div class="mt-4 pb-2">
-					<span class="font-serif text-xs text-wine-800 italic">
+					<span class="font-serif text-xs text-coffee-800 italic">
 						"Dua jiwa, satu takdir indah."
 					</span>
 				</div>
@@ -266,7 +266,7 @@
 			<!-- Floating Audio Player Button inside Phone -->
 			<button
 				type="button"
-				class="absolute bottom-4 right-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-wine-800 text-white shadow-lg transition-transform active:scale-95 hover:bg-wine-900"
+				class="absolute bottom-4 right-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-coffee-800 text-white shadow-lg transition-transform active:scale-95 hover:bg-coffee-900"
 				onclick={() => (musicPlaying = !musicPlaying)}
 				title={musicPlaying ? 'Jeda Musik' : 'Putar Musik'}
 			>
@@ -283,7 +283,7 @@
 
 		<!-- Home Indicator Bar -->
 		<div class="absolute bottom-1.5 left-1/2 -translate-x-1/2">
-			<div class="h-1 w-32 rounded-full bg-espresso-400/40"></div>
+			<div class="h-1 w-32 rounded-full bg-coffee-400/40"></div>
 		</div>
 	</div>
 </div>

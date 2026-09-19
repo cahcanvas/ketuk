@@ -51,18 +51,16 @@ ketuk/
 ## 4. Command cheat-sheet
 
 Berfungsi (dari root):
-- `bun install` · `bun run dev:fe` (frontend only) · `bun run build:shared`
+- `bun install` · `bun run dev` (frontend only) · `bun run build:shared`
 - `bun run lint` (biome) · `bun run format` · `bun run check` (tsc + svelte-check)
 
 Backend (dari `backend/`): `make run` (`go run ./cmd/api`) · `make tidy` ·
 `make test` (`go test ./...`) · `make bundle-api` (redocly). Verifikasi cepat:
 `go build ./... && go vet ./...`.
 
-**Script root yang STALE (backend bukan workspace bun lagi):** `bun run dev`,
-`dev:be`, `db:generate`, `db:migrate`, `db:studio` (Drizzle) — semua merujuk
-`--filter backend` yang tak punya package.json. `docs/DEVELOPMENT.md` bab
-"Migrasi database" dan script table-nya juga kedaluwarsa (Drizzle → sekarang
-goose di `internal/migrate/sql/`).
+Backend **bukan** workspace bun (tidak punya `package.json`); jangan tambah
+`backend` ke `workspaces` root atau script `--filter backend`. Migrasi DB
+lewat goose di `internal/migrate/sql/`, bukan Drizzle.
 
 Port: backend dengar `:8080` default (`PORT` diutamakan atas `HTTP_ADDR`), tapi
 `.env.example` menulis `BACKEND_PORT=3000` + `PUBLIC_API_URL=:3000` — **inkonsisten**, perlu saataman saat konfigurasi lokal.
@@ -177,10 +175,12 @@ paragraf Bahasa Indonesia menjelaskan **kenapa**.
     agresif `public, max-age=60, s-maxage=3600, swr=86400`, sengaja tak sentuh
     session agar CDN-aman) + `[slug]/tamu/[guestSlug]`.
   - `admin/` — statis (`+layout.svelte`, `produk-undangan/`).
-- `app.css` — Tailwind v4 `@theme`: palet `navy`(basis gelap), `coral`, `wine`,
-  `cream`, `champagne`, `espresso` + warna per modul (undangan ungu, planner
-  biru langit, vendor hijau, hadiah oranye). Font: Cormorant Garamond (serif),
-  Montserrat (display), Inter (body). `prefers-reduced-motion` reset animasi.
+- `app.css` — Tailwind v4 `@theme`: palet `coffee` (basis coklat, anchor
+  `#5D4037`, dipakai juga sebagai teks gelap & aksen utama di seluruh halaman
+  termasuk marketing), `terracotta` (aksen tombol app), `cream`, `champagne`
+  (netral hangat) + warna per modul (undangan ungu, planner biru langit,
+  vendor hijau, hadiah oranye). Font: Lora (serif), Plus Jakarta Sans
+  (display+body). `prefers-reduced-motion` reset animasi.
 - `app.d.ts` — `App.Locals = {supabase, safeGetSession}`; `App.PageData` =
   `{session?, user?, accessToken?}` (opsional sengaja).
 
@@ -213,11 +213,13 @@ Root `.env` (lihat `.env.example`): `PUBLIC_SUPABASE_URL`,
 
 ## 9. Gotcha & inkonsistensi yang harus diingat
 
-1. **Migrasi stack Hono→Go**: README badge, `docs/ARCHITECTURE.md`, dan
-   `docs/prompts/*` masih menyebut **Hono + Drizzle + adapter-node**. Realita:
-   **Go + chi + goose**, adapter Vercel. Perbarui dokumen itu saat kesempatan.
-2. **Script root stale**: `dev`/`dev:be`/`db:*` broken (backend tanpa
-   package.json). Jalankan backend lewat `make run` di `backend/`.
+1. ~~Migrasi stack Hono→Go~~ **sudah dibersihkan**: README badge,
+   `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md` sekarang menyebut
+   **Go + chi + goose**, adapter Vercel. `docs/prompts/*` belum diperbarui
+   (masih Drizzle/Hono) — low priority, tidak dipakai runtime.
+2. ~~Script root stale~~ **sudah diperbaiki**: `backend` dihapus dari
+   `workspaces` root; script `dev:be`/`db:*` dihapus. Jalankan backend lewat
+   `make run` di `backend/`.
 3. **Port mismatch**: backend default `:8080` vs `.env.example` `3000`.
 4. **`internal/auth` dead code** — jangan ikuti polanya; pakai identity+authctx.
 5. **`backend/dist/`** artefak JS lama; `backend/vercel.json` = `{}`.

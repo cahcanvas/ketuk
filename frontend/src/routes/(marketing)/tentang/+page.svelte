@@ -8,8 +8,8 @@
 
 <section class="py-16 sm:py-24">
 	<div class="mx-auto max-w-3xl px-4 sm:px-6">
-		<h1 class="font-display text-3xl font-bold text-navy-900 sm:text-4xl">Tentang Ketuk.id</h1>
-		<div class="mt-8 flex flex-col gap-5 leading-relaxed text-navy-600">
+		<h1 class="font-display text-3xl font-bold text-coffee-900 sm:text-4xl">Tentang Ketuk.id</h1>
+		<div class="mt-8 flex flex-col gap-5 leading-relaxed text-coffee-600">
 			<p>
 				Ketuk.id lahir dari pengamatan sederhana: mengurus satu acara, entah pernikahan, ulang
 				tahun, khitanan, syukuran, atau acara kantor, biasanya butuh lima aplikasi berbeda. Satu

@@ -9,7 +9,7 @@
 </script>
 
 <span
-	class="block animate-pulse bg-navy-100"
+	class="block animate-pulse bg-coffee-100"
 	style="width: {width}; height: {height}; border-radius: {rounded};"
 	aria-hidden="true"
 ></span>

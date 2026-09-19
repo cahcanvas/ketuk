@@ -94,10 +94,10 @@
 
 <div class="flex flex-col gap-8">
 	<form
-		class="flex flex-col gap-4 rounded-xl border border-navy-100 bg-white p-6"
+		class="flex flex-col gap-4 rounded-xl border border-coffee-100 bg-white p-6"
 		onsubmit={handleSaveEvent}
 	>
-		<h2 class="font-display text-lg font-semibold text-navy-900">Waktu &amp; Tempat</h2>
+		<h2 class="font-display text-lg font-semibold text-coffee-900">Waktu &amp; Tempat</h2>
 		<div class="grid gap-4 sm:grid-cols-2">
 			<Input label="Tanggal" type="date" bind:value={date} />
 			<div class="grid grid-cols-2 gap-3">
@@ -114,10 +114,10 @@
 	</form>
 
 	<form
-		class="flex flex-col gap-4 rounded-xl border border-navy-100 bg-white p-6"
+		class="flex flex-col gap-4 rounded-xl border border-coffee-100 bg-white p-6"
 		onsubmit={handleSaveInvitation}
 	>
-		<h2 class="font-display text-lg font-semibold text-navy-900">Isi Undangan</h2>
+		<h2 class="font-display text-lg font-semibold text-coffee-900">Isi Undangan</h2>
 		{#if isWeddingLike}
 			<div class="grid gap-4 sm:grid-cols-2">
 				<Input label="Nama mempelai pria" bind:value={groomName} />

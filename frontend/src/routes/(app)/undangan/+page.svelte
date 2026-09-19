@@ -18,8 +18,8 @@
 <div class="mx-auto max-w-6xl">
 	<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="font-display text-2xl font-bold text-navy-900 sm:text-3xl">Undangan</h1>
-			<p class="mt-1 text-navy-500">Semua acara yang kamu kelola.</p>
+			<h1 class="font-display text-2xl font-bold text-coffee-900 sm:text-3xl">Undangan</h1>
+			<p class="mt-1 text-coffee-500">Semua acara yang kamu kelola.</p>
 		</div>
 		<Button href="/undangan/baru">
 			<Plus size={16} />

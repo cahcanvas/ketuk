@@ -1,35 +1,45 @@
 @import "tailwindcss";
 
 /*
- * Sistem token desain Ketuk.id. Basis gelap navy + aksen coral hangat, plus satu
- * warna sekunder per modul supaya user bisa mengenali konteks secara visual
- * (undangan = ungu, planner = biru langit, vendor = hijau, hadiah = oranye).
+ * Sistem token desain Ketuk.id. Basis coklat hangat (coffee, anchor #5D4037)
+ * + aksen terakota, plus satu warna sekunder per modul supaya user bisa
+ * mengenali konteks secara visual (undangan = ungu, planner = biru langit,
+ * vendor = hijau, hadiah = oranye). Target user usia 25-50: kontras tinggi,
+ * bentuk sederhana, jenis besar.
  */
 @theme {
-	--color-navy-950: #060a14;
-	--color-navy-900: #0f1729;
-	--color-navy-800: #16213a;
-	--color-navy-700: #1f2c4a;
-	--color-navy-600: #2c3c5e;
-	--color-navy-500: #445374;
-	--color-navy-400: #6b7a9c;
-	--color-navy-300: #9aa6c0;
-	--color-navy-200: #c6cee0;
-	--color-navy-100: #e7eaf3;
-	--color-navy-50: #f5f6fb;
+	--color-coffee-950: #2a1a16;
+	--color-coffee-900: #3e2723;
+	--color-coffee-800: #4e342e;
+	--color-coffee-700: #5d4037;
+	--color-coffee-600: #6d4c41;
+	--color-coffee-500: #7a5a4f;
+	--color-coffee-400: #846357;
+	--color-coffee-300: #bcaaa4;
+	--color-coffee-200: #d7ccc8;
+	--color-coffee-100: #e9e0dc;
+	--color-coffee-50: #f7f4f2;
 
-	--color-coral-600: #e2503f;
-	--color-coral-500: #ff6b5a;
-	--color-coral-400: #ff8a7c;
-	--color-coral-300: #ffb0a5;
-	--color-coral-100: #ffe4df;
+	--color-terracotta-950: #2e160d;
+	--color-terracotta-900: #3f1e13;
+	--color-terracotta-800: #572919;
+	--color-terracotta-700: #6e351f;
+	--color-terracotta-600: #864226;
+	--color-terracotta-500: #9f4e2d;
+	--color-terracotta-400: #b96b45;
+	--color-terracotta-300: #ce8f6a;
+	--color-terracotta-200: #e0b495;
+	--color-terracotta-100: #efd9c7;
 
 	--color-undangan-600: #6d28d9;
 	--color-undangan-500: #8b5cf6;
+	--color-undangan-400: #a78bfa;
+	--color-undangan-200: #ddd6fe;
 	--color-undangan-100: #ede7fd;
 
 	--color-planner-600: #0284c7;
 	--color-planner-500: #38bdf8;
+	--color-planner-200: #bae6fd;
 	--color-planner-100: #e0f5fe;
 
 	--color-vendor-700: #166534;
@@ -41,11 +51,8 @@
 
 	--color-hadiah-600: #c2410c;
 	--color-hadiah-500: #f97316;
-	--color-hadiah-100: #fef0e0;
-
-	--color-undangan-200: #ddd6fe;
-	--color-planner-200: #bae6fd;
 	--color-hadiah-200: #fed7aa;
+	--color-hadiah-100: #fef0e0;
 
 	--color-wine-950: #2d070f;
 	--color-wine-900: #460d17;
@@ -68,10 +75,13 @@
 	--color-cream-100: #f4ede4;
 	--color-cream-50: #faf7f2;
 
+	--color-champagne-950: #2b2113;
+	--color-champagne-800: #6f5330;
 	--color-champagne-700: #8c6a3e;
 	--color-champagne-600: #a98350;
 	--color-champagne-500: #c5a478;
 	--color-champagne-400: #d6bc98;
+	--color-champagne-300: #e2cdad;
 	--color-champagne-200: #ebddc9;
 	--color-champagne-100: #f6efe4;
 
@@ -82,10 +92,11 @@
 	--color-espresso-600: #70635e;
 	--color-espresso-500: #8d7e78;
 	--color-espresso-400: #aba09b;
+	--color-espresso-300: #c2b0a6;
 
-	--font-serif: "Cormorant Garamond", Georgia, serif;
-	--font-display: "Montserrat", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-	--font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+	--font-serif: "Lora", Georgia, "Times New Roman", serif;
+	--font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+	--font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -94,8 +105,8 @@
 
 body {
 	font-family: var(--font-body);
-	background-color: var(--color-navy-50);
-	color: var(--color-navy-900);
+	background-color: var(--color-coffee-50);
+	color: var(--color-coffee-900);
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -110,7 +121,7 @@ h6 {
 
 /* Focus ring yang benar-benar terlihat untuk navigasi keyboard. */
 :focus-visible {
-	outline: 2px solid var(--color-coral-500);
+	outline: 2px solid var(--color-terracotta-500);
 	outline-offset: 2px;
 	border-radius: 2px;
 }

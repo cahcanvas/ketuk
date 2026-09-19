@@ -44,7 +44,7 @@
 	 * kosong) tapi tetap didefinisikan supaya lookup di template tidak butuh cast.
 	 */
 	const strengthStyles = [
-		{ bar: 'w-0', text: 'text-navy-400' },
+		{ bar: 'w-0', text: 'text-coffee-400' },
 		{ bar: 'w-1/4 bg-red-500', text: 'text-red-600' },
 		{ bar: 'w-2/4 bg-amber-500', text: 'text-amber-600' },
 		{ bar: 'w-3/4 bg-lime-500', text: 'text-lime-700' },
@@ -57,9 +57,9 @@
 
 <div class="flex flex-col gap-1.5">
 	{#if label}
-		<label for={inputId} class="text-sm font-medium text-navy-800">
+		<label for={inputId} class="text-sm font-medium text-coffee-800">
 			{label}
-			{#if required}<span class="text-coral-500">*</span>{/if}
+			{#if required}<span class="text-terracotta-500">*</span>{/if}
 		</label>
 	{/if}
 
@@ -81,9 +81,9 @@
 					: strength
 						? `${inputId}-strength`
 						: undefined}
-			class="w-full rounded-lg border py-2.5 pr-11 pl-3.5 text-sm text-navy-900 placeholder:text-navy-400
-				focus-visible:outline-2 disabled:cursor-not-allowed disabled:bg-navy-50
-				{error ? 'border-red-400' : 'border-navy-200'}"
+			class="w-full rounded-lg border py-2.5 pr-11 pl-3.5 text-sm text-coffee-900 placeholder:text-coffee-400
+				focus-visible:outline-2 disabled:cursor-not-allowed disabled:bg-coffee-50
+				{error ? 'border-red-400' : 'border-coffee-200'}"
 		/>
 		<button
 			type="button"
@@ -92,7 +92,7 @@
 				revealed = !revealed;
 			}}
 			class="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg
-				text-navy-400 transition-colors hover:text-navy-700 focus-visible:outline-2
+				text-coffee-400 transition-colors hover:text-coffee-700 focus-visible:outline-2
 				disabled:cursor-not-allowed"
 			aria-label={revealed ? 'Sembunyikan password' : 'Tampilkan password'}
 			aria-pressed={revealed}
@@ -114,7 +114,7 @@
 			lewat teks di sebelahnya, tidak perlu diumumkan dua kali.
 		-->
 		<div id="{inputId}-strength" class="flex items-center gap-2" aria-live="polite">
-			<span class="h-1 flex-1 overflow-hidden rounded-full bg-navy-100" aria-hidden="true">
+			<span class="h-1 flex-1 overflow-hidden rounded-full bg-coffee-100" aria-hidden="true">
 				<span
 					class="block h-full rounded-full transition-all duration-200 {strengthStyle.bar}"
 				></span>
@@ -122,6 +122,6 @@
 			<span class="text-xs font-medium {strengthStyle.text}">{strength.label}</span>
 		</div>
 	{:else if hint}
-		<p id="{inputId}-hint" class="text-sm text-navy-400">{hint}</p>
+		<p id="{inputId}-hint" class="text-sm text-coffee-400">{hint}</p>
 	{/if}
 </div>

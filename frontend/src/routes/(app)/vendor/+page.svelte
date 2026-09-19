@@ -36,8 +36,8 @@
 </svelte:head>
 
 <div class="mx-auto max-w-6xl">
-	<h1 class="font-display text-2xl font-bold text-navy-900 sm:text-3xl">Vendor</h1>
-	<p class="mt-1.5 text-navy-500">Cari katering, dekorasi, fotografer, dan vendor lainnya.</p>
+	<h1 class="font-display text-2xl font-bold text-coffee-900 sm:text-3xl">Vendor</h1>
+	<p class="mt-1.5 text-coffee-500">Cari katering, dekorasi, fotografer, dan vendor lainnya.</p>
 
 	<div class="mt-6 max-w-xs">
 		<Select

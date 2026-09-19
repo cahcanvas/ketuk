@@ -45,11 +45,11 @@
 	}
 </script>
 
-<div class="flex min-h-screen bg-navy-50">
+<div class="flex min-h-screen bg-coffee-50">
 	<!-- Desktop sidebar -->
-	<aside class="hidden w-64 shrink-0 flex-col border-r border-navy-100 bg-white p-5 lg:flex">
-		<a href="/dashboard" class="font-display text-xl font-bold text-navy-900">
-			Ketuk<span class="text-coral-500">.id</span>
+	<aside class="hidden w-64 shrink-0 flex-col border-r border-coffee-100 bg-white p-5 lg:flex">
+		<a href="/dashboard" class="font-display text-xl font-bold text-coffee-900">
+			Ketuk<span class="text-terracotta-500">.id</span>
 		</a>
 		<nav class="mt-8 flex flex-col gap-1">
 			{#each navItems as item (item.href)}
@@ -57,20 +57,20 @@
 					href={item.href}
 					class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors
 						{isActive(item.href)
-						? 'bg-coral-100 text-coral-600'
-						: 'text-navy-600 hover:bg-navy-50 hover:text-navy-900'}"
+						? 'bg-terracotta-100 text-terracotta-600'
+						: 'text-coffee-600 hover:bg-coffee-50 hover:text-coffee-900'}"
 				>
 					<item.icon size={18} />
 					{item.label}
 				</a>
 			{/each}
 		</nav>
-		<div class="mt-auto flex flex-col gap-3 border-t border-navy-100 pt-4">
-			<p class="truncate text-xs text-navy-400" title={data.user.email}>{data.user.email}</p>
+		<div class="mt-auto flex flex-col gap-3 border-t border-coffee-100 pt-4">
+			<p class="truncate text-xs text-coffee-400" title={data.user.email}>{data.user.email}</p>
 			<button
 				type="button"
 				onclick={handleLogout}
-				class="inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm font-medium text-navy-500 transition-colors hover:bg-navy-50 hover:text-navy-900"
+				class="inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm font-medium text-coffee-500 transition-colors hover:bg-coffee-50 hover:text-coffee-900"
 			>
 				<LogOut size={16} />
 				Keluar
@@ -81,17 +81,17 @@
 	<div class="flex min-w-0 flex-1 flex-col">
 		<!-- Mobile header -->
 		<header
-			class="sticky top-0 z-30 flex items-center justify-between border-b border-navy-100 bg-white px-4 py-3 lg:hidden"
+			class="sticky top-0 z-30 flex items-center justify-between border-b border-coffee-100 bg-white px-4 py-3 lg:hidden"
 		>
-			<a href="/dashboard" class="font-display text-lg font-bold text-navy-900">
-				Ketuk<span class="text-coral-500">.id</span>
+			<a href="/dashboard" class="font-display text-lg font-bold text-coffee-900">
+				Ketuk<span class="text-terracotta-500">.id</span>
 			</a>
 			<button
 				type="button"
 				onclick={() => (mobileOpen = !mobileOpen)}
 				aria-label={mobileOpen ? 'Tutup menu' : 'Buka menu'}
 				aria-expanded={mobileOpen}
-				class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-navy-700 hover:bg-navy-50"
+				class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-coffee-700 hover:bg-coffee-50"
 			>
 				{#if mobileOpen}
 					<X size={22} />
@@ -102,25 +102,25 @@
 		</header>
 		{#if mobileOpen}
 			<nav
-				class="flex flex-col gap-1 border-b border-navy-100 bg-white p-3 shadow-sm lg:hidden"
+				class="flex flex-col gap-1 border-b border-coffee-100 bg-white p-3 shadow-sm lg:hidden"
 			>
 				{#each navItems as item (item.href)}
 					<a
 						href={item.href}
 						class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium
-							{isActive(item.href) ? 'bg-coral-100 text-coral-600' : 'text-navy-600 hover:bg-navy-50'}"
+							{isActive(item.href) ? 'bg-terracotta-100 text-terracotta-600' : 'text-coffee-600 hover:bg-coffee-50'}"
 						onclick={() => (mobileOpen = false)}
 					>
 						<item.icon size={18} />
 						{item.label}
 					</a>
 				{/each}
-				<div class="mt-2 border-t border-navy-100 pt-2">
-					<p class="truncate px-3 py-1 text-xs text-navy-400">{data.user.email}</p>
+				<div class="mt-2 border-t border-coffee-100 pt-2">
+					<p class="truncate px-3 py-1 text-xs text-coffee-400">{data.user.email}</p>
 					<button
 						type="button"
 						onclick={handleLogout}
-						class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-navy-500 hover:bg-navy-50"
+						class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-coffee-500 hover:bg-coffee-50"
 					>
 						<LogOut size={16} />
 						Keluar

@@ -94,12 +94,12 @@
 	<div>
 		<a
 			href="/planner?event={data.eventId}"
-			class="inline-flex items-center gap-1.5 text-sm text-navy-500 hover:text-navy-900"
+			class="inline-flex items-center gap-1.5 text-sm text-coffee-500 hover:text-coffee-900"
 		>
 			<ArrowLeft size={14} />
 			Kembali ke Planner
 		</a>
-		<h1 class="mt-1 font-display text-2xl font-bold text-navy-900 sm:text-3xl">Budget</h1>
+		<h1 class="mt-1 font-display text-2xl font-bold text-coffee-900 sm:text-3xl">Budget</h1>
 	</div>
 	<Button onclick={openCreate}>
 		<Plus size={16} />

@@ -47,7 +47,7 @@
 		{#if template.badge}
 			<div class="absolute top-3 left-3 z-20">
 				<span
-					class="inline-block rounded-md bg-wine-900/90 px-2.5 py-1 text-[9px] font-semibold tracking-[0.15em] text-champagne-200 uppercase shadow-xs backdrop-blur-xs border border-champagne-400/20"
+					class="inline-block rounded-md bg-coffee-900/90 px-2.5 py-1 text-[9px] font-semibold tracking-[0.15em] text-champagne-200 uppercase shadow-xs backdrop-blur-xs border border-champagne-400/20"
 				>
 					{template.badge}
 				</span>
@@ -56,14 +56,14 @@
 
 		<!-- Interactive Preview Hover Overlay -->
 		<div
-			class="absolute inset-0 z-20 flex items-center justify-center bg-espresso-950/25 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100"
+			class="absolute inset-0 z-20 flex items-center justify-center bg-coffee-950/25 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100"
 		>
 			<button
 				type="button"
-				class="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-espresso-900 shadow-md transition-transform duration-200 hover:scale-105 active:scale-95"
+				class="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-coffee-900 shadow-md transition-transform duration-200 hover:scale-105 active:scale-95"
 				onclick={() => onPreview?.(template)}
 			>
-				<Eye size={14} class="text-wine-700" />
+				<Eye size={14} class="text-coffee-700" />
 				<span>Coba Preview</span>
 			</button>
 		</div>
@@ -128,7 +128,7 @@
 						</h5>
 						<!-- Decorative divider -->
 						<div class="mx-auto h-0.5 w-6 rounded-full bg-champagne-400/80"></div>
-						<p class="text-[7px] text-espresso-600">{template.preview.date}</p>
+						<p class="text-[7px] text-coffee-600">{template.preview.date}</p>
 					</div>
 
 					<!-- Bottom RSVP pill -->
@@ -148,27 +148,27 @@
 		<div>
 			<div class="flex items-center justify-between">
 				<a href="/template/{template.slug}" class="focus:outline-none">
-					<h4 class="font-serif text-xl sm:text-2xl font-semibold text-espresso-950 transition-colors group-hover:text-wine-800">
+					<h4 class="font-serif text-xl sm:text-2xl font-semibold text-coffee-950 transition-colors group-hover:text-coffee-800">
 						{template.title}
 					</h4>
 				</a>
 			</div>
-			<p class="mt-1 text-xs text-espresso-600 line-clamp-2 leading-relaxed">
+			<p class="mt-1 text-xs text-coffee-600 line-clamp-2 leading-relaxed">
 				{template.subtitle}
 			</p>
 		</div>
 
 		<div class="mt-4 pt-3 border-t border-cream-200/60 flex items-center justify-between">
 			<div>
-				<span class="block text-[10px] uppercase tracking-wider text-espresso-500 font-medium">Harga</span>
-				<span class="font-serif text-base sm:text-lg font-semibold text-espresso-900">
+				<span class="block text-[10px] uppercase tracking-wider text-coffee-500 font-medium">Harga</span>
+				<span class="font-serif text-base sm:text-lg font-semibold text-coffee-900">
 					{template.price}
 				</span>
 			</div>
 
 			<a
 				href="/template/{template.slug}"
-				class="inline-flex items-center gap-1 text-xs font-semibold text-wine-800 transition-all group-hover:translate-x-0.5 group-hover:text-wine-900"
+				class="inline-flex items-center gap-1 text-xs font-semibold text-coffee-800 transition-all group-hover:translate-x-0.5 group-hover:text-coffee-900"
 			>
 				<span>Lihat Desain</span>
 				<ArrowRight size={13} />

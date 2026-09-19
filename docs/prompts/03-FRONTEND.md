@@ -172,9 +172,9 @@ Musik latar boleh ada tapi harus dimulai dari interaksi user (tombol buka undang
 
 Buat sistem token di `src/app.css` pakai Tailwind v4 `@theme`. Arahan warna:
 
-Basis gelap navy (`#0f1729` dan variasinya) dengan aksen coral hangat (`#ff6b5a`). Empat warna sekunder untuk masing-masing modul supaya user bisa mengenalinya secara visual: ungu untuk undangan, biru langit untuk planner, hijau untuk vendor, oranye untuk hadiah.
+Basis coklat hangat (`#5D4037` dan variasinya, token `coffee`) dengan aksen terakota (`#9F4E2D`, token `terracotta`). Empat warna sekunder untuk masing-masing modul supaya user bisa mengenalinya secara visual: ungu untuk undangan, biru langit untuk planner, hijau untuk vendor, oranye untuk hadiah. Target user usia 25-50: kontras teks minimal AA (4.5:1), hindari warna saturasi tinggi di area besar.
 
-Tipografi dua keluarga: satu untuk display/heading, satu untuk body. Pilih yang mendukung karakter Indonesia dengan baik dan tersedia di Google Fonts. Jangan pakai lebih dari dua.
+Tipografi dua keluarga: Lora (serif, display/heading) dan Plus Jakarta Sans (sans, body). Kedua-duanya mendukung karakter Indonesia dan tersedia di Google Fonts. Jangan pakai lebih dari dua.
 
 Halaman undangan boleh punya identitas visual sendiri yang berbeda dari dashboard — undangan harus terasa personal dan elegan, dashboard harus terasa efisien.
 

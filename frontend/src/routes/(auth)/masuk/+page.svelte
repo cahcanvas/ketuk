@@ -35,8 +35,8 @@
 	<title>Masuk | Ketuk.id</title>
 </svelte:head>
 
-<h1 class="font-display text-xl font-semibold text-navy-900 sm:text-2xl">Masuk ke Ketuk.id</h1>
-<p class="mt-1.5 text-sm text-navy-500">Kelola undangan dan acaramu.</p>
+<h1 class="font-display text-xl font-semibold text-coffee-900 sm:text-2xl">Masuk ke Ketuk.id</h1>
+<p class="mt-1.5 text-sm text-coffee-500">Kelola undangan dan acaramu.</p>
 
 <form
 	method="POST"
@@ -80,10 +80,10 @@
 	<Button type="submit" loading={submitting} fullWidth>Masuk</Button>
 </form>
 
-<div class="my-6 flex items-center gap-3 text-xs text-navy-400">
-	<span class="h-px flex-1 bg-navy-100"></span>
+<div class="my-6 flex items-center gap-3 text-xs text-coffee-400">
+	<span class="h-px flex-1 bg-coffee-100"></span>
 	atau
-	<span class="h-px flex-1 bg-navy-100"></span>
+	<span class="h-px flex-1 bg-coffee-100"></span>
 </div>
 
 <Button variant="secondary" fullWidth onclick={handleGoogle}>
@@ -114,7 +114,7 @@
 	Lanjutkan dengan Google
 </Button>
 
-<p class="mt-6 text-center text-sm text-navy-500">
+<p class="mt-6 text-center text-sm text-coffee-500">
 	Belum punya akun?
-	<a href="/daftar" class="font-medium text-coral-500 hover:text-coral-600">Daftar</a>
+	<a href="/daftar" class="font-medium text-terracotta-500 hover:text-terracotta-600">Daftar</a>
 </p>

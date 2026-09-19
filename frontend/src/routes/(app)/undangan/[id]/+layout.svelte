@@ -32,12 +32,12 @@
 	<div class="mb-6">
 		<a
 			href="/undangan"
-			class="inline-flex items-center gap-1.5 text-sm text-navy-500 hover:text-navy-900"
+			class="inline-flex items-center gap-1.5 text-sm text-coffee-500 hover:text-coffee-900"
 		>
 			<ArrowLeft size={14} />
 			Semua Undangan
 		</a>
-		<h1 class="mt-1 font-display text-2xl font-bold text-navy-900 sm:text-3xl">
+		<h1 class="mt-1 font-display text-2xl font-bold text-coffee-900 sm:text-3xl">
 			{data.event.title}
 		</h1>
 	</div>

@@ -32,13 +32,13 @@ Aksi dinamis (RSVP / ucapan / kirim hadiah):
 
 ## Kenapa backend terpisah dari SvelteKit
 
-SvelteKit sendiri mampu menangani API lewat `+server.ts`, dan untuk banyak aplikasi itu cukup. Ketuk.id sengaja tidak memakai pendekatan itu untuk semua logika, dan menempatkan sebagian besar logika sensitif di layanan Hono yang terpisah, dengan tiga alasan konkret.
+SvelteKit sendiri mampu menangani API lewat `+server.ts`, dan untuk banyak aplikasi itu cukup. Ketuk.id sengaja tidak memakai pendekatan itu untuk semua logika, dan menempatkan sebagian besar logika sensitif di layanan Go yang terpisah, dengan tiga alasan konkret.
 
 Pertama, webhook Duitku butuh endpoint yang stabil secara alamat dan siklus hidup. Payment gateway menyimpan URL callback di sisi mereka dan memanggilnya kapan saja setelah transaksi dibuat — bisa detik berikutnya, bisa beberapa menit kemudian. Endpoint ini tidak boleh ikut redeploy, restart, atau berubah bentuk setiap kali frontend di-deploy ulang karena perubahan UI. Memisahkan backend berarti siklus rilis frontend dan siklus hidup endpoint pembayaran menjadi independen.
 
 Kedua, logika pembayaran dan pemrosesan order vendor adalah kode yang paling perlu diuji secara terisolasi, tanpa terikat pada rendering UI atau siklus hidup permintaan halaman. Menaruhnya di layanan API terpisah membuat unit test dan integration test bisa berjalan tanpa perlu memuat SvelteKit sama sekali.
 
-Ketiga, ini keputusan yang berorientasi ke depan: begitu ada mobile app atau dashboard khusus vendor, kedua klien tersebut butuh API yang sama persis dengan yang dipakai web app sekarang. Kalau logika itu tertanam di dalam route SvelteKit, ia harus diekstrak ulang nanti. Dengan backend Hono yang sudah berdiri sendiri sejak awal, klien baru tinggal memanggilnya.
+Ketiga, ini keputusan yang berorientasi ke depan: begitu ada mobile app atau dashboard khusus vendor, kedua klien tersebut butuh API yang sama persis dengan yang dipakai web app sekarang. Kalau logika itu tertanam di dalam route SvelteKit, ia harus diekstrak ulang nanti. Dengan backend Go yang sudah berdiri sendiri sejak awal, klien baru tinggal memanggilnya.
 
 ## Pembagian tanggung jawab
 
@@ -52,18 +52,24 @@ Setiap event di Ketuk.id punya `slug` unik yang menjadi identitas publiknya. Iso
 
 Ini keputusan yang disengaja, bukan default yang kebetulan dipakai. Kalau isolasi data hanya bergantung pada logika aplikasi, satu query yang lupa menambahkan filter event bisa membocorkan data tamu, RSVP, atau transaksi hadiah dari satu event ke event lain. Dengan RLS sebagai penjamin di level database, bahkan kalau ada bug di query aplikasi — filter yang lupa ditambahkan, join yang salah — database tetap menolak mengembalikan baris yang bukan milik konteks yang sedang mengakses. RLS berfungsi sebagai jaring pengaman terakhir, bukan satu-satunya lapisan pertahanan.
 
-## Kenapa Bun bukan runtime production
+## Kenapa backend ditulis dalam Go
 
-Bun dipakai di seluruh monorepo ini untuk instalasi dependency dan pengalaman development — `bun install` yang cepat, workspace filtering, dan test runner bawaan. Namun saat production, baik frontend maupun backend dijalankan di atas Node, bukan Bun.
+Backend Ketuk.id adalah modular monolith dalam Go 1.23 (chi v5, pgx v5, goose v3), bukan layanan JavaScript/TypeScript. Pemilihan Go didasari tiga alasan konkret.
 
-Alasannya adalah risiko yang tidak sepadan dengan manfaatnya. Adapter Bun untuk SvelteKit (`svelte-adapter-bun`) masih dikelola komunitas, bukan proyek resmi SvelteKit, sehingga tidak punya jaminan stabilitas jangka panjang atau dukungan yang setara dengan `adapter-node`. Aplikasi ini menangani uang sungguhan — transaksi pembayaran lewat Duitku dan transaksi hadiah — sehingga stabilitas runtime production diprioritaskan di atas kecepatan eksperimental. Kecepatan `bun install` dan developer experience yang baik tetap didapat tanpa menanggung risiko itu di production.
+Pertama, ini adalah layanan yang menangani uang sungguhan — transaksi pembayaran lewat Duitku dan transaksi hadiah. Go memberikan jaminan tipe dan konkurensi yang kuat di compile-time, sehingga banyak kelas bug (null pointer, race condition pada akses shared state) terdeteksi sebelum kode pernah jalan di production. Untuk logika pembayaran, ketegasan ini lebih berharga daripada keleluasaan dinamis.
+
+Kedua, runtime Go adalah binary tunggal yang start dalam hitungan milidetik dan konsumsi memorinya kecil. Endpoint callback Duitku dipanggil kapan saja setelah transaksi dibuat, dan layanan harus siap menerima kapan saja. Binary yang ringan dan cepat startup mempermudah scaling horizontal saat ada lonjakan.
+
+Ketiga, ekosistem Go untuk layanan database-centric sangat matang. pgx memberikan kontrol rendah-level atas koneksi Postgres yang dibutuhkan untuk connection pooling Supavisor, sementara goose mengelola migrasi schema sebagai file SQL biasa yang bisa di-review tanpa ORM. Layer ini cocok dengan keputusan menulis raw SQL alih-alih memakai ORM.
+
+Bun tetap dipakai di sisi frontend sebagai package manager dan development runner — `bun install` yang cepat dan workspace filtering — tetapi tidak ada kode backend JavaScript lagi. Frontend di-deploy lewat adapter Vercel runtime `nodejs22.x`, backend di-deploy sebagai binary Go terpisah.
 
 ```
 Alur transaksi pembayaran:
 
 ┌──────────┐   1. buat transaksi   ┌─────────┐   2. request charge   ┌────────┐
 │ Frontend │ ─────────────────────▶│ Backend │ ─────────────────────▶│ Duitku │
-│(SvelteKit)│                      │  (Hono) │                       │        │
+│(SvelteKit)│                      │  (Go)   │                       │        │
 └──────────┘                       └─────────┘                       └────────┘
                                         ▲                                  │
                                         │        3. callback status       │

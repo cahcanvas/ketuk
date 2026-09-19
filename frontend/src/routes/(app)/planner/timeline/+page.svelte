@@ -61,12 +61,12 @@
 		<div>
 			<a
 				href="/planner?event={data.eventId}"
-				class="inline-flex items-center gap-1.5 text-sm text-navy-500 hover:text-navy-900"
+				class="inline-flex items-center gap-1.5 text-sm text-coffee-500 hover:text-coffee-900"
 			>
 				<ArrowLeft size={14} />
 				Kembali ke Planner
 			</a>
-			<h1 class="mt-1 font-display text-2xl font-bold text-navy-900 sm:text-3xl">
+			<h1 class="mt-1 font-display text-2xl font-bold text-coffee-900 sm:text-3xl">
 				Timeline Acara
 			</h1>
 		</div>
@@ -83,20 +83,20 @@
 			<EmptyState icon={Clock} title="Belum ada rundown" description="Susun urutan acara hari-H." />
 		{:else}
 			<ol
-				class="flex flex-col divide-y divide-navy-100 overflow-hidden rounded-xl border border-navy-100 bg-white"
+				class="flex flex-col divide-y divide-coffee-100 overflow-hidden rounded-xl border border-coffee-100 bg-white"
 			>
 				{#each sortedItems as item (item.id)}
 					<li class="flex items-center gap-4 px-4 py-3">
-						<span class="w-14 shrink-0 font-mono text-sm font-medium text-coral-500">
+						<span class="w-14 shrink-0 font-mono text-sm font-medium text-terracotta-500">
 							{item.time}
 						</span>
-						<span class="flex-1 text-sm text-navy-900">{item.title}</span>
+						<span class="flex-1 text-sm text-coffee-900">{item.title}</span>
 						{#if item.pic}
-							<span class="hidden text-xs text-navy-400 sm:inline">{item.pic}</span>
+							<span class="hidden text-xs text-coffee-400 sm:inline">{item.pic}</span>
 						{/if}
 						<button
 							type="button"
-							class="inline-flex h-7 w-7 items-center justify-center rounded-md text-navy-300 hover:bg-red-50 hover:text-red-600"
+							class="inline-flex h-7 w-7 items-center justify-center rounded-md text-coffee-300 hover:bg-red-50 hover:text-red-600"
 							onclick={() => handleDelete(item.id)}
 							aria-label="Hapus item rundown"
 						>

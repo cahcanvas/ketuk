@@ -51,8 +51,8 @@
 </svelte:head>
 
 <div class="mx-auto max-w-2xl">
-<h1 class="font-display text-2xl font-bold text-navy-900 sm:text-3xl">Buat undangan baru</h1>
-<p class="mt-1.5 text-navy-500">Isi info dasar dulu. Tanggal, lokasi, dan detail lain bisa dilengkapi setelahnya.</p>
+<h1 class="font-display text-2xl font-bold text-coffee-900 sm:text-3xl">Buat undangan baru</h1>
+<p class="mt-1.5 text-coffee-500">Isi info dasar dulu. Tanggal, lokasi, dan detail lain bisa dilengkapi setelahnya.</p>
 
 <form class="mt-8 flex flex-col gap-5" onsubmit={handleSubmit}>
 	<Select label="Jenis acara" bind:value={type} options={typeOptions} required />

@@ -9,7 +9,7 @@
 	let { tone = 'neutral', children }: Props = $props();
 
 	const toneClasses: Record<NonNullable<Props['tone']>, string> = {
-		neutral: 'bg-navy-100 text-navy-700',
+		neutral: 'bg-coffee-100 text-coffee-700',
 		success: 'bg-vendor-100 text-vendor-600',
 		warning: 'bg-hadiah-100 text-hadiah-600',
 		danger: 'bg-red-100 text-red-700',
